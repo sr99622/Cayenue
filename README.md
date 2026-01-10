@@ -17,3 +17,13 @@ Computers running Linux, Mac or Windows. Cayenue runs as both the server and the
 <h3>Network Configuration</h3>
 
 Cayenue supports complete camera isolation with proxy services. The cameras are unable to access either your own network or the internet at large. This is a critical feature for privacy that protects your installation and data.
+
+Recordings are stored locally and shareable from the server for access by client computers. Configure the server for SMB protocol and pull video with the integrated file browser from any supported OS.
+
+<h3>Searchable Video Database</h3>
+
+Events triggered by the YOLO detector are stored as images that can be linked to the Video library. Simply double click the picture to start playback the timelime. Specific time points in video files can be accessed using the search tool. Important functions have associated key bindings for mouseless operation.
+
+<h3>Expand Your Horizon</h3>
+
+Open source software written in Python with the permissive Apache license gives you the ability to craft your own algorithm for advance usage. 
