@@ -22,7 +22,7 @@ Recordings are stored locally and shareable from the server for access by client
 
 <h3>Searchable Video Database</h3>
 
-Events triggered by the YOLO detector are stored as images that can be linked to the Video library. Simply double click the picture to start the timelime playback. Specific time points in video files can be accessed using the search tool. Important functions have associated key bindings for mouseless operation.
+Events triggered by the YOLOX detector are stored as images that can be linked to the Video library. Simply double click the picture to start the timelime playback. Specific time points in video files can be accessed using the search tool. Important functions have associated key bindings for mouseless operation.
 
 <h3>Expand Your Horizon</h3>
 
