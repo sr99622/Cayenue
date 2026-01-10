@@ -12,7 +12,7 @@ Collect, analyze and store AV streams from a fleet of networked cameras in real 
 
 Onvif compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco
 
-Computers running Linux, Mac or Windows. Cayenue runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer excellent power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
+Computers running Linux, Mac or Windows. Cayenue runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
 
 <h3>Network Configuration</h3>
 
