@@ -20,6 +20,8 @@ Cayenue supports complete camera isolation with proxy services. The cameras are 
 
 Recordings are stored locally and shareable from the server for access by client computers. Configure the server for SMB protocol and pull video with the integrated file browser from any supported OS.
 
+An integrated HTTP server provides access to live video streams from unconfigured devices such as mobile phone.
+
 <h3>Searchable Video Database</h3>
 
 Events triggered by the YOLO detector are stored as images that can be linked to the Video library. Simply double click the picture to start the timelime playback. Specific time points in video files can be accessed using the search tool. Important functions have associated key bindings for mouseless operation.
