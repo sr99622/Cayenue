@@ -31,7 +31,6 @@ class VideoModelSettings():
         self.skipFrames = self.getSkipFrames()
         self.skipCounter = 0
         self.sampleSize = self.getSampleSize()
-        #self.orig_img = None
         self.gain = self.getModelOutputGain()
 
     def getTargets(self):

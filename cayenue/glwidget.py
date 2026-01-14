@@ -19,7 +19,7 @@
 
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtGui import QPainter, QImage, QColorConstants, QPen, QMovie, QIcon, QPixmap
-from PyQt6.QtCore import QSize, QPointF, QRectF, QTimer, QMargins, Qt, QRect, QPoint
+from PyQt6.QtCore import QSize, QPointF, QRectF, QTimer, Qt, QRect, QPoint
 from PyQt6.QtWidgets import QMessageBox
 import numpy as np
 from datetime import datetime

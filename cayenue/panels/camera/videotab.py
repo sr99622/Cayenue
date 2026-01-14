@@ -18,12 +18,10 @@
 #*********************************************************************/
 
 from PyQt6.QtWidgets import QComboBox, QLineEdit, QSpinBox, \
-    QGridLayout, QWidget, QLabel, QCheckBox, QPushButton
+    QGridLayout, QWidget, QLabel, QCheckBox
 from PyQt6.QtCore import Qt
 from loguru import logger
 from cayenue.enums import ProxyType
-import pathlib
-from datetime import datetime
 
 class SpinBox(QSpinBox):
     def __init__(self, qle):

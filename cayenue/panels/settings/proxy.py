@@ -119,6 +119,13 @@ class ProxyOptions(QWidget):
         self.btnUpdate.clicked.connect(self.btnUpdateClicked)
         self.btnUpdate.setEnabled(False)
 
+        pnlRemote = QWidget()
+        lytRemote = QGridLayout(pnlRemote)
+        lytRemote.addWidget(self.btnUpdate, 0, 0, 1, 1, Qt.AlignmentFlag.AlignCenter)
+        lytRemote.addWidget(QLabel("   "),  0, 1, 1, 1)
+        lytRemote.addWidget(self.txtRemote, 0, 2, 1, 1)
+        lytRemote.setContentsMargins(10, 0, 10, 0)
+
         self.chkListen = QCheckBox("Get alarm events from server")
         self.chkListen.setChecked(int(mw.settings.value(self.listenKey, 1)))
         self.chkListen.stateChanged.connect(self.chkListenChecked)
@@ -135,7 +142,7 @@ class ProxyOptions(QWidget):
         lytTimeout.addWidget(self.spnTimeout,  0, 1, 1, 1, Qt.AlignmentFlag.AlignCenter)
         lytTimeout.setContentsMargins(0, 0, 0, 0)
 
-        self.chkEnableHttpServer = QCheckBox("Enable HTTP server")
+        self.chkEnableHttpServer = QCheckBox("Enable HTTP server (port 8800)")
         self.chkEnableHttpServer.setChecked(int(mw.settings.value(self.httpKey, 0)))
         self.chkEnableHttpServer.stateChanged.connect(self.chkEnableHttpServerChecked)
 
@@ -174,31 +181,27 @@ class ProxyOptions(QWidget):
         self.cmbProxyLog.currentTextChanged.connect(self.cmbProxyLogChanged)
 
         lytProxyType = QGridLayout(self.grpProxyType)
-        lytProxyType.addWidget(self.radStandAlone,       0, 0, 1, 1)
-        lytProxyType.addWidget(QLabel(),                 1, 0, 1, 2)
-        lytProxyType.addWidget(self.radClient,           2, 0, 1, 1)
-        lytProxyType.addWidget(self.lblRemote,           2, 1, 1, 1, Qt.AlignmentFlag.AlignCenter)
-        lytProxyType.addWidget(self.btnUpdate,           3, 0, 1, 1, Qt.AlignmentFlag.AlignCenter)
-        lytProxyType.addWidget(self.txtRemote,           3, 1, 1, 1)
-        lytProxyType.addWidget(self.chkListen,           4, 0, 1, 2)
-        lytProxyType.addWidget(pnlTimeout,          5, 0, 1, 2)
-        #lytProxyType.addWidget(QLabel(),                 6, 0, 1, 1)
-        lytProxyType.addWidget(self.radServer,           7, 0, 1, 1)
-        lytProxyType.addWidget(self.lblConnect,          7, 1, 1, 1)
-        lytProxyType.addWidget(self.lblServer,           8, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
-
-        lytProxyType.addWidget(self.chkEnableHttpServer,  11, 0, 1, 1)
-
+        lytProxyType.addWidget(self.radStandAlone,        0, 0, 1, 1)
+        lytProxyType.addWidget(QLabel(),                  1, 0, 1, 2)
+        lytProxyType.addWidget(self.radClient,            2, 0, 1, 1)
+        lytProxyType.addWidget(self.lblRemote,            2, 1, 1, 1)
+        lytProxyType.addWidget(pnlRemote,                 3, 0, 1, 2)
+        lytProxyType.addWidget(self.chkListen,            4, 0, 1, 2)
+        lytProxyType.addWidget(pnlTimeout,                5, 0, 1, 2)
+        lytProxyType.addWidget(QLabel(),                  6, 0, 1, 2)
+        lytProxyType.addWidget(self.radServer,            7, 0, 1, 1)
+        lytProxyType.addWidget(self.lblConnect,           7, 1, 1, 1)
+        lytProxyType.addWidget(self.lblServer,            9, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        lytProxyType.addWidget(self.chkEnableHttpServer, 11, 0, 1, 2)
         lytProxyType.addWidget(self.grpMediaMTX,         12, 0, 1, 2)
-
-        lytProxyType.addWidget(self.grpAlarmBroadcast,  13, 0, 1, 2)
-        lytProxyType.addWidget(QLabel(),                15, 0, 1, 1)
+        lytProxyType.addWidget(self.grpAlarmBroadcast,   13, 0, 1, 2)
+        lytProxyType.addWidget(QLabel(),                 15, 0, 1, 2)
 
         lytMain = QGridLayout(self)
         lytMain.addWidget(self.grpProxyType,  0, 0, 1, 2)
 
-        lytMain.addWidget(QLabel(),           2, 0, 1, 2)
-        lytMain.setRowStretch(2, 10)
+        #lytMain.addWidget(QLabel(),           2, 0, 1, 2)
+        #lytMain.setRowStretch(2, 10)
 
     def getProxyServerDir(self):
         dir = None
@@ -523,15 +526,8 @@ class ProxyOptions(QWidget):
             lst = self.mw.cameraPanel.lstCamera
             cameras = [lst.item(x) for x in range(lst.count())]
             for camera in cameras:
-                #print("camera", camera.name())
                 for profile in camera.profiles:
-                    #print("    profile:", f"{camera.serial_number()}/{profile.profile()}")
                     links[f"{camera.name()} ({profile.profile()})"] = f"{camera.serial_number()}/{profile.profile()}"
-
-            #for link in links:
-            #    print("Link", link, links[link])
-
-            #print(self.generateIndexHtml(links))
 
             with open(f'{self.getProxyServerDir()}/index.html', 'w') as file:
                 file.write(self.generateIndexHtml(links))

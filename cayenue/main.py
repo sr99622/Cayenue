@@ -45,13 +45,16 @@ import requests
 import cayenue
 import threading
 import argparse
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 if sys.platform == "win32":
     from zipfile import ZipFile
 else:
     import tarfile
 
-VERSION = "1.0.0"
+VERSION = "1.0.2"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -170,8 +173,8 @@ class MainWindow(QMainWindow):
         self.program_name = f'Cayenue'
         self.setWindowTitle(self.program_name)
         if sys.platform == "darwin":
-            self.setWindowIcon(QIcon('image:mac_icon.png'))
-            QGuiApplication.setWindowIcon(QIcon('image:mac_icon.png'))
+            self.setWindowIcon(QIcon('image:Cayenue.png'))
+            QGuiApplication.setWindowIcon(QIcon('image:Cayenue.png'))
         else:
             self.setWindowIcon(QIcon('image:Cayenue.png'))
             QGuiApplication.setWindowIcon(QIcon('image:Cayenue.png'))
@@ -639,6 +642,11 @@ class MainWindow(QMainWindow):
                         logger.debug(f'Camera stream opened {self.getCameraName(uri)}, stream_uri : {profile.stream_uri()}, serial_number : {profile.serial_number()}, resolution : {profile.width()} x {profile.height()}, fps: {profile.frame_rate()}, {profile_type}, Window: {window_name}')
 
                 if player := self.pm.getPlayer(uri):
+
+                    if player.marked_for_death:
+                        player.terminate()
+                        return
+
                     if player.systemTabSettings():
                         if player.systemTabSettings().record_enable and player.systemTabSettings().record_always:
                             if camera := self.cameraPanel.getCamera(uri):
@@ -1295,10 +1303,10 @@ def run():
             executable = f'{working_dir}\\Cayenue.exe'
             try:
                 import winshell
-                link_filepath = f'{Path(winshell.desktop())}\\Onvif GUI.lnk'
+                link_filepath = f'{Path(winshell.desktop())}\\Cayenue.lnk'
                 with winshell.shortcut(link_filepath) as link:
                     link.path = executable
-                    link.description = "Onvif GUI"
+                    link.description = "Cayenue"
                     link.arguments = ""
                     link.icon_location = (icon, 0)
                     link.working_directory = working_dir
@@ -1312,7 +1320,7 @@ def run():
 
             contents = (f'[Desktop Entry]\n'
                         f'Version={VERSION}\n'
-                        f'Name=Onvif GUI\n'
+                        f'Name=Cayeue\n'
                         f'Comment=IP Camera Application\n'
                         f'Exec={executable}\n'
                         f'Terminal=false\n'

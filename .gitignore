@@ -22,3 +22,4 @@ repo/
 .flatpak-builder/
 *.flatpak
 env/
+run.py

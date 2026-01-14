@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+	<id>io.github.sr99622.Cayenue</id>
+	<name>Cayenue</name>
+	<summary>Onvif Camera Management System</summary>
+	<metadata_license>CC-BY-SA-3.0</metadata_license>
+	<project_license>Apache-2.0</project_license>
+	<description>
+		<p>  A fully featured graphical interface for working with ONVIF compatible IP cameras. This application can 
+		discover cameras on the network, control camera parameters and display camera output. Multiple cameras can be 
+		viewed simultaneously in the display. Camera output can be recorded to disk archive. Cameras can be configured 
+		to use lower resolution streams during real time operation to conserve resources and to stream high resolution 
+		output to disk archive for maximum observability.
+
+		The application is equipped with a built in YOLOX model for computer vision analysis of real time stream data
+		to generate alarms and recordings. The application includes built in runtime drivers for zero configuration 
+		installation on Intel iGPU and Apple Silicon NPU. NVIDIA GPU will also work with proper drivers installed. The 
+		detector features fine-grained control of model parameters for optimized detection envelopes.
+
+		Proxy servers, including Media MTX, isolate cameras on a seperate subnet for maximum privacy. Recordings held on 
+		the server can be shared with clients via SMB protocol common to Windows, Linux and Mac OS. HTTP output is 
+		available for generic web browser access from mobile devices. 
+		</p>
+	</description>
+	<developer_name>Stephen Rhodes</developer_name>
+	<url type="homepage">https://github.com/sr99622/Cayenue</url>
+	<screenshots>
+		<screenshot type="default">
+			<caption>The app running YOLOX detection on a camera stream</caption>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/assets/images/screenshot_1.png</image>
+		</screenshot>
+		<screenshot>
+			<caption>The file browser can scroll through detection pictures and automatically launch the associated video file at the timepoint of the detection</caption>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/assets/images/screenshot_2.png</image>
+		</screenshot>
+	</screenshots>
+	<releases>
+		<release version="1.0.2" date="2026-01-13">
+			<description>
+				<p>Wilton</p>
+			</description>
+			<url>https://github.com/sr99622/Cayenue/releases/tag/v1.0.1</url>
+		</release>
+	</releases>
+	<categories>
+		<category>Utility</category>
+	</categories>
+	<keywords>
+		<keyword>Camera</keyword>
+		<keyword>Networking</keyword>
+		<keyword>Yolo</keyword>
+	</keywords>
+	<recommends>
+		<control>keyboard</control>
+	</recommends>
+	<supports>
+		<control>pointing</control>
+	</supports>
+	<content_rating type="oars-1.1"/>
+	<launchable type="desktop-id">io.github.sr99622.Cayenue.desktop</launchable>
+</component>

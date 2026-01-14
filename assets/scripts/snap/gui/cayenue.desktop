@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Cayenue
+Exec=cayenue
+Icon=${SNAP}/meta/gui/Cayenue.png
+Type=Application
+Terminal=false

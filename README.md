@@ -1,12 +1,12 @@
 # Cayenue
 <h3>IP Camera Interface Software</h3>
 
-<image src="assets/images/combined.png">
+<image src="assets/images/cayenue_logo.png">
 
 
 <h2>Take your security seriously.</h2>
 
-Collect, analyze and store AV streams from a fleet of networked cameras in real time. Reduce cognitive load to enhance phenomena observability using nueral net feedback indicators. Concurrently review events in critical alert situations with intuitive controls. Distributed knowledge using proxy service multipliers. Absolute autonomy over data privacy.
+View, analyze and store AV streams from a fleet of networked cameras in real time. Reduce cognitive load to enhance phenomena observability using nueral net feedback indicators. Concurrently review events in critical alert situations with intuitive controls. Distributed knowledge using proxy service multipliers. Absolute autonomy over data privacy.
 
 <h3>System Requirements</h3>
 
@@ -30,6 +30,175 @@ Open source software written in Python with the permissive Apache license gives 
 
 
 ## Operation
+
+<details>
+<summary>Hardware</summary>
+
+&nbsp;
+
+The system installation requires network connected components and appropriate switching hardware. The software is designed to support ONVIF compatible cameras. Please note that not all cameras support ONVIF, and those that do may have non-compliant or incomplete implementations. Cayenue supports a wide range of cameras and is tolerant of non-compliant implementations. Cameras listed in the System Requirements section above can be expected to work. Many other types of cameras are derivative of those listed and should behave in a similar fashion.
+
+The software can operate in three modes, Stand-Alone, Server and Client. Stand-Alone mode is based on legacy configurations and might be considered obsolete. Server mode is recommended, even if there is only one computer being used to view camera streams on the network. Server mode includes a Proxy server (Media MTX) that will provide a buffer between the camera stream and the Server. This has beneficial effects for stability. However, some cameras may not conform properly to RTSP standards expected by the Proxy, in which case Stand-Alone mode may provide better results. Client mode requires a Server and can be installed and used by a number of computers limited by the network constraints of the installation.
+
+Operating a Server with dual network interface ports provides the opportunity for subnet isolation of cameras. There are many benefits to this configuration, not the least being enhanced network security that prevents camera network communication with the internet at large, or the internal network. Non-compliant protocol implementations by cameras also present a stability threat that isolation can prevent.
+
+<image src="assets/images/net_config.png" width="600">
+
+&nbsp;
+
+When cameras are isolated on a seperate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses and is a service running on the Server. DHCP is configured on Linux by installing a service program that is configured with an edited file. Similarly, Mac OS can be configured to run a DHCP server by editing a configuration file. Although Windows is not recommended for Server configuration, it is possible to use a free program for this purpose. Please consult the DHCP Servers section of the Server Configuration topic of this document for detailed instructions. One important point to note is that the DHCP server for the camera subnet MUST reside on the proper network interface (on the diagram 10.1.1.0/24). There can only be one DHCP server on a network and the existing DHCP service provided by the internal router may experience issues if the Cayenue Server DHCP is run on the wrong network interface (on the diagram 192.168.1.0/24).
+
+Cayenue is designed to take advantage of advanced YOLO detection algorithms for detecting objects of interest. There is a requirement that the Server have a capable compute unit in order to run this inference. Integrated GPU or NPU hardware is recommended for this task. Discrete GPU may also be used, but at a significantly higher power consumption profile, as well as additional driver installation and configuration. Intel iGPU and Apple Silicon NPU are recommended and are directly supported by the Cayenue installation programs and do not require any additional configuration.
+
+Hardware requirements for Client configuration are more relaxed as the Client can recieve alerts from the server and do not require any additional inference processing capablilties. If the Server is configured to share its Picture and Video directories using SMB protocol (Samba), Clients may access videos from the Server without the need for local storage. SMB performance is excellent in a local network scenario, and can be expected to provide essentially the same experience as local storage.
+
+</details>
+
+<details>
+<summary>Software Installation</summary>
+
+&nbsp;
+
+<details>
+<summary>Linux</summary>
+
+&nbsp;
+
+---
+
+<details>
+<summary>Flatpak</summary>
+
+&nbsp;
+
+Download the [Flatpak installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.2/Cayenue-1.0.2.flatpak), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+
+```
+flatpak install Cayenue-1.0.2.flatpak
+```
+
+In some cases, it may be necessary to re-boot the computer in order to see the icon in the Applications menu.
+
+The program can then be launched from the Applications menu. To uninstall use the command.
+
+```
+flatpak uninstall io.github.sr99622.Cayenue
+```
+
+---
+
+</details>
+
+<details>
+<summary>Snap</summary>
+
+&nbsp;
+
+Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.2/cayenue_1.0.2_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+
+```
+sudo snap install cayeneu_1.0.2_amd64.snap --dangerous
+```
+
+The program can then be launched from the Applications menu. In order to get audio, you need to connect the pulseaudio driver.
+
+```
+sudo snap connect cayenue:pulseaudio
+```
+
+If you would like to use the NPU on Intel, the driver can be installed as follows.
+
+```
+sudo snap install intel-npu-driver
+sudo chown root:render /dev/accel/accel0
+sudo chmod g+rw /dev/accel/accel0
+sudo usermod -a -G render $USER
+sudo bash -c "echo 'SUBSYSTEM==\"accel\", KERNEL==\"accel*\", GROUP=\"render\", MODE=\"0660\"' > /etc/udev/rules.d/10-intel-vpu.rules"
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=accel
+sudo reboot now
+```
+
+To uninstall.
+
+```
+sudo snap remove cayenue
+```
+
+---
+
+</details>
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>Mac</summary>
+
+&nbsp;
+
+---
+
+An installer is available for Apple Silicon running Mac OS version Sequoia (15).
+
+Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.2/Cayenue-1.0.2.dmg) and open it. Drag the OnvifGUI icon into the Applications folder. Once the installation is complete, the program can then be started from the Launchpad. To uninstall the program, use Finder to go to the Applications directory, then right click over the icon and select Move to Trash.
+
+---
+
+&nbsp;
+
+</details>
+
+
+<details>
+<summary>Windows</summary>
+
+&nbsp;
+
+---
+
+An installer is available for Windows.
+
+Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.2/Cayenue-installer-1.0.2.exe) and double click on it. You will receive a warning message from the Operating System. Follow the prompts on the screen to install the program. It can be launched from the icon found in the Applications menu. To uninstall the program, go to Settings -> Apps -> Installed Apps and find the icon, then use the three dot button on the right to select action.
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>NVIDIA GPU</summary>
+
+&nbsp;
+
+If YOLO operation is desired for systems equipped with NVIDIA GPU, an alternate installation method is required. This is due to the large size of the files required for NVIDIA operation. To use the application with NVIDIA GPU on Linux, create a python virtual environment, then use pip to install.
+
+```
+python3 -m venv env
+source env/bin/activate
+pip install cayenue openvino
+```
+
+Then follow the directions at [PyTorch](https://pytorch.org/get-started/locally/) to complete the installation based on your operating system.
+
+To use an icon with this configuration,
+
+```
+sudo env\bin\Cayenue --icon
+```
+
+</details>
+
+&nbsp;
+
+</details>
+
+
+</details>
 
 <details>
 <summary>Getting Started</summary>
@@ -851,7 +1020,7 @@ The control tab on the right of the application window may be toggled using the 
 </details>
 
 <details>
-<summary>Servers</summary>
+<summary>Server Configuration</summary>
 
 &nbsp;
 
@@ -1497,5 +1666,92 @@ Check the update service periodically to ensure it remains disabled.
 ---
 
 &nbsp;
+
+</details>
+</details>
+
+<details>
+<summary>Acknowledegments</summary>
+
+&nbsp;
+
+<details>
+<summary>Media MTX</summary>
+
+<a href="https://github.com/bluenviron/mediamtx">
+<image src="assets/images/media_mtx_logo.png">
+</a>
+
+MIT License
+
+Copyright (c) 2019 aler9
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+</details>
+
+<details>
+<summary>YOLOX</summary>
+
+<a href="https://github.com/Megvii-BaseDetection/YOLOX">
+<image src = "assets/images/yolox_logo.png">
+</a>
+
+&nbsp;
+
+Copyright (c) 2021-2022 Megvii Inc. All rights reserved.
+
+License: Apache
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+## Cite YOLOX
+If you use YOLOX in your research, please cite our work by using the following BibTeX entry:
+
+```latex
+ @article{yolox2021,
+  title={YOLOX: Exceeding YOLO Series in 2021},
+  author={Ge, Zheng and Liu, Songtao and Wang, Feng and Li, Zeming and Sun, Jian},
+  journal={arXiv preprint arXiv:2107.08430},
+  year={2021}
+}
+```
+## In memory of Dr. Jian Sun
+Without the guidance of [Dr. Sun Jian](http://www.jiansun.org/), YOLOX would not have been released and open sourced to the community.
+The passing away of Dr. Sun Jian is a great loss to the Computer Vision field. We have added this section here to express our remembrance and condolences to our captain Dr. Sun.
+It is hoped that every AI practitioner in the world will stick to the concept of "continuous innovation to expand cognitive boundaries, and extraordinary technology to achieve product value" and move forward all the way.
+
+<div align="center"><image src="assets/images/sunjian.png" width="200"></div>
+没有孙剑博士的指导，YOLOX也不会问世并开源给社区使用。
+孙剑博士的离去是CV领域的一大损失，我们在此特别添加了这个部分来表达对我们的“船长”孙老师的纪念和哀思。
+希望世界上的每个AI从业者秉持着“持续创新拓展认知边界，非凡科技成就产品价值”的观念，一路向前。
+
+</details>
 
 </details>

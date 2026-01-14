@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Cayenue
+Comment=IP Camera Application
+Exec=cayenue
+Terminal=false
+Icon=io.github.sr99622.Cayenue
+StartupWMClass=python3
+Type=Application
+Categories=Utility

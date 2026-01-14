@@ -1,0 +1,82 @@
+name: cayenue
+title: Cayenue
+base: core24
+summary: GUI application for ONVIF compatible cameras
+description: |
+    A fully featured graphical interface for working with ONVIF compatible IP cameras. This application can 
+    discover cameras on the network, control camera parameters and display camera output. Multiple cameras can be 
+    viewed simultaneously in the display. Camera output can be recorded to disk archive. Cameras can be configured 
+    to use lower resolution streams during real time operation to conserve resources and to stream high resolution 
+    output to disk archive for maximum observability.
+
+    The application is equipped with a built in YOLOX model for computer vision analysis of real time stream data
+    to generate alarms and recordings. The application includes built in runtime drivers for zero configuration 
+    installation on Intel iGPU and Apple Silicon NPU. NVIDIA GPU will also work with proper drivers installed. The 
+    detector features fine-grained control of model parameters for optimized detection envelopes.
+
+    Proxy servers, including Media MTX, isolate cameras on a seperate subnet for maximum privacy. Recordings held on 
+    the server can be shared with clients via SMB protocol common to Windows, Linux and Mac OS. HTTP output is 
+    available for generic web browser access from mobile devices. 
+
+version: 1.0.2
+contact: sr99622@gmail.com
+license: Apache-2.0
+issues: https://github.com/sr99622/Cayenue/issues
+website: https://github.com/sr99622/Cayenue
+source-code: https://github.com/sr99622/Cayenue
+
+grade: stable
+confinement: strict
+
+platforms:
+  amd64:
+
+plugs:
+  intel-npu:
+    interface: custom-device
+    custom-device: intel-npu-device
+  npu-libs:
+    interface: content
+    content: npu-libs-2404
+    target: $SNAP/npu-libs
+
+apps:
+  cayenue:
+    command: bin/cayenue
+    extensions: [gnome]
+    plugs:
+      - network
+      - wayland
+      - pulseaudio
+      - x11
+      - desktop
+      - desktop-legacy
+      - opengl
+      - home
+      - intel-npu
+      - npu-libs
+    environment:
+      LD_LIBRARY_PATH: $SNAP/npu-libs:$SNAP/usr/local/lib:$LD_LIBRARY_PATH
+      OCL_ICD_VENDORS: $SNAP/etc/OpenCL/vendors
+
+parts:
+  cayenue:
+    source: .
+    plugin: python
+    python-packages:
+      - openvino
+      - cayenue
+      - https://download.pytorch.org/whl/cpu/torch-2.7.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=64123c05615e27368c7a7816f6e39c6d219998693beabde0b0b9cedf91b5ed8b
+      - https://download.pytorch.org/whl/cpu/torchvision-0.22.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=effb34eabe87ae0d811fe2d6e3433ed1eee2d1850ff0670964d1475a06512c73
+
+    override-build: |
+      craftctl default
+      mkdir -p "${CRAFT_PART_INSTALL}"/bin
+      intel_icd="${CRAFT_PART_INSTALL}"/etc/OpenCL/vendors/intel.icd
+      intel_icd_so_path=$(cat ${intel_icd})
+      base_path="/snap/${SNAPCRAFT_PROJECT_NAME}/current"
+      echo "${base_path}""${intel_icd_so_path}" > "${intel_icd}"
+
+    stage-packages:
+      - intel-opencl-icd
+      - libxcb-cursor-dev

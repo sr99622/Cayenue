@@ -22,7 +22,6 @@ from PyQt6.QtCore import Qt, pyqtSignal, QObject, QTimer
 from PyQt6.QtGui import QIcon, QColor
 import libonvif as onvif
 from cayenue.panels.camera.systemtab import SystemTabSettings
-#from cayenue.panels.video.modules.common.yolosettings import YoloSettings
 from cayenue.panels.video.modules.settings import VideoModelSettings
 from cayenue.enums import ProxyType, StreamState, SnapshotAuth
 from loguru import logger

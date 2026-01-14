@@ -20,7 +20,7 @@
 import os
 import sys
 from PyQt6.QtWidgets import QGridLayout, QWidget, QLabel, \
-    QMessageBox, QMenu, QApplication, QDialog, QPushButton
+    QMessageBox, QMenu, QApplication
 from PyQt6.QtGui import QAction, QFileSystemModel
 from PyQt6.QtCore import Qt, QStandardPaths
 from cayenue.components import Progress, InfoDialog

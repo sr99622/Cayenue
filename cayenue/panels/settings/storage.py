@@ -26,8 +26,6 @@ import shutil
 from cayenue.components import DirectorySelector
 from PyQt6.QtCore import pyqtSignal, QObject
 import threading
-import os
-import tempfile
 
 class StorageSignals(QObject):
     updateDiskUsage = pyqtSignal()

@@ -29,13 +29,10 @@ from loguru import logger
 import webbrowser
 import platform
 from cayenue.player import Player
-from cayenue.enums import Style, ProxyType, SnapshotAuth
-from cayenue.panels.camera import Snapshot
+from cayenue.enums import Style, ProxyType
 import cayenue
 from pathlib import Path
 import subprocess
-import avio
-from time import sleep
 
 class LogText(QTextEdit):
     def __init__(self, parent):
@@ -410,6 +407,8 @@ class GeneralOptions(QWidget):
         self.btnTest = QPushButton("Test")
         self.btnTest.clicked.connect(self.btnTestClicked)
 
+        self.lblVersion = QLabel(f'Cayenue Version {mw.version}')
+
         grpNewView = QGroupBox("Open New Window")
         self.btnNewView = QPushButton("Open")
         self.btnNewView.clicked.connect(self.btnNewViewClicked)
@@ -463,8 +462,9 @@ class GeneralOptions(QWidget):
         lytMain.addWidget(pnlBuffer,           7, 0, 1, 3)
         lytMain.addWidget(grpNewView,          8, 0, 1, 3)
         lytMain.addWidget(pnlButtons,          9, 0, 1, 3)
-        lytMain.addWidget(self.lblMemory,     10, 0, 1, 3)
-        lytMain.setRowStretch(10, 10)
+        lytMain.addWidget(self.lblVersion,    10, 0, 1, 3)
+        lytMain.addWidget(self.lblMemory,     11, 0, 1, 3)
+        lytMain.setRowStretch(11, 10)
 
     def usernameChanged(self, username):
         self.mw.settings.setValue(self.usernameKey, username)

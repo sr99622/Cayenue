@@ -32,20 +32,16 @@ class ClientProtocols():
         self.signals = ClientProtocolSignals()
         self.signals.error.connect(self.showMsgBox)
         self.msg_box = QMessageBox(mw)
-        self.msg_box.setIcon(QMessageBox.Icon.Critical)  # Sets the critical icon
-        self.msg_box.setWindowTitle("client error")  # Sets the window title
-        self.msg_box.setText("Unable to complete request")  # Sets the main text
-        #self.msg_box.setInformativeText(msg)  # Sets the informative text (if needed)
-        self.msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)  # Adds an OK button
+        self.msg_box.setIcon(QMessageBox.Icon.Critical)
+        self.msg_box.setWindowTitle("client error") 
+        self.msg_box.setText("Unable to complete request") 
+        self.msg_box.setStandardButtons(QMessageBox.StandardButton.Ok) 
         self.msg_box.setMinimumWidth(650)
     def callback(self, arg):
         try:
-            #print("LEN ARG", len(arg))
             index = bytearray(arg).find(b'\r\n')
-            #print(index)
             msg = bytearray(arg[:index]).decode('utf-8')
             payload_size = (len(arg) - index - 2)
-            #print("payload size", payload_size)
             configs = msg.split("\n\n")
             cmd = configs.pop(0)
 
@@ -69,9 +65,7 @@ class ClientProtocols():
                     camera.syncData(data)
 
             if cmd == "SNAPSHOT":
-                #print("SNAPSHOT SERVER RETURN")
                 filename = configs[0]
-                #print("filename", filename)
                 if payload_size:
                     index += 2
                     with open(filename, 'wb') as file:
@@ -79,11 +73,9 @@ class ClientProtocols():
                 else:
                     path = Path(filename)
                     camera_name = path.parent.name
-                    #print("CAMERA NAME", camera_name)
                     if camera := self.mw.cameraPanel.getCameraByName(camera_name):
                         if profile := camera.getDisplayProfile():
                             if player := self.mw.pm.getPlayer(profile.uri()):
-                                #print("FOUND PLAYER")
                                 if player.image:
                                     player.image.save(filename)
 

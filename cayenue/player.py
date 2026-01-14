@@ -54,6 +54,7 @@ class Player(avio.Player):
         self.needs_render = False
         self.timer = None
         self.thread_lock = False
+        self.marked_for_death = False
 
         self.boxes = None
         self.labels = []
@@ -99,6 +100,7 @@ class Player(avio.Player):
         self.analyze_video = False
         self.analyze_audio = False
         self.request_reconnect = reconnect
+        self.marked_for_death = True
         self.terminate()
 
     def systemTabSettings(self):

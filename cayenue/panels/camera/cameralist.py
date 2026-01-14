@@ -17,31 +17,15 @@
 #
 #*********************************************************************/
 
-from time import sleep
-from PyQt6.QtWidgets import QPushButton, QGridLayout, QWidget, QSlider, \
-    QListWidget, QTabWidget, QMessageBox, QMenu, QFileDialog
-from PyQt6.QtGui import QAction
-from PyQt6.QtCore import Qt, pyqtSignal, QObject, QTimer, QSettings
-from . import NetworkTab, ImageTab, VideoTab, PTZTab, SystemTab, LoginDialog, \
-    Session, Camera
+from PyQt6.QtWidgets import QListWidget, QMessageBox
+from PyQt6.QtCore import Qt
 from loguru import logger
 import libonvif as onvif
-from pathlib import Path
-import os
-import subprocess
-from datetime import datetime
-from cayenue.enums import ProxyType, SnapshotAuth
-import platform
-import webbrowser
-import requests
-from requests.auth import HTTPDigestAuth
-from urllib.parse import urlparse, parse_qs
-import threading
+from cayenue.enums import ProxyType
 
 class CameraList(QListWidget):
     def __init__(self, mw):
         super().__init__()
-        #self.signals = CameraPanelSignals()
         self.setSortingEnabled(True)
         self.mw = mw
 
@@ -177,5 +161,7 @@ class CameraList(QListWidget):
 
     def stopCamera(self):
         if camera := self.currentItem():
-            self.mw.cameraPanel.onItemDoubleClicked(camera)
+            players = self.mw.pm.getStreamPairPlayers(camera.uri())
+            if len(players):
+                self.mw.cameraPanel.btnStopClicked()
 
