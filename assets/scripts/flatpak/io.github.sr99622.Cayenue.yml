@@ -1,6 +1,6 @@
 id: io.github.sr99622.Cayenue
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 command: cayenue
 finish-args:
@@ -11,7 +11,6 @@ finish-args:
   - --device=all
   - --device=dri
   - --socket=pulseaudio
-  - --filesystem=xdg-cache:rw
   - --filesystem=xdg-videos:rw
   - --filesystem=xdg-pictures:rw
   - --env=LEVEL_ZERO_DISABLE_SYSTEM=1
@@ -24,9 +23,9 @@ modules:
       - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
         cayenue --no-build-isolation
       - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
-        torch-2.9.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl --no-build-isolation
-      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
-        torchvision-0.24.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl --no-build-isolation
+        torch-2.9.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl --no-build-isolation
+      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST}
+        torchvision-0.24.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl --no-build-isolation
       - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
         openvino --no-build-isolation
       - install -Dm644 io.github.sr99622.Cayenue.desktop -t /app/share/applications
@@ -54,29 +53,29 @@ modules:
         path: io.github.sr99622.Cayenue.metainfo.xml
       - type: file
         path: io.github.sr99622.Cayenue.png
-      - type: file
-        path: cayenue-1.0.2-py3-none-any.whl
       #- type: file
-      #  url: https://files.pythonhosted.org/packages/67/9b/ebeded8cc6f495ac968a9a917b5af48a55ff6e1c3d15eb565d73d9138f14/onvif_gui-3.1.10-py3-none-any.whl
-      #  sha256: fbdd70b4660a8cc22b0b1c3514bbab7a073bc4d94f74d05e543d93b55b1c6883
-      #  x-checker-data:
-      #    type: pypi
-      #    name: onvif-gui
+      #  path: cayenue-1.0.2-py3-none-any.whl
       - type: file
-        url: https://files.pythonhosted.org/packages/ed/59/524cd2aecab33c018a29d84ff448b0125142186f34a34eaa5f4a7e7d9dec/avio-3.2.7-cp312-cp312-manylinux_2_35_x86_64.whl
-        sha256: 79a94dae7c272a77968ce79de6e9e6e00c5cfb0af61622a618c652e949566ccd
+        url: https://files.pythonhosted.org/packages/62/e6/127d3f4ccc2063f19e0d98e03b406f949606c9f7c71b53cc4ded652a010f/cayenue-1.0.2-py3-none-any.whl
+        sha256: e460e671fee3a66cf03053b115df1620e39452325deb389ed5077b3d56dedf09
+        x-checker-data:
+          type: pypi
+          name: cayenue
+      - type: file
+        url: https://files.pythonhosted.org/packages/64/d5/1daf65654eeeb665ba49d92f846a1d48655b870ceb45b3b83db7e9d217bd/avio-3.2.7-cp313-cp313-manylinux_2_35_x86_64.whl
+        sha256: 33918af7a49557b97245c7d2ae541a9a23819131ebb7397eff30c15ad825d6ab
         x-checker-data:
           type: pypi
           name: avio
       - type: file
-        url: https://files.pythonhosted.org/packages/82/bf/b672cf5b584f0db068c393f125425b874a9288f9bd1a9ed8953a34c5b52d/kankakee-1.0.4-cp312-cp312-manylinux_2_34_x86_64.whl
-        sha256: be0c6c83b3d87781ad59868a51da67273ac301d5b56c95717b3db189d1701061
+        url: https://files.pythonhosted.org/packages/c3/c7/8181535b69c4ec357046f1b273454e64f4a7892c065fdc4dac0c9cbb82a6/kankakee-1.0.4-cp313-cp313-manylinux_2_34_x86_64.whl
+        sha256: 4cf8001b3eafc83372060b9ee01f85656b06295e4005c26cce2d72874bdc4d12
         x-checker-data:
           type: pypi
           name: kankakee
       - type: file
-        url: https://files.pythonhosted.org/packages/83/0b/cbed8a52dc20f6653460574f7fdb083dc0c5bd2ad16486c4bbd49c5b209b/libonvif-3.2.8-cp312-cp312-manylinux_2_34_x86_64.whl
-        sha256: 68a3a818d42db5017ffad40a2885bf285e793292274b078201d71eff90e92c96
+        url: https://files.pythonhosted.org/packages/f2/2a/5654ff35452869f157a87f24bd2ed6a4ffd51d3e8d6bca2aae553b697f57/libonvif-3.2.8-cp313-cp313-manylinux_2_34_x86_64.whl
+        sha256: 66821fed29669d6188171f7b242d20884271fb57ad6ab010722ac06e300b52bf
         x-checker-data:
           type: pypi
           name: libonvif
@@ -87,8 +86,8 @@ modules:
           type: pypi
           name: certifi
       - type: file
-        url: https://files.pythonhosted.org/packages/8c/73/6ede2ec59bce19b3edf4209d70004253ec5f4e319f9a2e3f2f15601ed5f7/charset_normalizer-3.4.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 4e594135de17ab3866138f496755f302b72157d115086d100c3f19370839dd3a
+        url: https://files.pythonhosted.org/packages/f5/83/6ab5883f57c9c801ce5e5677242328aa45592be8a00644310a008d04f922/charset_normalizer-3.4.4-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+        sha256: a8a8b89589086a25749f471e6a900d3f662d1d3b6e2e59dcecf787b1cc3a1894
         x-checker-data:
           type: pypi
           name: charset-normalizer
@@ -129,8 +128,8 @@ modules:
           type: pypi
           name: loguru
       - type: file
-        url: https://files.pythonhosted.org/packages/0a/0d/2454f072fae3b5a137c119abf15465d1771319dfe9e4acbb31722a0fff91/MarkupSafe-2.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: f5dfb42c4604dddc8e4305050aa6deb084540643ed5804d7455b5df8fe16f5e5
+        url: https://files.pythonhosted.org/packages/96/ec/2102e881fe9d25fc16cb4b25d5f5cde50970967ffa5dddafdb771237062d/markupsafe-3.0.3-cp313-cp313t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 8709b08f4a89aa7586de0aadc8da56180242ee0ada3999749b183aa23df95025
         x-checker-data:
           type: pypi
           name: MarkupSafe
@@ -147,8 +146,8 @@ modules:
           type: pypi
           name: networkx
       - type: file
-        url: https://files.pythonhosted.org/packages/9b/b4/e3c7e6fab0f77fff6194afa173d1f2342073d91b1d3b4b30b17c3fb4407a/numpy-2.1.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 6d95f286b8244b3649b477ac066c6906fbb2905f8ac19b170e2175d3d799f4df
+        url: https://files.pythonhosted.org/packages/19/49/4df9123aafa7b539317bf6d342cb6d227e49f7a35b99c287a6109b13dd93/numpy-2.2.6-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 1bc23a79bfabc5d056d106f9befb8d50c31ced2fbc70eedb8155aec74a45798f
         x-checker-data:
           type: pypi
           name: numpy
@@ -159,8 +158,8 @@ modules:
           type: pypi
           name: opencv_python_headless
       - type: file
-        url: https://files.pythonhosted.org/packages/8a/91/807f4e288969bc696dee2e56d7269abffb56626249642effb8ec2ab7d424/openvino-2025.4.1-20426-cp312-cp312-manylinux2014_x86_64.whl
-        sha256: 88f074286d420c1a1a95e7f2ba11109a899f2f3b3fd818cfe1e47ead22cc7e45
+        url: https://files.pythonhosted.org/packages/d7/76/099c34ac7563a350325efe6dbc91b5cc20f0aa2331a6e036f2da262bab57/openvino-2025.4.1-20426-cp313-cp313-manylinux2014_x86_64.whl
+        sha256: 68f8d6cfd74c7a74d68a62c8156830ddaa5b9f1f782d3643def83f659c0a6671
         x-checker-data:
           type: pypi
           name: openvino
@@ -177,8 +176,8 @@ modules:
           type: pypi
           name: packaging
       - type: file
-        url: https://files.pythonhosted.org/packages/9d/21/84c9f287d17180f26263b5f5c8fb201de0f88b1afddf8a2597a5c9fe787f/pillow-11.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: f02541ef64077f22bf4924f225c0fd1248c168f86e4b7abdedd87d6ebaceab0f
+        url: https://files.pythonhosted.org/packages/38/57/755dbd06530a27a5ed74f8cb0a7a44a21722ebf318edbe67ddbd7fb28f88/pillow-12.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: f4f1231b7dec408e8670264ce63e9c71409d9583dd21d32c163e25213ee2a344
         x-checker-data:
           type: pypi
           name: pillow
@@ -195,8 +194,8 @@ modules:
           type: pypi
           name: PyQt6_Qt6
       - type: file
-        url: https://files.pythonhosted.org/packages/11/fd/04adac969ba70bb042d52e13c99c968fce0e1fa6a52146f03a974168a848/pyqt6_sip-13.10.3-cp312-cp312-manylinux1_x86_64.manylinux_2_5_x86_64.whl
-        sha256: 3f3e2a79738319b795f0d1b2a555b1ea669b1a306b604bac876c84833cabb008
+        url: https://files.pythonhosted.org/packages/0e/38/27c3aa3f153fcd83a0765fedf8e44a1136f189a322bcc9c494c5b3793cd7/pyqt6_sip-13.11.0-cp313-cp313-manylinux1_x86_64.manylinux_2_5_x86_64.whl
+        sha256: a75144e8a0bcf9d1a9069011890401748af353749f1de1b6a314b880781edf9d
         x-checker-data:
           type: pypi
           name: PyQt6_sip
@@ -219,14 +218,14 @@ modules:
           type: pypi
           name: sympy
       - type: file
-        url: https://download.pytorch.org/whl/cpu/torch-2.9.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl
-        sha256: 7417d8c565f219d3455654cb431c6d892a3eb40246055e14d645422de13b9ea1
+        url: https://download.pytorch.org/whl/cpu/torch-2.9.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl
+        sha256: 39b3dff6d8fba240ae0d1bede4ca11c2531ae3b47329206512d99e17907ff74b
         x-checker-data:
           type: pypi
           name: torch
       - type: file
-        url: https://download.pytorch.org/whl/cpu/torchvision-0.24.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl
-        sha256: 48ff40694812292f1f75cddb517f9eef224a2e8388798a0aa191e27bf159fc5d
+        url: https://download.pytorch.org/whl/cpu/torchvision-0.24.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl
+        sha256: 19eb1744686a992522bf9ab8bf4b3245c2202e93a39b1fe1fcb2b8d2ca982048
         x-checker-data:
           type: pypi
           name: torchvision
