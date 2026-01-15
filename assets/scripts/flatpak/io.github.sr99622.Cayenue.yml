@@ -44,7 +44,7 @@ modules:
       - tar -xvf data.tar.zst -C /app
       - ar x libze-intel-gpu1_25.48.36300.8-0_amd64.deb
       - tar -xvf data.tar.zst -C /app
-      - echo "/app/usr/lib/x86_64-linux-gnu/intel-opencl/libigdrcl.so" > /app/etc/OpenCL/vendors/intel.icd
+      - install -Dm644 intel.icd -t /app/etc/OpenCL/vendors
 
     sources:
       - type: file
@@ -53,6 +53,8 @@ modules:
         path: io.github.sr99622.Cayenue.metainfo.xml
       - type: file
         path: io.github.sr99622.Cayenue.png
+      - type: file
+        path: intel.icd
       #- type: file
       #  path: cayenue-1.0.2-py3-none-any.whl
       - type: file
