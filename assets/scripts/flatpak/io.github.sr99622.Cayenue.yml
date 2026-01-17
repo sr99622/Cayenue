@@ -1,8 +1,9 @@
+
 id: io.github.sr99622.Cayenue
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
-command: cayenue
+command: hello
 finish-args:
   - --socket=wayland
   - --socket=fallback-x11
@@ -14,10 +15,26 @@ finish-args:
   - --filesystem=xdg-videos:rw
   - --filesystem=xdg-pictures:rw
   - --env=LEVEL_ZERO_DISABLE_SYSTEM=1
-  - --env=OCL_ICD_VENDORS=/app/etc/OpenCL/vendors
-#  - --env=LD_LIBRARY_PATH=/app/usr/local/lib:/app/usr/lib/x86_64-linux-gnu:/app/lib
 
 modules:
+
+  - name: hello
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 hello.sh /app/bin/hello
+    sources:
+      - type: script
+        dest-filename: hello.sh
+        commands:
+          - export LD_LIBRARY_PATH=/app/usr/local/lib:/app/usr/lib/x86_64-linux-gnu:/app/lib
+          - export OCL_ICD_VENDORS=/app/etc/OpenCL/vendors
+          - cayenue
+        only-arches: [x86_64]
+      - type: script
+        dest-filename: hello.sh
+        commands:
+          - cayenue
+        only-arches: [aarch64]
 
   - name: cayenue
     buildsystem: simple
@@ -215,16 +232,6 @@ modules:
           type: pypi
           name: idna
 
-#  - name: patchelf
-#    buildsystem: autotools
-#    cleanup:
-#      - '*'
-#    sources:
-#      - type: archive
-#        url: https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.gz
-#        sha256: 64de10e4c6b8b8379db7e87f58030f336ea747c0515f381132e810dbf84a86e7
-
-
   - name: intel-opencl
     only-arches: [x86_64]
     buildsystem: simple
@@ -246,8 +253,6 @@ modules:
       - ar x libze-intel-gpu1_25.48.36300.8-0_amd64.deb
       - tar -xvf data.tar.zst -C /app
       - install -Dm644 intel.icd -t /app/etc/OpenCL/vendors
-#      - patchelf --set-rpath '$ORIGIN:$ORIGIN/../lib:/app/usr/lib/x86_64-linux-gnu' \
-#          /app/usr/lib/x86_64-linux-gnu/intel-opencl/libigdrcl.so
 
     sources:
       - type: file

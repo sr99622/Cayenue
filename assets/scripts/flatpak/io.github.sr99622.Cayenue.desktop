@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Cayenue
 Comment=IP Camera Application
-Exec=cayenue
+Exec=hello
 Terminal=false
 Icon=io.github.sr99622.Cayenue
 StartupWMClass=python3
