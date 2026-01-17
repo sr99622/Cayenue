@@ -219,11 +219,9 @@ modules:
     only-arches: [x86_64]
     buildsystem: simple
     build-commands:
-      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
-        torch-2.9.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl --no-build-isolation
-      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
-        torchvision-0.24.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl --no-build-isolation
-      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} 
+      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} \
+        torch-2.9.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl \
+        torchvision-0.24.1%2Bcpu-cp313-cp313-manylinux_2_28_x86_64.whl \
         openvino --no-build-isolation
       - ar x intel-igc-core-2_2.24.8+20344_amd64.deb
       - tar -xvf data.tar.gz -C /app
