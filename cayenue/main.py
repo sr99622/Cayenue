@@ -28,7 +28,8 @@ import importlib.util
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QSplitter, \
     QTabWidget, QMessageBox, QDialog, QGridLayout, QWidget
-from PyQt6.QtCore import pyqtSignal, QObject, QSettings, QDir, QSize, QTimer, Qt
+from PyQt6.QtCore import pyqtSignal, QObject, QSettings, QDir, QSize, \
+    QTimer, Qt, QStandardPaths
 from PyQt6.QtGui import QIcon, QGuiApplication, QMovie
 from cayenue.panels import CameraPanel, FilePanel, SettingsPanel, VideoPanel, \
     AudioPanel, PicturePanel
@@ -867,11 +868,19 @@ class MainWindow(QMainWindow):
         return str(path.parent.absolute())
     
     def getCacheLocation(self):
+        path = None
+        if sys.platform == "linux":
+            if len(QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation)):
+                path = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation)[0]
+            else:
+                path = os.path.join(os.environ['HOME'], ".cache", "Cayenue")
+            return path
+
         if sys.platform == "win32":
             home = os.environ['HOMEPATH']
         else:
             home = os.environ['HOME']
-        path = None
+
         if sys.platform == "darwin":
             path = os.path.join(self.getLocation(), "cache")
         else:
