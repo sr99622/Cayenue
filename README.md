@@ -420,7 +420,7 @@ Remove the currently selected camera from the list. This will remove the camera 
 
 &nbsp;
 
-<image src="assets/images/image_tab.png" width="400"/>
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/image_tab.png?raw=true" width="400"/>
 
 &nbsp;
 
@@ -433,7 +433,7 @@ The sliders control various parameters of the video quality.  The Apply button m
 
 &nbsp;
 
-<image src="assets/images/network_tab.png" width="400"/>
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/network_tab.png?raw=true" width="400"/>
 
 &nbsp;
 
@@ -452,7 +452,7 @@ The Apply button must be clicked to enact any of these changes on the camera.
 
 &nbsp;
 
-<image src="assets/images/ptz_tab.png" width="400"/>
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/ptz_tab.png?raw=true" width="400"/>
 
 &nbsp;
 
@@ -467,7 +467,7 @@ Settings pertain to preset selections or current camera position. The arrow butt
 
 &nbsp;
 
-<image src="assets/images/system_tab.png" width="400"/>
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/system_tab.png?raw=true" width="400"/>
 
 &nbsp;
 
@@ -513,7 +513,7 @@ Settings pertain to preset selections or current camera position. The arrow butt
 
     &nbsp;
 
-    <image src="assets/images/sync_time.png" width="640">
+    <image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/sync_time.png?raw=true" width="640">
 
     &nbsp;
 
@@ -562,11 +562,11 @@ Inside the camera folders are the individual picture or video files recorded by 
 
 &nbsp;
 
-<image src="assets/images/picture_panel.png" width="500">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/picture_panel.png?raw=true" width="500">
 
 &nbsp;
 
-<image src="assets/images/file_panel.png" width="500">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/file_panel.png?raw=true" width="500">
 
 &nbsp;
 
@@ -576,11 +576,11 @@ File playback is configured such that one file is played at a time. Keyboard sho
 
 <h3>File Playback Controls For Mouse</h3>
 
-<image src="cayenue/resources/search.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/refresh.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/snapshot.png">
+<image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/search.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/refresh.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/snapshot.png?raw=true">
 
 Search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refresh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Snapshot
 
-<image src="cayenue/resources/play.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/pause.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/stop.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/previous.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/next.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/audio.png">
+<image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/play.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/pause.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/stop.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/previous.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/next.png?raw=true"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="https://github.com/sr99622/Cayenue/blob/main/cayenue/resources/audio.png?raw=true">
 
 Play&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pause&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prev&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mute
 
@@ -644,7 +644,7 @@ The application has the ability to search the files by camera for a particular m
 
 &nbsp;
 
-<image src="assets/images/file_search.png">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/file_search.png?raw=true">
 
 &nbsp;
 
@@ -672,7 +672,7 @@ The files listed in the panel my not be updated automatically. Use the refresh i
 
 &nbsp;
 
-<image src="assets/images/general.png" width="400">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/general.png?raw=true" width="400">
 
 &nbsp;
 
@@ -712,7 +712,7 @@ Additional profiles can be added using the three dot button to the right of the 
 
 &nbsp;
 
-<image src="assets/images/profile.png" width="360">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/profile.png?raw=true" width="360">
 
 &nbsp;
 
@@ -740,7 +740,7 @@ This will clear all settings for the application, including the File Reader sett
 
 &nbsp;
 
-<image src="assets/images/discover.png" width="400">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/discover.png?raw=true" width="400">
 
 &nbsp;
 
@@ -770,7 +770,7 @@ When selected in combination with the Auto Discovery check box, cameras shown in
 
 &nbsp;
 
-<image src="assets/images/storage.png" width="400">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/storage.png?raw=true" width="400">
 
 &nbsp;
 
@@ -810,7 +810,7 @@ The application has the ability to manage the disk space used by the recorded me
 
 &nbsp;
 
-<image src="assets/images/proxy.png" width="400">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/proxy.png?raw=true" width="400">
 
 &nbsp;
 
@@ -846,7 +846,7 @@ The application has the ability to manage the disk space used by the recorded me
 
 &nbsp;
 
-<image src="assets/images/alarm.png" width="400">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/alarm.png?raw=true" width="400">
 
 &nbsp;
 
@@ -900,7 +900,7 @@ If the analysis produces an alarm, record and alarm sound actions are taken base
 
 &nbsp;
 
-<image src="assets/images/motion.png" width="640">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/motion.png?raw=true" width="640">
 
 &nbsp;
 
@@ -923,7 +923,7 @@ Motion detection systems are prone to false alarms due to the indiscriminate nat
 
 &nbsp;
 
-<image src="assets/images/yolox.png" width="640">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/yolox.png?raw=true" width="640">
 
 &nbsp;
 
@@ -982,7 +982,7 @@ If the analysis produces an alarm, record and alarm sound actions are taken base
 
 &nbsp;
 
-<image src="assets/images/audio_panel.png" width="400">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/audio_panel.png?raw=true" width="400">
 
 &nbsp;
 
@@ -1682,7 +1682,7 @@ Check the update service periodically to ensure it remains disabled.
 <summary>Media MTX</summary>
 
 <a href="https://github.com/bluenviron/mediamtx">
-<image src="assets/images/media_mtx_logo.png">
+<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/media_mtx_logo.png?raw=true">
 </a>
 
 MIT License
@@ -1713,7 +1713,7 @@ SOFTWARE.
 <summary>YOLOX</summary>
 
 <a href="https://github.com/Megvii-BaseDetection/YOLOX">
-<image src = "assets/images/yolox_logo.png">
+<image src = "https://github.com/sr99622/Cayenue/blob/main/assets/images/yolox_logo.png?raw=true">
 </a>
 
 &nbsp;
