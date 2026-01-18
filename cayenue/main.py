@@ -327,7 +327,7 @@ class MainWindow(QMainWindow):
         self.signals.hideWaitDialog.emit()
 
     def loadVideoConfigure(self, workerName):
-        workerLocation = f'{self.videoPanel.stdLocation}/{workerName}'
+        workerLocation = str(Path(self.videoPanel.stdLocation) / workerName)
         if workerName == "motion.py":
             # weird linux bug that shows dlgWait delayed causing missed signal hideWaitDialog, see sleep in specVideo
             self.specVideo(workerLocation)
@@ -345,7 +345,7 @@ class MainWindow(QMainWindow):
 
     def pyVideoCallback(self, frame, player):
         if not self.videoWorkerHook:
-            file = self.videoPanel.stdLocation + "/" + self.videoPanel.cmbWorker.currentText()
+            file = str(Path(self.videoPanel.stdLocation) / self.videoPanel.cmbWorker.currentText())
             spec = importlib.util.spec_from_file_location("VideoWorker", file)
             self.videoWorkerHook = importlib.util.module_from_spec(spec)
             sys.modules["VideoWorker"] = self.videoWorkerHook
@@ -479,9 +479,10 @@ class MainWindow(QMainWindow):
                     self.glWidget.focused_uri = None
                     self.collapseSplitter()
             case Qt.Key.Key_D:
-                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
-                    self.cameraPanel.btnDiscoverClicked()
-                    self.cameraPanel.lstCamera.setFocus()
+                if self.settings_profile == "gui":
+                    if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                        self.cameraPanel.btnDiscoverClicked()
+                        self.cameraPanel.lstCamera.setFocus()
 
         super().keyPressEvent(event)
 

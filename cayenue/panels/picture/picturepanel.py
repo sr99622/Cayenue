@@ -22,7 +22,7 @@ from loguru import logger
 from PyQt6.QtWidgets import QGridLayout, QWidget, \
     QLabel, QAbstractItemView, QAbstractItemView, \
     QApplication, QTreeView, QMenu, QMessageBox
-from PyQt6.QtGui import QFileSystemModel, QAction
+from PyQt6.QtGui import QFileSystemModel, QAction, QColorConstants
 from PyQt6.QtCore import Qt, QFileInfo, QDateTime, \
     QDate, QTime, QStandardPaths
 from cayenue.components.directoryselector import DirectorySelector
@@ -54,9 +54,11 @@ class PicTreeView(QTreeView):
                             self.expand(index)
             case Qt.Key.Key_Escape:
                 if player := self.mw.filePanel.getCurrentlyPlayingFile():
-                    #self.mw.filePanel.control.btnStopClicked()
                     self.mw.closeAllStreams()
                     pass_through = False
+                else:
+                    self.mw.glWidget.buffer.fill(QColorConstants.Black)
+                    self.mw.glWidget.update()
             case Qt.Key.Key_Space:
                 if player := self.mw.filePanel.getCurrentlyPlayingFile():
                     player.togglePaused()

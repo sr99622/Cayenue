@@ -21,6 +21,7 @@ import os
 from PyQt6.QtWidgets import QGridLayout, QWidget, \
     QLabel, QComboBox, QVBoxLayout
 from PyQt6.QtCore import Qt
+from pathlib import Path
 
 class VideoPanel(QWidget):
     def __init__(self, mw):
@@ -30,7 +31,7 @@ class VideoPanel(QWidget):
         self.panel = None
         self.layout = QVBoxLayout(self)
         self.workerKey = "VideoPanel/worker"
-        self.stdLocation = mw.getLocation() + "/cayenue/panels/video/modules"
+        self.stdLocation = str(Path(mw.getLocation()) / "cayenue" / "panels" / "video" / "modules")
 
         self.lblCamera = QLabel("Please select a camera to enable this panel")
 
@@ -73,7 +74,6 @@ class VideoPanel(QWidget):
         self.layout.setStretch(1, 10)
 
     def cmbWorkerChanged(self, worker):
-        print("cmbWorkerChanged")
         camera = None
         if self.panel:
             camera = self.panel.camera

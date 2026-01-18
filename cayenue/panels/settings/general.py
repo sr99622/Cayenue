@@ -398,7 +398,7 @@ class GeneralOptions(QWidget):
         self.btnHideDisplay = QPushButton("Hide Display")
         self.btnHideDisplay.clicked.connect(self.btnHideDisplayClicked)
 
-        self.btnClearSettings = QPushButton("Clear")
+        self.btnClearSettings = QPushButton("Clear All Settings")
         self.btnClearSettings.clicked.connect(self.btnClearSettingsClicked)
 
         self.btnHelp = QPushButton("Help")
@@ -442,7 +442,7 @@ class GeneralOptions(QWidget):
         lytButtons.addWidget(self.btnShowLogs,      0, 1, 1, 1)
         lytButtons.addWidget(self.btnHelp,          0, 2, 1, 1)
         #lytButtons.addWidget(self.btnCloseAll,      0, 0, 1, 1)
-        #lytButtons.addWidget(self.btnClearSettings, 1, 2, 1, 1)
+        lytButtons.addWidget(self.btnClearSettings, 1, 0, 1, 3)
         #lytButtons.addWidget(self.btnTest,   1, 1, 1, 1)
 
         self.lblMemory = QLabel()
