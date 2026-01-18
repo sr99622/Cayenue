@@ -23,7 +23,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cayenue"
-version = "1.0.2"
+version = "1.0.3"
 description = "A client GUI for ONVIF"
 readme = "README.md"
 requires-python = ">=3.10"

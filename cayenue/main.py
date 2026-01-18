@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -868,31 +868,19 @@ class MainWindow(QMainWindow):
         return str(path.parent.absolute())
     
     def getCacheLocation(self):
-        print("GET CONFIG LOCATION:", QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation))
-        print("GET DATA LOCATION:", QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppConfigLocation))
-        print("GET CACHE LOCATION:", QStandardPaths.standardLocations(QStandardPaths.StandardLocation.CacheLocation))
+        match sys.platform:
+            case "linux":
+                if len(QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation)):
+                    return QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation)[0]
+                else:
+                    return os.path.join(os.environ['HOME'], ".cache", "cayenue")
+            case "win32":
+                return os.join(os.environ['HOMEPATH'], ".cache", "cayenue")
+            case "darwin":
+                return os.join(self.getLocation(), "cache")
 
-        path = None
-        if sys.platform == "linux":
-            home = os.environ['HOME']
-            if len(QStandardPaths.standardLocations(QStandardPaths.StandardLocation.CacheLocation)):
-                path = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.CacheLocation)[0]
-            else:
-                path = os.path.join(os.environ['HOME'], ".cache", "Cayenue")
-                #path = os.path.join(home, "cayenue")
-            print("PATH IS:", path)
-            return path
-
-        if sys.platform == "win32":
-            home = os.environ['HOMEPATH']
-        else:
-            home = os.environ['HOME']
-        #path = None
-        if sys.platform == "darwin":
-            path = os.path.join(self.getLocation(), "cache")
-        else:
-            path = Path(f'{home}/.cache/Cayenue')
-        return path
+        # fallback if all else fails
+        return ".cache"
 
     def getLogFilename(self):
         return os.path.join(self.getCacheLocation(), "logs", "logs.txt")
