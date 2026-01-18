@@ -4,15 +4,15 @@
 <image src="assets/images/cayenue_logo.png">
 
 
-<h2>Take your security seriously.</h2>
+<h2>Taking security seriously.</h2>
 
-View, analyze and store AV streams from a fleet of networked cameras in real time. Reduce cognitive load to enhance phenomena observability using neural net feedback indicators. Concurrently review events in critical alert situations with intuitive controls. Distributed knowledge using proxy service multipliers. Absolute autonomy over data privacy.
+View, analyze and store AV streams from a fleet of networked cameras in real time. Reduce cognitive load to enhance phenomena observability using neural net feedback indicators. Concurrently review events in critical alert situations with intuitive controls. Distributed knowledge using proxy service multipliers. Absolute autonomy over data privacy. High Perfomance software with repsonsive interface.
 
 <h3>System Requirements</h3>
 
 Onvif compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco
 
-Computers running Linux, Mac or Windows. Cayenue runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
+Computers running Linux, Mac or Windows. Cayenue is a multi-modal system and runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
 
 <h3>Network Configuration</h3>
 
@@ -26,9 +26,9 @@ An integrated HTTP server provides access to live video streams from unconfigure
 
 Events triggered by the YOLO detector are stored as images that can be linked to the Video library. Simply double click the picture to start the timelime playback. Specific time points in video files can be accessed using the search tool. Important functions have associated key bindings for mouseless operation.
 
-<h3>Expand Your Horizon</h3>
+<h3>Expand The Horizon</h3>
 
-Open source software written in Python with the permissive Apache license gives you the ability to craft your own algorithms for advanced usage. 
+Open source software written in Python with permissive Apache license affords the ability to craft custom algorithms for advanced usage. 
 
 
 ## Operation
