@@ -868,19 +868,26 @@ class MainWindow(QMainWindow):
         return str(path.parent.absolute())
     
     def getCacheLocation(self):
+        print("GET CONFIG LOCATION:", QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation))
+        print("GET DATA LOCATION:", QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppConfigLocation))
+        print("GET CACHE LOCATION:", QStandardPaths.standardLocations(QStandardPaths.StandardLocation.CacheLocation))
+
         path = None
         if sys.platform == "linux":
-            if len(QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation)):
-                path = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.AppDataLocation)[0]
+            home = os.environ['HOME']
+            if len(QStandardPaths.standardLocations(QStandardPaths.StandardLocation.CacheLocation)):
+                path = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.CacheLocation)[0]
             else:
                 path = os.path.join(os.environ['HOME'], ".cache", "Cayenue")
+                #path = os.path.join(home, "cayenue")
+            print("PATH IS:", path)
             return path
 
         if sys.platform == "win32":
             home = os.environ['HOMEPATH']
         else:
             home = os.environ['HOME']
-
+        #path = None
         if sys.platform == "darwin":
             path = os.path.join(self.getLocation(), "cache")
         else:
