@@ -732,6 +732,9 @@ Shows this file.
 
 If running Onvif GUI in server configuration, it may be desirable to run in headless mode. If this is the case, hiding the display will significantly reduce compute load by bypassing the rendering routines. In this configuration, the compute load will be similar to that of a console application. Once the display is hidden, the text of the button will change to Show Display with appropriate functionality.
 
+### Clear All Settings
+
+This will clear all settings for the application, including the File Reader settings.
 
 ## Discover Settings
 

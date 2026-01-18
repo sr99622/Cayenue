@@ -876,9 +876,9 @@ class MainWindow(QMainWindow):
                 else:
                     return os.path.join(os.environ['HOME'], ".cache", "cayenue")
             case "win32":
-                return os.join(os.environ['HOMEPATH'], ".cache", "cayenue")
+                return os.path.join(os.environ['HOMEPATH'], ".cache", "cayenue")
             case "darwin":
-                return os.join(self.getLocation(), "cache")
+                return os.path.join(self.getLocation(), "cache")
 
         # fallback if all else fails
         return ".cache"

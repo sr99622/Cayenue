@@ -47,7 +47,7 @@ dependencies = [
   "kankakee==1.0.4",
   "numpy",
   "loguru",
-  "opencv-python-headless",
+  "opencv-python-headless==4.12.0.88",
   "PyQt6-Qt6",
   "PyQt6",
   "requests"
