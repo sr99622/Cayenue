@@ -163,8 +163,7 @@ class Player(avio.Player):
 
                 if self.systemTabSettings():
                     save_picture = self.alarm_state != self.last_alarm_state \
-                                and self.mw.settingsPanel.alarm.chkSavePicture.isChecked() \
-                                and self.systemTabSettings().record_enable
+                                and self.mw.settingsPanel.alarm.chkSavePicture.isChecked()
 
                     if save_picture and self.image:
                         try:
