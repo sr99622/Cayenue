@@ -539,9 +539,9 @@ class GeneralOptions(QWidget):
         self.dlgLog.show()
 
     def btnHelpClicked(self):
-        result = webbrowser.get().open("https://github.com/sr99622/libonvif#readme-ov-file")
+        result = webbrowser.get().open("https://github.com/sr99622/Cayenue?tab=readme-ov-file#cayenue")
         if not result:
-            webbrowser.get().open("https://github.com/sr99622/libonvif")
+            webbrowser.get().open("https://github.com/sr99622/Cayenue")
 
     def btnHideDisplayClicked(self):
         controlSize = self.mw.split.sizes()[1]
