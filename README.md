@@ -3,9 +3,7 @@
 
 <image src="assets/images/cayenue_logo.png">
 
-&nbsp;
-
-View, analyze and store AV streams from a fleet of networked cameras in real time. Reduce cognitive load to enhance phenomena observability using neural net feedback indicators. Concurrently review events in critical alert situations with intuitive controls. Distributed knowledge using proxy service multipliers. Absolute autonomy over data privacy. High Perfomance software with responsive interface.
+View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High Perfomance software with responsive interface and proven stability.
 
 <h3>System Requirements</h3>
 
