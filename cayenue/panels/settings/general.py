@@ -334,6 +334,7 @@ class GeneralOptions(QWidget):
         
         self.txtPassword = QLineEdit()
         self.txtPassword.setText(mw.settings.value(self.passwordKey, ""))
+        self.txtPassword.setEchoMode(QLineEdit.EchoMode.Password)
         self.txtPassword.textChanged.connect(self.passwordChanged)
         lblPassword = QLabel("Common Password")
         

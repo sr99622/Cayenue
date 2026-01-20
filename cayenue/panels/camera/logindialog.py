@@ -39,6 +39,7 @@ class LoginDialog(QDialog):
         self.txtUsername = QLineEdit()
         lblUsername = QLabel("Username")
         self.txtPassword = QLineEdit()
+        self.txtPassword.setEchoMode(QLineEdit.EchoMode.Password)
         lblPassword = QLabel("Password")
 
         lytMain = QGridLayout(self)
