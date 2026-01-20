@@ -3,8 +3,7 @@
 
 <image src="assets/images/cayenue_logo.png">
 
-
-<h2>Taking security seriously</h2>
+&nbsp;
 
 View, analyze and store AV streams from a fleet of networked cameras in real time. Reduce cognitive load to enhance phenomena observability using neural net feedback indicators. Concurrently review events in critical alert situations with intuitive controls. Distributed knowledge using proxy service multipliers. Absolute autonomy over data privacy. High Perfomance software with responsive interface.
 
