@@ -222,6 +222,12 @@ class PicturePanel(QWidget):
 
     def playVideo(self):
         try:
+            uri = self.mw.filePanel.getCurrentFileURI()
+            if player := self.mw.pm.getPlayer(uri):
+                player.togglePaused()
+                self.control.setBtnPlay()
+                return
+
             alarm_buffer_size = self.mw.settingsPanel.alarm.spnBufferSize.value()
             index = self.tree.currentIndex()
             if index.isValid():
