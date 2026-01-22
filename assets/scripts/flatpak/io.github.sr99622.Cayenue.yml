@@ -51,14 +51,14 @@ modules:
         path: io.github.sr99622.Cayenue.metainfo.xml
       - type: file
         path: io.github.sr99622.Cayenue.png
-      #- type: file
-      #  path: cayenue-1.0.3-py3-none-any.whl
       - type: file
-        url: https://files.pythonhosted.org/packages/91/3e/e178f7fc4df722d67fe710575d68ce85733de51e58a7dbdcb4a6116ea0e9/cayenue-1.0.3-py3-none-any.whl
-        sha256: 5dab12125b70c5e34b86747097a90ca1fb4753e300afbe78eeb0cdc5a3fd095c
-        x-checker-data:
-          type: pypi
-          name: cayenue
+        path: cayenue-1.0.4-py3-none-any.whl
+      #- type: file
+      #  url: https://files.pythonhosted.org/packages/91/3e/e178f7fc4df722d67fe710575d68ce85733de51e58a7dbdcb4a6116ea0e9/cayenue-1.0.3-py3-none-any.whl
+      #  sha256: 5dab12125b70c5e34b86747097a90ca1fb4753e300afbe78eeb0cdc5a3fd095c
+      #  x-checker-data:
+      #    type: pypi
+      #    name: cayenue
       - type: file
         url: https://files.pythonhosted.org/packages/64/d5/1daf65654eeeb665ba49d92f846a1d48655b870ceb45b3b83db7e9d217bd/avio-3.2.7-cp313-cp313-manylinux_2_35_x86_64.whl
         sha256: 33918af7a49557b97245c7d2ae541a9a23819131ebb7397eff30c15ad825d6ab
