@@ -1038,9 +1038,9 @@ The control tab on the right of the application window may be toggled using the 
 
 Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to-install-and-configure-isc-kea). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below.
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Onvif GUI server ethernet address connecting to the camera network to be 10.1.1.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.1.1.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.1.1.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Onvif GUI server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
 
-It will be necessary to find the name of the network interface intended to provide the DHCP service. On Linux, the command `ip a` will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.1.1.1 as set previously</i>) of the desired interface.
+It will be necessary to find the name of the network interface intended to provide the DHCP service. On Linux, the command `ip a` will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface.
 
 ### Sample Configuration File
 
@@ -1089,7 +1089,7 @@ It will be necessary to find the name of the network interface intended to provi
 }
 ```
 
-This is a basic configuration that will assign addresses in the range of 10.1.1.64 - 10.1.1.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Onvif GUI server.
+This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Onvif GUI server.
 
 The service can be set up by copying the sample file to `/etc/kea/kea-dhcp4.conf`, replacing the tag `<your-interface-name>` with the appropriate data from the `ip a` command,  This can be done using the command `sudo nano /etc/kea/kea-dhcp4.conf`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
 
@@ -1119,7 +1119,7 @@ The `enable` and `disable` commands install and uninstall the kea dhcp4 service 
 
 On Mac OS, the DHCP service is provided by bootpd. The service is configured with a file named `/etc/bootpd.plist`. A sample configuration file is shown below. 
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Onvif GUI server ethernet address connecting to the camera network to be 10.1.1.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.1.1.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.1.1.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Onvif GUI server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
 
 This file is configured to use the interface named `en0`, which in most cases will be the ethernet interface on the Mac computer. Please check the name using the `ifconfig` command to verify that this is the correct information.
 
@@ -1146,21 +1146,21 @@ This file is configured to use the interface named `en0`, which in most cases wi
             <key>allocate</key>
             <true/>
             <key>dhcp_router</key>
-            <string>10.1.1.1</string>
+            <string>10.2.2.1</string>
             <key>lease_max</key>
             <integer>86400</integer>
             <key>lease_min</key>
             <integer>86400</integer>
             <key>name</key>
-            <string>10.1.1</string>
+            <string>10.2.2</string>
             <key>net_address</key>
-            <string>10.1.1.0</string>
+            <string>10.2.2.0</string>
             <key>net_mask</key>
             <string>255.255.255.0</string>
             <key>net_range</key>
             <array>
-                <string>10.1.1.64</string>
-                <string>10.1.1.242</string>
+                <string>10.2.2.64</string>
+                <string>10.2.2.242</string>
             </array>
         </dict>
     </array>
@@ -1168,7 +1168,7 @@ This file is configured to use the interface named `en0`, which in most cases wi
 </plist>
 ```
 
-This is a basic configuration that will assign addresses in the range of 10.1.1.64 - 10.1.1.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Onvif GUI server.
+This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Onvif GUI server.
 
 The service can be set up by copying the sample file to `/etc/bootpd.plist`, replacing the tag `en0` tag in the `dhcp_enabled` key with the appropriate data from the `ifconfig` command if necessary. This can be done using the command `sudo nano /etc/bootpd.plist`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
 
