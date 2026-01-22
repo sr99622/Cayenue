@@ -70,10 +70,10 @@ Hardware requirements for Client configuration are more relaxed as the Client ca
 
 &nbsp;
 
-Download the [Flatpak installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.3/Cayenue-1.0.3.flatpak), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+Download the [Flatpak installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.5/Cayenue-1.0.5.flatpak), then open a terminal and navigate to the Downloads folder. Use the following command to install.
 
 ```
-flatpak install Cayenue-1.0.3.flatpak
+flatpak install Cayenue-1.0.5.flatpak
 ```
 
 In some cases, it may be necessary to re-boot the computer in order to see the icon in the Applications menu.
@@ -93,10 +93,10 @@ flatpak uninstall io.github.sr99622.Cayenue
 
 &nbsp;
 
-Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.3/cayenue_1.0.3_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.5/cayenue_1.0.5_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
 
 ```
-sudo snap install cayeneu_1.0.3_amd64.snap --dangerous
+sudo snap install cayeneu_1.0.5_amd64.snap --dangerous
 ```
 
 The program can then be launched from the Applications menu. In order to get audio, you need to connect the pulseaudio driver.
@@ -143,7 +143,7 @@ sudo snap remove cayenue
 
 An installer is available for Apple Silicon running Mac OS version Sequoia (15).
 
-Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.3/Cayenue-1.0.3.dmg) and open it. Drag the Cayenue icon into the Applications folder. Once the installation is complete, the program can then be started from the Launchpad. To uninstall the program, use Finder to go to the Applications directory, then right click over the icon and select Move to Trash.
+Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.5/Cayenue-1.0.5.dmg) and open it. Drag the Cayenue icon into the Applications folder. Once the installation is complete, the program can then be started from the Launchpad. To uninstall the program, use Finder to go to the Applications directory, then right click over the icon and select Move to Trash.
 
 ---
 
@@ -161,7 +161,7 @@ Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1
 
 An installer is available for Windows.
 
-Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.3/Cayenue-installer-1.0.3.exe) and double click on it. You will receive a warning message from the Operating System. Follow the prompts on the screen to install the program. It can be launched from the icon found in the Applications menu. To uninstall the program, go to Settings -> Apps -> Installed Apps and find the icon, then use the three dot button on the right to select action.
+Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.5/Cayenue-installer-1.0.5.exe) and double click on it. You will receive a warning message from the Operating System. Follow the prompts on the screen to install the program. It can be launched from the icon found in the Applications menu. To uninstall the program, go to Settings -> Apps -> Installed Apps and find the icon, then use the three dot button on the right to select action.
 
 ---
 
