@@ -1063,20 +1063,20 @@ It will be necessary to find the name of the network interface intended to provi
     "subnet4": [
     {
         "id": 1,
-        "subnet": "10.1.1.0/24",
+        "subnet": "10.2.2.0/24",
         "pools": [
         {
-            "pool": "10.1.1.64 - 10.1.1.242"
+            "pool": "10.2.2.64 - 10.2.2.242"
         }
         ],
         "option-data": [
         {
             "name": "routers",
-            "data": "10.1.1.1"
+            "data": "10.2.2.1"
         },
         {
             "name": "domain-name-servers",
-            "data": "10.1.1.1"
+            "data": "10.2.2.1"
         },
         {
             "name": "domain-name",
