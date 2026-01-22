@@ -727,7 +727,7 @@ Shows this file.
 
 ### Hide Display
 
-If running Onvif GUI in server configuration, it may be desirable to run in headless mode. If this is the case, hiding the display will significantly reduce compute load by bypassing the rendering routines. In this configuration, the compute load will be similar to that of a console application. Once the display is hidden, the text of the button will change to Show Display with appropriate functionality.
+If running Cayenue in server configuration, it may be desirable to run in headless mode. If this is the case, hiding the display will significantly reduce compute load by bypassing the rendering routines. In this configuration, the compute load will be similar to that of a console application. Once the display is hidden, the text of the button will change to Show Display with appropriate functionality.
 
 ### Clear All Settings
 
@@ -1029,7 +1029,7 @@ The control tab on the right of the application window may be toggled using the 
 
 &nbsp;
 
-<i>A network set up as shown in the Recommended Configuration will require some mechanism for setting IP addresses to the cameras and computers that connect to the network. Although this may be achieved by setting  static IP for each device, a DHCP server is recommended. This is a service that is installed on the Onvif GUI server host computer. DHCP service configuration details are shown for each operating system.</i>
+<i>A network set up as shown in the Recommended Configuration will require some mechanism for setting IP addresses to the cameras and computers that connect to the network. Although this may be achieved by setting  static IP for each device, a DHCP server is recommended. This is a service that is installed on the Cayenue server host computer. DHCP service configuration details are shown for each operating system.</i>
 
 <details>
 <summary>Linux</summary>
@@ -1038,7 +1038,7 @@ The control tab on the right of the application window may be toggled using the 
 
 Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to-install-and-configure-isc-kea). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below.
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Onvif GUI server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
 
 It will be necessary to find the name of the network interface intended to provide the DHCP service. On Linux, the command `ip a` will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface.
 
@@ -1089,7 +1089,7 @@ It will be necessary to find the name of the network interface intended to provi
 }
 ```
 
-This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Onvif GUI server.
+This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
 
 The service can be set up by copying the sample file to `/etc/kea/kea-dhcp4.conf`, replacing the tag `<your-interface-name>` with the appropriate data from the `ip a` command,  This can be done using the command `sudo nano /etc/kea/kea-dhcp4.conf`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
 
@@ -1119,7 +1119,7 @@ The `enable` and `disable` commands install and uninstall the kea dhcp4 service 
 
 On Mac OS, the DHCP service is provided by bootpd. The service is configured with a file named `/etc/bootpd.plist`. A sample configuration file is shown below. 
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Onvif GUI server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
 
 This file is configured to use the interface named `en0`, which in most cases will be the ethernet interface on the Mac computer. Please check the name using the `ifconfig` command to verify that this is the correct information.
 
@@ -1168,7 +1168,7 @@ This file is configured to use the interface named `en0`, which in most cases wi
 </plist>
 ```
 
-This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Onvif GUI server.
+This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
 
 The service can be set up by copying the sample file to `/etc/bootpd.plist`, replacing the tag `en0` tag in the `dhcp_enabled` key with the appropriate data from the `ifconfig` command if necessary. This can be done using the command `sudo nano /etc/bootpd.plist`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
 
@@ -1232,7 +1232,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   sudo nano smb.conf
   ```
 
-  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Onvif GUI was installated. For example, if you created a user onvif-gui, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/onvif-gui. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
+  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installated. For example, if you created a user onvif-gui, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/onvif-gui. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
   
   ```
   [global]
@@ -1311,7 +1311,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   \\10.1.1.3
   ```
 
-  If all goes well, you get a shared folder icon in the navigator. Double click the folder to get a login screen. Use the credentials of the Onvif GUI account on the Linux server. If successful, create a shared drive by right clicking over the folder and using the drop down menu, and make the drive persisent. Open the Ovnif GUI application, go to the Files tab and use the navigation bar at the top to select the Videos folder from the shared drive. You should see the folders holding the camera recordings.
+  If all goes well, you get a shared folder icon in the navigator. Double click the folder to get a login screen. Use the credentials of the Cayenue account on the Linux server. If successful, create a shared drive by right clicking over the folder and using the drop down menu, and make the drive persisent. Open the Ovnif GUI application, go to the Files tab and use the navigation bar at the top to select the Videos folder from the shared drive. You should see the folders holding the camera recordings.
 
 * #### Linux Client Configuration
 
@@ -1569,7 +1569,7 @@ Compute load may also be reduced by increasing the Display Refresh Interval on t
 
 The load on the computer can be observed using a system monitoring tool such as Task Manager on Windows. This tool can be launched by right clicking over the task bar. Linux has a nice monitoring tool named [Mission Center](https://flathub.org/apps/io.missioncenter.MissionCenter) that has an appearance very similar to Task Manager. Apple Macs have the Activity Monitor with pop out windows for CPU and GPU history that can be accessed from the Mac toolbar.
 
-When setting up the computer for Onvif GUI, it can be helpful to observe the effects of different operations on the system load using the appropriate monitoring tool. Pushing the computer too hard will reduce reliability over time and may lead to crashing. It is a good idea to observe the loads on individual cores in the CPU and try to avoid bottlenecks caused when a single core becomes saturated and is flat lined at 100% usage. GPUs likewise will start to misbehave if pushed too hard. It is a good idea to leave some headroom in the performance metrics to allow for system operations that are performed periodically by the computer in the background.
+When setting up the computer for Cayenue, it can be helpful to observe the effects of different operations on the system load using the appropriate monitoring tool. Pushing the computer too hard will reduce reliability over time and may lead to crashing. It is a good idea to observe the loads on individual cores in the CPU and try to avoid bottlenecks caused when a single core becomes saturated and is flat lined at 100% usage. GPUs likewise will start to misbehave if pushed too hard. It is a good idea to leave some headroom in the performance metrics to allow for system operations that are performed periodically by the computer in the background.
 
 Lower powered CPUs with a small number of cores or systems running a large number of streams may benefit from hardware decoding. More powerful CPUs with a large core count will work as well as a hardware decoder for smaller numbers of streams.
 
@@ -1590,7 +1590,7 @@ Software developments in this field are constantly advancing, so it may be worth
 
 Camera compliance with the onvif standard is often incomplete and in some cases incorrect. Success may be limited in many cases. Cameras made by Hikvision or Dahua will have the greatest level of compatibility. Note that some third party OEM vendors who sell branded versions of these cameras might significantly alter the functionality of the camera software.
 
-Camera settings on the Media tab are most likely to work. Other tabs may have limited success. If Onvif GUI is able to determine that the camera settings for a particular function are unavailable, it will disable the controls for that function.
+Camera settings on the Media tab are most likely to work. Other tabs may have limited success. If Cayenue is able to determine that the camera settings for a particular function are unavailable, it will disable the controls for that function.
 
 If the camera DHCP setting is properly onvif compliant, the IP address may be reliably set. Some cameras may not respond to the DHCP setting requested by onvif-gui due to non compliance. Note that the camera may reboot automatically under some conditions if the DHCP setting is changed from off to on. DHCP must be turned off before setting a static IP address.
 
