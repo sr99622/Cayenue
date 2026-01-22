@@ -1036,7 +1036,7 @@ The control tab on the right of the application window may be toggled using the 
 
 &nbsp;
 
-Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to-install-and-configure-isc-kea). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below.
+Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below.
 
 It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
 
