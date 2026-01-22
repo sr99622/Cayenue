@@ -52,7 +52,7 @@ modules:
       - type: file
         path: io.github.sr99622.Cayenue.png
       - type: file
-        path: cayenue-1.0.4-py3-none-any.whl
+        path: cayenue-1.0.5-py3-none-any.whl
       #- type: file
       #  url: https://files.pythonhosted.org/packages/91/3e/e178f7fc4df722d67fe710575d68ce85733de51e58a7dbdcb4a6116ea0e9/cayenue-1.0.3-py3-none-any.whl
       #  sha256: 5dab12125b70c5e34b86747097a90ca1fb4753e300afbe78eeb0cdc5a3fd095c
