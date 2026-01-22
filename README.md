@@ -96,7 +96,7 @@ flatpak uninstall io.github.sr99622.Cayenue
 Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.5/cayenue_1.0.5_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
 
 ```
-sudo snap install cayeneu_1.0.5_amd64.snap --dangerous
+sudo snap install cayenue_1.0.5_amd64.snap --dangerous
 ```
 
 The program can then be launched from the Applications menu. In order to get audio, you need to connect the pulseaudio driver.
@@ -1035,6 +1035,8 @@ The control tab on the right of the application window may be toggled using the 
 <summary>Linux</summary>
 
 &nbsp;
+
+Ubuntu is the supported Linux OS, and is highly recommended for production use. Other distributions may work, but may rewuire significant effort to become operational, and their usage instructions will vary from those described here. The instructions provided here are based on Ubuntu.
 
 Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below.
 
