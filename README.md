@@ -1259,6 +1259,11 @@ Please note that the installation procedure does not include instructions for se
 
 &nbsp;
 
+<details>
+<summary>Ubuntu</summary>
+
+&nbsp;
+
 It is possible for Windows clients to access camera recordings residing on a Linux server on the local network by installing a samba share on the Linux server. There are a few steps needed to set up the server, which are often not well documented for this type of configuration. The following instructions will set up the shared folder on the server, then show how a Windows client can attach to the shared folder as a mapped drive. Please note that this setup is intended for use in a simple private network where all users can be trusted with data. More sophisticated configurations that control data access are possible, but are beyond the scope of these instructions.
 
 * #### Linux Server Configuration
@@ -1347,7 +1352,116 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 
   ```
 
-  _____________
+&nbsp;
+
+______________
+
+</details>
+
+<details>
+<summary>Fedora</summary>
+
+&nbsp;
+
+Install samba
+
+```
+sudo dnf install samba samba-common samba-client
+```
+
+Open firewall
+
+```
+sudo firewall-cmd --permanent --add-service=samba
+sudo firewall-cmd --reload
+```
+
+
+create shared directory
+
+```
+sudo mkdir -p /srv/samba/myshare
+sudo chmod -R 777 /srv/samba/myshare
+# Set the correct SELinux context
+sudo semanage fcontext --add --type "samba_share_t" "/srv/samba/myshare(/.*)?"
+sudo restorecon -R /srv/samba/myshare
+
+```
+
+Edit configuration file
+
+```
+sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
+sudo nano /etc/samba/smb.conf
+```
+
+configuration file content
+
+```
+[myshare]
+    comment = My Fedora Samba Share
+    path = /srv/samba/myshare
+    browseable = yes
+    writable = yes
+    guest ok = yes
+    read only = no
+    create mask = 0777
+    directory mask = 0777
+    public = yes
+```
+
+add password
+
+```
+sudo smbpasswd -a <username>
+```
+
+Step 5: Manage Samba Users (for private shares) 
+If you require restricted access instead of a public share, you must create a system user and then add them as a Samba user with a specific Samba password. 
+
+
+    Create a system user (if they don't exist): 
+```    
+sudo useradd smbuser
+```
+
+Set a system password: 
+
+```
+sudo passwd smbuser
+```
+
+Add the user to Samba and set a Samba password (it can be different from the system password):
+
+```
+sudo smbpasswd -a smbuser
+```
+     
+
+For a private share, you would modify the configuration in Step 4 to use parameters like valid users = smbuser and set guest ok = no. 
+
+
+
+
+start and enable
+
+```
+sudo systemctl enable smb nmb
+sudo systemctl start smb nmb
+sudo systemctl status smb
+
+```
+
+</details>
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>Samba Client Configuration</summary>
 
 
 * #### Windows Client Configuration
@@ -1364,9 +1478,6 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 
   Detailed configuration instructions can be found in the Operations -> Mount SMB Drive from Linux section of the notes.
 
----
-
-&nbsp;
 
 </details>
 
@@ -1573,8 +1684,6 @@ Once the mount is established, you can use the directory browser from the Files 
 
 </details>
 
-
----
 
 </details>
 
