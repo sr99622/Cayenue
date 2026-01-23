@@ -1036,6 +1036,9 @@ The control tab on the right of the application window may be toggled using the 
 
 &nbsp;
 
+<details>
+<summary>Ubuntu</summary>
+
 Ubuntu is the supported Linux OS, and is highly recommended for production use. Other distributions may work, but may require significant effort to become operational, and their usage instructions will probably vary from those described here. The instructions provided here are based on Ubuntu.
 
 Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below. The link above is recommended reading and contains detailed information not covered here.
@@ -1107,6 +1110,48 @@ sudo systemctl status kea-dhcp4-server
 ```
 
 The `enable` and `disable` commands install and uninstall the kea dhcp4 service into the boot protocol, controlling whether the service is started automatically at boot time. The balance of the commands control or show information about the service.
+
+</details>
+
+<details>
+<summary>Fedora</summary>
+
+&nbsp;
+
+Courtesy of [Server World](https://www.server-world.info/en/note?os=Fedora_43&p=dhcp&f=1). More detailed info there.
+
+Install the DHCP server program
+
+```
+sudo dnf install dhcp-server
+```
+
+Edit the configuration file
+
+```
+sudo nano /etc/dhcp/dhcpd.conf
+```
+
+Add the following content to the conf file
+
+```
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+subnet 10.2.2.0 netmask 255.255.255.0 {
+    range dynamic-bootp 10.2.2.64 10.2.2.224;
+    option broadcast-address 10.2.2.255;
+    option routers 10.2.2.1;
+}
+```
+
+Enable the server
+
+```
+sudo systemctl enable --now dhcpd 
+```
+
+</details>
 
 &nbsp;
 
