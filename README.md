@@ -1036,13 +1036,13 @@ The control tab on the right of the application window may be toggled using the 
 
 &nbsp;
 
-Ubuntu is the supported Linux OS, and is highly recommended for production use. Other distributions may work, but may rewuire significant effort to become operational, and their usage instructions will vary from those described here. The instructions provided here are based on Ubuntu.
+Ubuntu is the supported Linux OS, and is highly recommended for production use. Other distributions may work, but may require significant effort to become operational, and their usage instructions will probably vary from those described here. The instructions provided here are based on Ubuntu.
 
-Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below.
+Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below. The link above is recommended reading and contains detailed information not covered here.
 
 It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
 
-It will be necessary to find the name of the network interface intended to provide the DHCP service. On Linux, the command `ip a` will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface.
+It will be necessary to find the name of the network interface intended to provide the DHCP service. On Linux, the command `ip -br addr show` will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface.
 
 ### Sample Configuration File
 
@@ -1093,7 +1093,7 @@ It will be necessary to find the name of the network interface intended to provi
 
 This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
 
-The service can be set up by copying the sample file to `/etc/kea/kea-dhcp4.conf`, replacing the tag `<your-interface-name>` with the appropriate data from the `ip a` command,  This can be done using the command `sudo nano /etc/kea/kea-dhcp4.conf`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
+The service can be set up by copying the sample file to `/etc/kea/kea-dhcp4.conf`, replacing the tag `<your-interface-name>` with the appropriate data from the `ip -br addr show` command,  This can be done using the command `sudo nano /etc/kea/kea-dhcp4.conf`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
 
 Use the commands shown below to control the service. Be sure to use the enable command to get persistent service operation through reboots.
 
@@ -1234,7 +1234,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   sudo nano smb.conf
   ```
 
-  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installated. For example, if you created a user onvif-gui, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/onvif-gui. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
+  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installated. For example, if you created a user cayenue, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/cayenue. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
   
   ```
   [global]
@@ -1242,19 +1242,19 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 
   [Videos]
     comment = Shared Videos Folder
-    path = /home/onvif-gui/Videos
+    path = /home/cayenue/Videos
     browasble = yes
     read only = yes
 
   [Pictures]
     comment = Shared Pictures Folder
-    path = /home/onvif-gui/Pictures
+    path = /home/cayenue/Pictures
     browsable = yes
     read only = yes
 
   [Documents]
     comment = Shared Documents Folder
-    path = /home/onvif-gui/Documents
+    path = /home/cayenue/Documents
     browsable = yes
     read only = no
   ```
@@ -1594,9 +1594,9 @@ Camera compliance with the onvif standard is often incomplete and in some cases 
 
 Camera settings on the Media tab are most likely to work. Other tabs may have limited success. If Cayenue is able to determine that the camera settings for a particular function are unavailable, it will disable the controls for that function.
 
-If the camera DHCP setting is properly onvif compliant, the IP address may be reliably set. Some cameras may not respond to the DHCP setting requested by onvif-gui due to non compliance. Note that the camera may reboot automatically under some conditions if the DHCP setting is changed from off to on. DHCP must be turned off before setting a static IP address.
+If the camera DHCP setting is properly onvif compliant, the IP address may be reliably set. Some cameras may not respond to the DHCP setting requested by Cayenue due to non compliance. Note that the camera may reboot automatically under some conditions if the DHCP setting is changed from off to on. DHCP must be turned off before setting a static IP address.
 
-If there is an issue with a particular setting, it is recommended to connect to the camera with a web browser, as most cameras will have a web interface that will allow you to make the changes reliably. onvif-gui has a button on the Camera Panel System Tab that will launch the web browser connection with the camera.
+If there is an issue with a particular setting, it is recommended to connect to the camera with a web browser, as most cameras will have a web interface that will allow you to make the changes reliably. Cayenue has a button on the Camera Panel System Tab that will launch the web browser connection with the camera.
 
 ---
 
