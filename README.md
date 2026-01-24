@@ -1380,11 +1380,8 @@ sudo firewall-cmd --reload
 create shared directory
 
 ```
-sudo mkdir -p /srv/samba/myshare
-sudo chmod -R 777 /srv/samba/myshare
-# Set the correct SELinux context
-sudo semanage fcontext --add --type "samba_share_t" "/srv/samba/myshare(/.*)?"
-sudo restorecon -R /srv/samba/myshare
+sudo semanage fcontext --add --type "samba_share_t" "/home/cayenue(/.*)?"
+sudo restorecon -R /home/cayenue
 
 ```
 
@@ -1398,16 +1395,19 @@ sudo nano /etc/samba/smb.conf
 configuration file content
 
 ```
+[global]
+  workgroup = WORKGROUP
+  security = user
+
 [myshare]
-    comment = My Fedora Samba Share
-    path = /srv/samba/myshare
-    browseable = yes
-    writable = yes
-    guest ok = yes
-    read only = no
-    create mask = 0777
-    directory mask = 0777
-    public = yes
+  comment = My Fedora Samba Share
+  path = /home/cayenue
+  valid users = cayenue
+  browseable = yes
+  writable = no
+  guest ok = no
+  read only = yes
+  public = yes
 ```
 
 add password
@@ -1415,32 +1415,6 @@ add password
 ```
 sudo smbpasswd -a <username>
 ```
-
-Step 5: Manage Samba Users (for private shares) 
-If you require restricted access instead of a public share, you must create a system user and then add them as a Samba user with a specific Samba password. 
-
-
-    Create a system user (if they don't exist): 
-```    
-sudo useradd smbuser
-```
-
-Set a system password: 
-
-```
-sudo passwd smbuser
-```
-
-Add the user to Samba and set a Samba password (it can be different from the system password):
-
-```
-sudo smbpasswd -a smbuser
-```
-     
-
-For a private share, you would modify the configuration in Step 4 to use parameters like valid users = smbuser and set guest ok = no. 
-
-
 
 
 start and enable
