@@ -1388,7 +1388,7 @@ sudo restorecon -R /home/cayenue
 Edit configuration file
 
 ```
-sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
+sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
 sudo nano /etc/samba/smb.conf
 ```
 
@@ -1399,7 +1399,7 @@ configuration file content
   workgroup = WORKGROUP
   security = user
 
-[myshare]
+[cayenue]
   comment = My Fedora Samba Share
   path = /home/cayenue
   valid users = cayenue
