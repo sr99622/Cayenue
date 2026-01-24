@@ -589,12 +589,6 @@ class GeneralOptions(QWidget):
             self.mw.openFocusWindow()
         elif self.cmbViewerProfile.currentText() == "Reader":
             self.mw.cameraPanel.btnHistoryClicked()
-            '''
-            reader_settings = QSettings("Cayenue", "Reader")
-            reader_settings.setValue("filePanel/hideCameraPanel", 1)
-            main_file = Path(__file__).parent.parent.parent / "main.py"
-            subprocess.Popen(["python", str(main_file), "--profile", "reader"], env=os.environ.copy(), start_new_session=True, shell=True)
-            '''
         else:
             window = MainWindow(settings_profile = self.cmbViewerProfile.currentText())
             window.parent_window = self.mw

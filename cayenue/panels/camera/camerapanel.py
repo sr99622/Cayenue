@@ -589,11 +589,6 @@ class CameraPanel(QWidget):
                 if camera:
                     camera.manual_recording = False
             else:
-                #d = self.mw.settingsPanel.storage.dirArchive.txtDirectory.text()
-                #if self.mw.settingsPanel.storage.chkManageDiskUsage.isChecked():
-                #    self.mw.diskManager.manageDirectory(d)
-                #else:
-                #    self.mw.settingsPanel.storage.signals.updateDiskUsage.emit()
                 if filename := player.getOutputFilename():
                     player.toggleRecording(filename)
                     if camera:
@@ -606,7 +601,6 @@ class CameraPanel(QWidget):
             reader_settings = QSettings("Cayenue", "Reader")
             reader_settings.setValue("filePanel/hideCameraPanel", 1)
             main_file = Path(__file__).parent.parent.parent / "main.py"
-            #subprocess.Popen(["python", str(main_file), "--profile", "reader"], env=os.environ.copy(), start_new_session=True, shell=True)
             if platform.system() == "Windows":
                 subprocess.Popen([sys.executable, str(main_file), "--profile", "Reader"], env=os.environ.copy(), start_new_session=True, shell=True)
             else:
@@ -617,7 +611,6 @@ class CameraPanel(QWidget):
 
     def btnStopClicked(self):
         if camera := self.getCurrentCamera():
-            #profiles = self.mw.pm.getStreamPairProfiles(camera.uri())
             players = self.mw.pm.getStreamPairPlayers(camera.uri())
             timers = self.mw.pm.getStreamPairTimers(camera.uri())
 
@@ -699,8 +692,6 @@ class CameraPanel(QWidget):
                 if camera := self.getCurrentCamera():
                     self.mw.glWidget.focused_uri = camera.uri()
 
-        #self.tabVideo.btnSnapshot.setEnabled(True)
-        
         self.syncGUI()
 
     def onMediaStopped(self, uri):
@@ -713,7 +704,6 @@ class CameraPanel(QWidget):
                 if profile.getAnalyzeAudio():
                     if self.mw.audioWorker:
                         self.mw.audioWorker(None, None)
-        #self.tabVideo.btnSnapshot.setEnabled(False)
         self.syncGUI()
 
     def syncGUI(self):
@@ -726,7 +716,6 @@ class CameraPanel(QWidget):
             if player := self.mw.pm.getPlayer(camera.uri()):
                 self.btnStop.setStyleSheet(self.getButtonStyle("stop"))
                 self.btnSnapshot.setEnabled(True)
-                #self.tabVideo.btnSnapshot.setEnabled(True)
 
                 if ps := player.systemTabSettings():
                     self.btnRecord.setEnabled(not (ps.record_enable and ps.record_always))
@@ -755,7 +744,6 @@ class CameraPanel(QWidget):
                     self.btnRecord.setStyleSheet(self.getButtonStyle("record"))
             else:
                 reconnecting = False
-                #self.tabVideo.btnSnapshot.setEnabled(False)
                 timers = self.mw.pm.getStreamPairTimers(camera.uri())
                 for timer in timers:
                     if timer.isActive():

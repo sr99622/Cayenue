@@ -513,6 +513,16 @@ class GLWidget(QOpenGLWidget):
 
                     timer.unlock()
 
+                else:
+                    if camera := self.mw.cameraPanel.getCamera(timer.uri):
+                        if len(self.mw.pm.getStreamPairPlayers(camera.uri())):
+                            return
+
+                    timer.lock()
+                    rect = self.mw.pm.displayRect(timer.uri, self.buffer.size())
+                    painter.fillRect(rect, QColorConstants.Black)
+                    timer.unlock()
+
         except Exception as ex:
             logger.error(f'GLWidget buildImage exception: {str(ex)}')
             logger.debug(traceback.format_exc())
