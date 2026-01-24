@@ -41,15 +41,16 @@ class Manager():
     def startPlayer(self, player):
         self.lock()
         if not player.uri in self.ordinals.keys():
-            ordinal = self.nextOrdinal()
-    
-            if player.isCameraStream():
-                if camera := self.mw.cameraPanel.getCamera(player.uri):
-                    if camera.companionURI(player.uri) in self.ordinals.keys():
-                        ordinal = self.ordinals[camera.companionURI(player.uri)]
-                    camera.setOrdinal(ordinal)
-            
-            self.ordinals[player.uri] = ordinal
+            if not player.disable_video:
+                ordinal = self.nextOrdinal()
+        
+                if player.isCameraStream():
+                    if camera := self.mw.cameraPanel.getCamera(player.uri):
+                        if camera.companionURI(player.uri) in self.ordinals.keys():
+                            ordinal = self.ordinals[camera.companionURI(player.uri)]
+                        camera.setOrdinal(ordinal)
+                
+                self.ordinals[player.uri] = ordinal
 
         self.players[player.uri] = player
         player.start()

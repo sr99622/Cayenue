@@ -323,7 +323,6 @@ class MainWindow(QMainWindow):
         spec = importlib.util.spec_from_file_location("VideoConfigure", workerLocation)
         sys.modules["VideoConfigure"] = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(sys.modules["VideoConfigure"])
-        #sleep(0.5)
         self.signals.hideWaitDialog.emit()
 
     def loadVideoConfigure(self, workerName):
