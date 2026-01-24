@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.5"
+VERSION = "1.0.6"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)

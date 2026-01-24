@@ -35,11 +35,11 @@
 		</screenshot>
 	</screenshots>
 	<releases>
-		<release version="1.0.5" date="2026-01-18">
+		<release version="1.0.6" date="2026-01-24">
 			<description>
 				<p>Wilton</p>
 			</description>
-			<url>https://github.com/sr99622/Cayenue/releases/tag/v1.0.5</url>
+			<url>https://github.com/sr99622/Cayenue/releases/tag/v1.0.6</url>
 		</release>
 	</releases>
 	<categories>

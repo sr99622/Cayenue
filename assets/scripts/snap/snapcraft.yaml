@@ -18,7 +18,7 @@ description: |
     the server can be shared with clients via SMB protocol common to Windows, Linux and Mac OS. HTTP output is 
     available for generic web browser access from mobile devices. 
 
-version: 1.0.5
+version: 1.0.6
 contact: sr99622@gmail.com
 license: Apache-2.0
 issues: https://github.com/sr99622/Cayenue/issues
