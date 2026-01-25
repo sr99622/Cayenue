@@ -330,7 +330,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 
 ---
 
-### PLEASE NOTE: Replace `<username>` in these instructions with the name of the account under which Cayenue is installed
+<b>PLEASE NOTE: Replace `<username>` in these instructions with the name of the account under which Cayenue is installed</b>
 
 Install samba
 
