@@ -58,6 +58,467 @@ Hardware requirements for Client configuration are more relaxed as the Client ca
 
 &nbsp;
 
+The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode easily configured, but requires acces to a Server.
+
+For Stand Alone or Client modes, please go to the section <b>Install Cayenue</b>
+
+Server mode requires the configuation of two services for network communication, DHCP service for cameras and SMB protocol for file sharing with clients. The instructions for setting up these services will vary by operating system. Instructions are provided for Mac OS and Linux distributions Ubuntu and Fedora. Similar procedures could be developed for Windows, however, the use of Windows as a Server is discouraged. Windows does work well as a client, but is difficult to stabilize in a Server role.
+
+Please refer to the diagram presented in the Hardware section of this document, as it shows the configuration for which these instructions are validated. The Server will require two Network Interfaces. If the hardware has only one ethernet port, a dongle can be used to provide a second network interface.
+
+&nbsp;
+
+<details>
+<summary>Building Out The Server</summary>
+
+&nbsp;
+
+Service configuration for SMB and DHCP are recommended prior to software installation for Cayenue on Servers. This reduces the number of variables under consideration during individual steps of the build process. It is recommended to set up and verify SMB first, then set up and verify DHCP, then install Cayenue. 
+
+The server should have a fixed IP address on the local network for client access. The router for your local network will control the range of addresses available for fixed IP. In most cases, these will be the lowest or highest numbered addresses on the network. Looking at the router configuration will provide definitive answers to this question. It's always a good idea to ping out to the network to verify that the address under consideration is not being used already, as duplicate addresses can cause mysterious undefined behavior. When setting a fixed IP address for the local network, it is recommended to make note of the current configuration and retain the existing Netmask, Gateway and DNS settings so that the IP address is the only parameter undergoing change.
+
+When configuring SMB service, it is recommended to physically connect only the network interface for the local network used by clients and leave the camera subnet disconnected. This will help reduce confusion over network interface designation. If the two interfaces have different bandwidth properties, the higher bandwidth connection should be used for the local network.
+
+<b>SMB configuration</b>
+
+<details>
+<summary>Linux - Ubuntu</summary>
+
+&nbsp;
+
+It is possible for Windows clients to access camera recordings residing on a Linux server on the local network by installing a samba share on the Linux server. There are a few steps needed to set up the server, which are often not well documented for this type of configuration. The following instructions will set up the shared folder on the server, then show how a Windows client can attach to the shared folder as a mapped drive. Please note that this setup is intended for use in a simple private network where all users can be trusted with data. More sophisticated configurations that control data access are possible, but are beyond the scope of these instructions.
+
+* #### Linux Server Configuration
+
+  <h4>Step 1. <b>Set Fixed IP Address</b></h4> The server should have a fixed IP address. This is not completely necessary for system operation, but will prevent mishaps later that can occur if the server address changes. For Ubuntu and similar systems, there is a GUI control dialog that can be used to assign a fixed IP address. The address chosen will depend on the router settings, which will set aside a range of addresses that are available for fixed IP. Usually this will be at the bottom and/or top of the IP range controlled by the router. The router setting that defines these ranges is set by DHCP. Check ahead of time that the desired IP address is not already taken and is available per the router configuration.
+
+  <h4>Step 2. <b>Install and Configure Samba</b></h4> On Ubuntu, the Samba server is installed using the apt command
+
+  ```
+  sudo apt install samba
+  ```
+
+  The Samba configuration is performed by editing the `/etc/samba/smb.conf` file. The Samba installation will create a default file in this location, which is not a good fit for this type of configuration. It is recommnded to move the file to a backup and start with a fresh file for configuration, following the commands
+
+  ```
+  cd /etc/samba
+  sudo mv smb.conf smb.conf.bak
+  sudo nano smb.conf
+  ```
+
+  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installated. For example, if you created a user cayenue, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/cayenue. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
+  
+  ```
+  [global]
+    workgroup = WORKGROUP
+
+  [Videos]
+    comment = Shared Videos Folder
+    path = /home/cayenue/Videos
+    browasble = yes
+    read only = yes
+
+  [Pictures]
+    comment = Shared Pictures Folder
+    path = /home/cayenue/Pictures
+    browsable = yes
+    read only = yes
+
+  [Documents]
+    comment = Shared Documents Folder
+    path = /home/cayenue/Documents
+    browsable = yes
+    read only = no
+  ```
+
+  <h4>Step 3. Re-start the Samba service</h4> After changing the configuration file, it is necessary to re-start the service in order to enact the changes made. This should be done any time changes are made to the smb.conf file.
+
+  ```
+  sudo systemctl restart smbd
+  ```
+  
+  <h4>Step 4. <b>Add User and Set Samba Password</b></h4>
+
+  The command to add a user is
+
+  ```
+  sudo useradd -m <username>
+  ```
+  
+  The samba access requires a passord for the user
+    
+  ```
+  sudo smbpasswd -a <username>
+  ```
+
+  The system will prompt you to enter a password.
+
+  ____________
+  
+  A script to get a list of active samba accounts
+
+  ```
+  #!/bin/bash
+
+  # Run pdbedit and extract only the Unix usernames
+  sudo pdbedit -L -v | while IFS= read -r line; do
+    # Skip empty lines
+    [[ -z "$line" ]] && continue
+
+    # Match only lines that start with "Unix username:"
+    if [[ "$line" == "Unix username:"* ]]; then
+      value="${line#Unix username: }"
+      echo "$value"
+    fi
+  done
+
+  ```
+
+&nbsp;
+
+______________
+
+
+</details>
+
+<details>
+<summary>Linux - Fedora</summary>
+
+
+
+&nbsp;
+
+Install samba
+
+```
+sudo dnf install samba samba-common samba-client
+```
+
+Open firewall
+
+```
+sudo firewall-cmd --permanent --add-service=samba
+sudo firewall-cmd --reload
+```
+
+
+create shared directory
+
+```
+sudo semanage fcontext --add --type "samba_share_t" "/home/cayenue(/.*)?"
+sudo restorecon -R /home/cayenue
+
+```
+
+Edit configuration file
+
+```
+sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
+sudo nano /etc/samba/smb.conf
+```
+
+configuration file content
+
+```
+[global]
+  workgroup = WORKGROUP
+  security = user
+
+[cayenue]
+  comment = My Fedora Samba Share
+  path = /home/cayenue
+  valid users = cayenue
+  browseable = yes
+  writable = no
+  guest ok = no
+  read only = yes
+  public = yes
+```
+
+add password
+
+```
+sudo smbpasswd -a <username>
+```
+
+
+start and enable
+
+```
+sudo systemctl enable smb nmb
+sudo systemctl start smb nmb
+sudo systemctl status smb
+
+```
+
+
+</details>
+
+<details>
+<summary>Mac OS</summary>
+
+
+
+&nbsp;
+
+Open Sharing Settings: Go to the Apple menu > System Settings > General > Sharing (scroll down if needed).
+
+Enable File Sharing: Turn on the toggle for File Sharing.
+
+Configure SMB: Click the info button (i) or Options next to File Sharing.
+
+Turn on SMB Sharing: Check the box for "Share files and folders using SMB".
+
+Select Users: Under "Windows File Sharing," check the box for each user account that needs access and enter their password.
+
+(Optional) Add Folders: In the main Sharing window, use the "+" button to add specific folders to share and set their permissions (read/write for users). 
+
+
+
+
+</details>
+
+&nbsp;
+
+Upon completion of the SMB service configuration, a test from a client machine is recommended before continuing.
+
+The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camara subnet interface should be set to 10.2.2.1. Ensure that the cameras are connected and powered on.
+
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. Although very unlikely, please verify that your existing network does not use this address range. 
+
+There are many references that can provide details on how to set a static ip. On many versions od Linux, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. This configuration prevents direct camera communication outside of the subnet, forcing all traffic through the proxy server.
+
+<b>DHCP Configuration</b>
+
+<details>
+<summary>Linux - Ubuntu</summary>
+
+&nbsp;
+
+The link shown is recommended reading and contains detailed information not covered here. [Kea DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). 
+
+Install the kea server using the following command
+
+```
+sudo apt install kea
+```
+
+Further configuration will require the name of the network interface intended to provide the DHCP service. On Linux, the command 
+
+```
+ip -br addr show
+```
+
+will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface. Make note of the interface name for use in the next step.
+
+Move the default configuration file to a backup location and open an editor to create the new configuration file
+
+```
+sudo mv /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.bak
+sudo nano /etc/kea/kea-dhcp4.conf
+```
+
+copy and paste the text below into the file. Replace `<your-interface-name>` with the interface name obtained from the `ip -br addr show` command, retaining the quotation marks.
+
+<b>/etc/kea/kea-dhcp4.conf</b>
+
+```
+{
+  "Dhcp4": {
+    "interfaces-config": {
+    "interfaces": [ "<your-interface-name>" ]
+    },
+    "control-socket": {
+        "socket-type": "unix",
+        "socket-name": "/run/kea/kea4-ctrl-socket"
+    },
+    "lease-database": {
+        "type": "memfile",
+        "lfc-interval": 3600
+    },
+    "valid-lifetime": 600,
+    "max-valid-lifetime": 7200,
+    "subnet4": [
+    {
+        "id": 1,
+        "subnet": "10.2.2.0/24",
+        "pools": [
+        {
+            "pool": "10.2.2.64 - 10.2.2.242"
+        }
+        ],
+        "option-data": [
+        {
+            "name": "routers",
+            "data": "10.2.2.1"
+        },
+        {
+            "name": "domain-name-servers",
+            "data": "10.2.2.1"
+        },
+        {
+            "name": "domain-name",
+            "data": "mydomain.example"
+        }
+        ]
+    }
+    ]
+  }
+}
+```
+
+This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
+
+Use the commands shown below to control the service. Be sure to use the enable command to get persistent service operation through reboots.
+
+```
+sudo systemctl enable --now kea-dhcp4
+```
+
+Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transistory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
+
+```
+sudo systemctl status kea-dhcp4
+```
+
+
+
+</details>
+
+<details>
+<summary>Linux - Fedora</summary>
+
+
+&nbsp;
+
+Courtesy of [Server World](https://www.server-world.info/en/note?os=Fedora_43&p=dhcp&f=1). More detailed info there.
+
+Install the DHCP server program
+
+```
+sudo dnf install dhcp-server
+```
+
+Edit the configuration file
+
+```
+sudo nano /etc/dhcp/dhcpd.conf
+```
+
+Add the following content to the conf file
+
+```
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+subnet 10.2.2.0 netmask 255.255.255.0 {
+    range dynamic-bootp 10.2.2.64 10.2.2.224;
+    option broadcast-address 10.2.2.255;
+    option routers 10.2.2.1;
+}
+```
+
+Enable the server
+
+```
+sudo systemctl enable --now dhcpd 
+```
+
+Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transistory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
+
+```
+sudo systemctl status dhcp4
+```
+
+</details>
+
+<details>
+<summary>Mac OS</summary>
+
+&nbsp;
+
+On Mac OS, the DHCP service is provided by bootpd. The service is configured with a file named `/etc/bootpd.plist`. A sample configuration file is shown below. 
+
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
+
+This file is configured to use the interface named `en0`, which in most cases will be the ethernet interface on the Mac computer. Please check the name using the `ifconfig` command to verify that this is the correct information.
+
+### Sample Configuration File
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>bootp_enabled</key>
+    <false/>
+    <key>detect_other_dhcp_server</key>
+    <integer>1</integer>
+    <key>dhcp_enabled</key>
+    <array>
+        <string>en0</string>
+    </array>
+    <key>reply_threshold_seconds</key>
+    <integer>0</integer>
+    <key>Subnets</key>
+    <array>
+        <dict>
+            <key>allocate</key>
+            <true/>
+            <key>dhcp_router</key>
+            <string>10.2.2.1</string>
+            <key>lease_max</key>
+            <integer>86400</integer>
+            <key>lease_min</key>
+            <integer>86400</integer>
+            <key>name</key>
+            <string>10.2.2</string>
+            <key>net_address</key>
+            <string>10.2.2.0</string>
+            <key>net_mask</key>
+            <string>255.255.255.0</string>
+            <key>net_range</key>
+            <array>
+                <string>10.2.2.64</string>
+                <string>10.2.2.242</string>
+            </array>
+        </dict>
+    </array>
+</dict>
+</plist>
+```
+
+This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
+
+The service can be set up by copying the sample file to `/etc/bootpd.plist`, replacing the tag `en0` tag in the `dhcp_enabled` key with the appropriate data from the `ifconfig` command if necessary. This can be done using the command `sudo nano /etc/bootpd.plist`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
+
+The service can then be started using the command
+
+```
+sudo launchctl load -w /System/Library/LaunchDaemons/bootps.plist
+```
+
+The service can be stopped with
+
+```
+sudo launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
+```
+
+&nbsp;
+
+---
+
+</details>
+
+</details>
+
+&nbsp;
+
+<details>
+<summary>Install Cayenue</summary>
+
+&nbsp;
+
 <details>
 <summary>Linux</summary>
 
@@ -69,6 +530,7 @@ Hardware requirements for Client configuration are more relaxed as the Client ca
 <summary>Flatpak</summary>
 
 &nbsp;
+___
 
 Download the [Flatpak installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.flatpak), then open a terminal and navigate to the Downloads folder. Use the following command to install.
 
@@ -86,12 +548,16 @@ flatpak uninstall io.github.sr99622.Cayenue
 
 ---
 
+&nbsp;
+
 </details>
 
 <details>
+
 <summary>Snap</summary>
 
 &nbsp;
+____
 
 Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/cayenue_1.0.6_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
 
@@ -123,8 +589,6 @@ To uninstall.
 ```
 sudo snap remove cayenue
 ```
-
----
 
 </details>
 
@@ -173,6 +637,7 @@ Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1
 <summary>NVIDIA GPU</summary>
 
 &nbsp;
+___
 
 If YOLO operation is desired for systems equipped with NVIDIA GPU, an alternate installation method is required. This is due to the large size of the files required for NVIDIA operation. To use the application with NVIDIA GPU on Linux, create a python virtual environment, then use pip to install.
 
@@ -190,12 +655,103 @@ To use an icon with this configuration,
 sudo env\bin\Cayenue --icon
 ```
 
+___
+
 </details>
+
+
+</details>
+
+&nbsp;
+
+
+<details>
+<summary>Mount SMB Drive from Linux Client</summary>
+
+&nbsp;
+
+---
+
+It may be necessary to install cifs-utils on the machine. For example on Manjaro Linux, 
+
+```
+sudo pacman -S cifs-utils
+```
+
+Create a Mount Point. Please note that if you installed the application by snap or flatpak, you will not have access to the /mnt directory. The installers create a container environment that limits your access to directories on the host. In this case, you should create another mount point that is accessible from within the application container. 
+
+The application containers only allow connection to Videos and Pictures directories on the host. In this case, the easiest option is to create subdirectories in your Videos and Pictures folders. The mounting process will obscure files on the host system in favor of files on the mounted remote. If you have existing files in the Videos or Pictures folders, or if you need to preserve the location for use by other programs, using subdirectories as the mounting points will let you keep using the Videos and Pictures folders without disrupting other programs.
+
+The examples that follow are based on general mounting instructions, and use the generic tag `<mount_point>` to indicate the mount directory. Note that the best practice is to use the full path name of the mount point directory in the following commands.
+
+```
+sudo mkdir -p <mount_point>
+```
+
+Mount the share, you can get the uid and gid using the command `id $USER`, they are usually both 1000
+```
+sudo mount -t cifs //<server_ip>/<share_path> <mount_point> -o username=<username>,password=<password>,uid=<user_id>,gid=<group_id>
+```
+
+Once you are done testing the mount, you can unmount the remote server before setting it up permanently
+```
+sudo umount <mount_point>
+```
+
+For better security, you should use a credentials file
+
+```
+sudo nano /root/.smbcredentials
+```
+
+Then add this information to the file
+```
+username=<username>
+password=<password>
+domain=<domain> (if applicable)
+```
+
+Set the access permisions of the file
+```
+sudo chmod 600 /root/.smbcredentials
+```
+
+If you would like to test the credentials file, you can mount 
+```
+sudo mount -t cifs //<server_ip>/<share_path> <mount_point> -o credentials=/root/.smbcredentials,uid=<user_id>,gid=<group_id>
+```
+
+To make the mount persistent, edit the fstab file
+```
+sudo nano /etc/fstab
+```
+
+Add this content to the file
+```
+//<server_ip>/<share_path> <mount_point> cifs x-systemd.automount,_netdev,credentials=/root/.smbcredentials,uid=<user_id>,gid=<group_id> 0 0
+```
+
+You can test the fstab file
+```
+sudo systemctl daemon-reload
+sudo mount -a
+```
+
+Please note that the mount requires the system to wait for the network to be up before running fstab. The part of the fstab entry - `x-systemd.automount,_netdev,` is what does this. It assumes you have systemd in you Linux distribution. If you don't know what systemd is, you probably have it, as most mainstream linux distros use it by default. If you are using a distro that doesn't have it, then you probably already know what to do.
+
+Once the mount is established, you can use the directory browser from the Files panel to set the Video directory used by the application. Note that the Files panel setting is used for viewing existing videos. The setting on the Storage panel Archive Dir is used by the application for writing videos files as they are produced by the cameras.
+
+---
 
 &nbsp;
 
 </details>
 
+&nbsp;
+
+___
+
+</details>
 
 </details>
 
@@ -1019,439 +1575,37 @@ The control tab on the right of the application window may be toggled using the 
 
 </details>
 
-<details>
-<summary>Server Configuration</summary>
-
-&nbsp;
-
-<details>
-<summary>DHCP Servers</summary>
-
-&nbsp;
-
-<i>A network set up as shown in the Recommended Configuration will require some mechanism for setting IP addresses to the cameras and computers that connect to the network. Although this may be achieved by setting  static IP for each device, a DHCP server is recommended. This is a service that is installed on the Cayenue server host computer. DHCP service configuration details are shown for each operating system.</i>
-
-<details>
-<summary>Linux</summary>
-
-&nbsp;
-
-<details>
-<summary>Ubuntu</summary>
-
-Ubuntu is the supported Linux OS, and is highly recommended for production use. Other distributions may work, but may require significant effort to become operational, and their usage instructions will probably vary from those described here. The instructions provided here are based on Ubuntu.
-
-Linux can be configured to run a kea [DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). A sample configuration file `/etc/kea/kea-dhcp4.conf` for this server is shown below. The link above is recommended reading and contains detailed information not covered here.
-
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. There are many references that can provide details on how to set a static ip. On Ubuntu, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button  to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately.
-
-It will be necessary to find the name of the network interface intended to provide the DHCP service. On Linux, the command `ip -br addr show` will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface.
-
-### Sample Configuration File
-
-```
-{
-  "Dhcp4": {
-    "interfaces-config": {
-    "interfaces": [ "<your-interface-name>" ]
-    },
-    "control-socket": {
-        "socket-type": "unix",
-        "socket-name": "/run/kea/kea4-ctrl-socket"
-    },
-    "lease-database": {
-        "type": "memfile",
-        "lfc-interval": 3600
-    },
-    "valid-lifetime": 600,
-    "max-valid-lifetime": 7200,
-    "subnet4": [
-    {
-        "id": 1,
-        "subnet": "10.2.2.0/24",
-        "pools": [
-        {
-            "pool": "10.2.2.64 - 10.2.2.242"
-        }
-        ],
-        "option-data": [
-        {
-            "name": "routers",
-            "data": "10.2.2.1"
-        },
-        {
-            "name": "domain-name-servers",
-            "data": "10.2.2.1"
-        },
-        {
-            "name": "domain-name",
-            "data": "mydomain.example"
-        }
-        ]
-    }
-    ]
-  }
-}
-```
-
-This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
-
-The service can be set up by copying the sample file to `/etc/kea/kea-dhcp4.conf`, replacing the tag `<your-interface-name>` with the appropriate data from the `ip -br addr show` command,  This can be done using the command `sudo nano /etc/kea/kea-dhcp4.conf`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
-
-Use the commands shown below to control the service. Be sure to use the enable command to get persistent service operation through reboots.
-
-```
-sudo systemctl enable kea-dhcp4-server
-sudo systemctl disable kea-dhcp4-server
-sudo systemctl start kea-dhcp4-server
-sudo systemctl restart kea-dhcp4-server
-sudo systemctl stop kea-dhcp4-server
-sudo systemctl status kea-dhcp4-server
-```
-
-The `enable` and `disable` commands install and uninstall the kea dhcp4 service into the boot protocol, controlling whether the service is started automatically at boot time. The balance of the commands control or show information about the service.
 
 </details>
 
-<details>
-<summary>Fedora</summary>
-
-&nbsp;
-
-Courtesy of [Server World](https://www.server-world.info/en/note?os=Fedora_43&p=dhcp&f=1). More detailed info there.
-
-Install the DHCP server program
-
-```
-sudo dnf install dhcp-server
-```
-
-Edit the configuration file
-
-```
-sudo nano /etc/dhcp/dhcpd.conf
-```
-
-Add the following content to the conf file
-
-```
-default-lease-time 600;
-max-lease-time 7200;
-authoritative;
-subnet 10.2.2.0 netmask 255.255.255.0 {
-    range dynamic-bootp 10.2.2.64 10.2.2.224;
-    option broadcast-address 10.2.2.255;
-    option routers 10.2.2.1;
-}
-```
-
-Enable the server
-
-```
-sudo systemctl enable --now dhcpd 
-```
-
-</details>
-
-&nbsp;
-
----
-
-</details>
 
 <details>
-<summary>Mac</summary>
-
-&nbsp;
-
-On Mac OS, the DHCP service is provided by bootpd. The service is configured with a file named `/etc/bootpd.plist`. A sample configuration file is shown below. 
-
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
-
-This file is configured to use the interface named `en0`, which in most cases will be the ethernet interface on the Mac computer. Please check the name using the `ifconfig` command to verify that this is the correct information.
-
-### Sample Configuration File
-
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>bootp_enabled</key>
-    <false/>
-    <key>detect_other_dhcp_server</key>
-    <integer>1</integer>
-    <key>dhcp_enabled</key>
-    <array>
-        <string>en0</string>
-    </array>
-    <key>reply_threshold_seconds</key>
-    <integer>0</integer>
-    <key>Subnets</key>
-    <array>
-        <dict>
-            <key>allocate</key>
-            <true/>
-            <key>dhcp_router</key>
-            <string>10.2.2.1</string>
-            <key>lease_max</key>
-            <integer>86400</integer>
-            <key>lease_min</key>
-            <integer>86400</integer>
-            <key>name</key>
-            <string>10.2.2</string>
-            <key>net_address</key>
-            <string>10.2.2.0</string>
-            <key>net_mask</key>
-            <string>255.255.255.0</string>
-            <key>net_range</key>
-            <array>
-                <string>10.2.2.64</string>
-                <string>10.2.2.242</string>
-            </array>
-        </dict>
-    </array>
-</dict>
-</plist>
-```
-
-This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
-
-The service can be set up by copying the sample file to `/etc/bootpd.plist`, replacing the tag `en0` tag in the `dhcp_enabled` key with the appropriate data from the `ifconfig` command if necessary. This can be done using the command `sudo nano /etc/bootpd.plist`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
-
-The service can then be started using the command
-
-```
-sudo launchctl load -w /System/Library/LaunchDaemons/bootps.plist
-```
-
-The service can be stopped with
-
-```
-sudo launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
-```
-
-&nbsp;
-
----
-
-</details>
-
-<details>
-<summary>Windows</summary>
-
-&nbsp;
-
-[DHCP Server for Windows](https://www.dhcpserver.de/cms/) is made available by third party . Older versions are available for [download](https://www.dhcpserver.de/cms/download/) free of charge. Instructions for installation can be found [here](https://www.dhcpserver.de/cms/running_the_server/). Please consider making a donation to the developer if you find the software useful.
-
-Please note that the installation procedure does not include instructions for setting up a static IP address on the network interface, which is necessary for operation. This should be done before configuring the DHCP service. An exhaustive resource on this topic is available at [How to set a static IP address on Windows 11](https://pureinfotech.com/set-static-ip-address-windows-11/).
-
-</details>
-
-&nbsp;
-
----
-
-</details>
-
-<details>
-<summary>Setting Up a Samba Share on Linux</summary>
+<summary>Notes</summary>
 
 &nbsp;
 
 <details>
-<summary>Ubuntu</summary>
+<summary>Using MacOS as a Server</summary>
 
 &nbsp;
 
-It is possible for Windows clients to access camera recordings residing on a Linux server on the local network by installing a samba share on the Linux server. There are a few steps needed to set up the server, which are often not well documented for this type of configuration. The following instructions will set up the shared folder on the server, then show how a Windows client can attach to the shared folder as a mapped drive. Please note that this setup is intended for use in a simple private network where all users can be trusted with data. More sophisticated configurations that control data access are possible, but are beyond the scope of these instructions.
+### Introduction
 
-* #### Linux Server Configuration
+MacOS has a number of qualities that make it desirable as a server platform. It has a capable NPU that can process YOLO models for inference in a very power-efficient manner. It has a good built in DHCP server that can easily be used for the camera network. It has a polished graphical interface capable of driving multiple monitors. It will also run silent in most conditions without creating a lot of fan noise which can be problematic with some systems. 
 
-  <h4>Step 1. <b>Set Fixed IP Address</b></h4> The server should have a fixed IP address. This is not completely necessary for system operation, but will prevent mishaps later that can occur if the server address changes. For Ubuntu and similar systems, there is a GUI control dialog that can be used to assign a fixed IP address. The address chosen will depend on the router settings, which will set aside a range of addresses that are available for fixed IP. Usually this will be at the bottom and/or top of the IP range controlled by the router. The router setting that defines these ranges is set by DHCP. Check ahead of time that the desired IP address is not already taken and is available per the router configuration.
+### Power Management
 
-  <h4>Step 2. <b>Install and Configure Samba</b></h4> On Ubuntu, the Samba server is installed using the apt command
+Apple Silicon is very power efficient, and features have been added to the operating system to further enhance efficiency. These features can have the effect of making the server sleep or get behind in processing video frames that are sent by the cameras. This is undesirable when depending upon the alarm function as the data is not processed in a timely manner. The settings for Energy should be adjusted to disable the low power mode for the device during periods of no user interaction. The setting "Prevent automatic sleeping when the display is off" should be set to on. 
 
-  ```
-  sudo apt install samba
-  ```
+### File Handle Management
 
-  The Samba configuration is performed by editing the `/etc/samba/smb.conf` file. The Samba installation will create a default file in this location, which is not a good fit for this type of configuration. It is recommnded to move the file to a backup and start with a fresh file for configuration, following the commands
-
-  ```
-  cd /etc/samba
-  sudo mv smb.conf smb.conf.bak
-  sudo nano smb.conf
-  ```
-
-  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installated. For example, if you created a user cayenue, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/cayenue. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
-  
-  ```
-  [global]
-    workgroup = WORKGROUP
-
-  [Videos]
-    comment = Shared Videos Folder
-    path = /home/cayenue/Videos
-    browasble = yes
-    read only = yes
-
-  [Pictures]
-    comment = Shared Pictures Folder
-    path = /home/cayenue/Pictures
-    browsable = yes
-    read only = yes
-
-  [Documents]
-    comment = Shared Documents Folder
-    path = /home/cayenue/Documents
-    browsable = yes
-    read only = no
-  ```
-
-  <h4>Step 3. Re-start the Samba service</h4> After changing the configuration file, it is necessary to re-start the service in order to enact the changes made. This should be done any time changes are made to the smb.conf file.
-
-  ```
-  sudo systemctl restart smbd
-  ```
-  
-  <h4>Step 4. <b>Add User and Set Samba Password</b></h4>
-
-  The command to add a user is
-
-  ```
-  sudo useradd -m <username>
-  ```
-  
-  The samba access requires a passord for the user
-    
-  ```
-  sudo smbpasswd -a <username>
-  ```
-
-  The system will prompt you to enter a password.
-
-  ____________
-  
-  A script to get a list of active samba accounts
-
-  ```
-  #!/bin/bash
-
-  # Run pdbedit and extract only the Unix usernames
-  sudo pdbedit -L -v | while IFS= read -r line; do
-    # Skip empty lines
-    [[ -z "$line" ]] && continue
-
-    # Match only lines that start with "Unix username:"
-    if [[ "$line" == "Unix username:"* ]]; then
-      value="${line#Unix username: }"
-      echo "$value"
-    fi
-  done
-
-  ```
-
-&nbsp;
-
-______________
-
-</details>
-
-<details>
-<summary>Fedora</summary>
-
-&nbsp;
-
-Install samba
+The operating system will limit the number of file handles that can be open simoultaneously. These handles are also associated with network socket creation. This has the effect of limiting the number of clients that can connect to the server. In order to increase the number of handles, the ```ulimit``` command can be used.
 
 ```
-sudo dnf install samba samba-common samba-client
+ulimit -n 8192
 ```
 
-Open firewall
-
-```
-sudo firewall-cmd --permanent --add-service=samba
-sudo firewall-cmd --reload
-```
-
-
-create shared directory
-
-```
-sudo semanage fcontext --add --type "samba_share_t" "/home/cayenue(/.*)?"
-sudo restorecon -R /home/cayenue
-
-```
-
-Edit configuration file
-
-```
-sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
-sudo nano /etc/samba/smb.conf
-```
-
-configuration file content
-
-```
-[global]
-  workgroup = WORKGROUP
-  security = user
-
-[cayenue]
-  comment = My Fedora Samba Share
-  path = /home/cayenue
-  valid users = cayenue
-  browseable = yes
-  writable = no
-  guest ok = no
-  read only = yes
-  public = yes
-```
-
-add password
-
-```
-sudo smbpasswd -a <username>
-```
-
-
-start and enable
-
-```
-sudo systemctl enable smb nmb
-sudo systemctl start smb nmb
-sudo systemctl status smb
-
-```
-
-</details>
-
----
-
-&nbsp;
-
-</details>
-
-<details>
-<summary>Samba Client Configuration</summary>
-
-
-* #### Windows Client Configuration
-
-  Open the file navigator in Windows and go to the Network section. Using the address bar at the top, enter the IP address of the server such as, for example,
-
-  ```
-  \\10.1.1.3
-  ```
-
-  If all goes well, you get a shared folder icon in the navigator. Double click the folder to get a login screen. Use the credentials of the Cayenue account on the Linux server. If successful, create a shared drive by right clicking over the folder and using the drop down menu, and make the drive persisent. Open the Ovnif GUI application, go to the Files tab and use the navigation bar at the top to select the Videos folder from the shared drive. You should see the folders holding the camera recordings.
-
-* #### Linux Client Configuration
-
-  Detailed configuration instructions can be found in the Operations -> Mount SMB Drive from Linux section of the notes.
-
+This command can be added to the shell resource file, e.g. .zshrc in the user home directory. This will then set the limit for each terminal session as it is opened on a persistent basis.
 
 </details>
 
@@ -1490,49 +1644,6 @@ Click the Apple icon in the upper left corner of the screen and select System Se
 
 </details>
 
-<details>
-<summary>Using MacOS as a Server</summary>
-
-&nbsp;
-
-### Introduction
-
-MacOS has a number of qualities that make it desirable as a server platform. It has a capable NPU that can process YOLO models for inference in a very power-efficient manner. It has a good built in DHCP server that can easily be used for the camera network. It has a polished graphical interface capable of driving multiple monitors. It will also run silent in most conditions without creating a lot of fan noise which can be problematic with some systems. 
-
-### Power Management
-
-Apple Silicon is very power efficient, and features have been added to the operating system to further enhance efficiency. These features can have the effect of making the server sleep or get behind in processing video frames that are sent by the cameras. This is undesirable when depending upon the alarm function as the data is not processed in a timely manner. The settings for Energy should be adjusted to disable the low power mode for the device during periods of no user interaction. The setting "Prevent automatic sleeping when the display is off" should be set to on. 
-
-### File Handle Management
-
-The operating system will limit the number of file handles that can be open simoultaneously. These handles are also associated with network socket creation. This has the effect of limiting the number of clients that can connect to the server. In order to increase the number of handles, the ```ulimit``` command can be used.
-
-```
-ulimit -n 8192
-```
-
-This command can be added to the shell resource file, e.g. .zshrc in the user home directory. This will then set the limit for each terminal session as it is opened on a persistent basis.
-
-</details>
-
-<details>
-<summary>File Sharing on Mac OS</summary>
-
-&nbsp;
-
-Open Sharing Settings: Go to the Apple menu > System Settings > General > Sharing (scroll down if needed).
-
-Enable File Sharing: Turn on the toggle for File Sharing.
-
-Configure SMB: Click the info button (i) or Options next to File Sharing.
-
-Turn on SMB Sharing: Check the box for "Share files and folders using SMB".
-
-Select Users: Under "Windows File Sharing," check the box for each user account that needs access and enter their password.
-
-(Optional) Add Folders: In the main Sharing window, use the "+" button to add specific folders to share and set their permissions (read/write for users). 
-
-</details>
 
 <details>
 <summary>Sharing Drives From Windows</summary>
@@ -1576,96 +1687,6 @@ You should now be able to sign into the folder from an SMB client with the user 
 
 </details>
 
-<details>
-<summary>Mount SMB Drive from Linux</summary>
-
-&nbsp;
-
----
-
-It may be necessary to install cifs-utils on the machine. For example on Manjaro Linux, 
-
-```
-sudo pacman -S cifs-utils
-```
-
-Create a Mount Point. Please note that if you installed the application by snap or flatpak, you will not have access to the /mnt directory. The installers create a container environment that limits your access to directories on the host. In this case, you should create another mount point that is accessible from within the application container. 
-
-The application containers only allow connection to Videos and Pictures directories on the host. In this case, the easiest option is to create subdirectories in your Videos and Pictures folders. The mounting process will obscure files on the host system in favor of files on the mounted remote. If you have existing files in the Videos or Pictures folders, or if you need to preserve the location for use by other programs, using subdirectories as the mounting points will let you keep using the Videos and Pictures folders without disrupting other programs.
-
-The examples that follow are based on general mounting instructions, and use the generic tag `<mount_point>` to indicate the mount directory. Note that the best practice is to use the full path name of the mount point directory in the following commands.
-
-```
-sudo mkdir -p <mount_point>
-```
-
-Mount the share, you can get the uid and gid using the command `id $USER`, they are usually both 1000
-```
-sudo mount -t cifs //<server_ip>/<share_path> <mount_point> -o username=<username>,password=<password>,uid=<user_id>,gid=<group_id>
-```
-
-Once you are done testing the mount, you can unmount the remote server before setting it up permanently
-```
-sudo umount <mount_point>
-```
-
-For better security, you should use a credentials file
-
-```
-sudo nano /root/.smbcredentials
-```
-
-Then add this information to the file
-```
-username=<username>
-password=<password>
-domain=<domain> (if applicable)
-```
-
-Set the access permisions of the file
-```
-sudo chmod 600 /root/.smbcredentials
-```
-
-If you would like to test the credentials file, you can mount 
-```
-sudo mount -t cifs //<server_ip>/<share_path> <mount_point> -o credentials=/root/.smbcredentials,uid=<user_id>,gid=<group_id>
-```
-
-To make the mount persistent, edit the fstab file
-```
-sudo nano /etc/fstab
-```
-
-Add this content to the file
-```
-//<server_ip>/<share_path> <mount_point> cifs x-systemd.automount,_netdev,credentials=/root/.smbcredentials,uid=<user_id>,gid=<group_id> 0 0
-```
-
-You can test the fstab file
-```
-sudo systemctl daemon-reload
-sudo mount -a
-```
-
-Please note that the mount requires the system to wait for the network to be up before running fstab. The part of the fstab entry - `x-systemd.automount,_netdev,` is what does this. It assumes you have systemd in you Linux distribution. If you don't know what systemd is, you probably have it, as most mainstream linux distros use it by default. If you are using a distro that doesn't have it, then you probably already know what to do.
-
-Once the mount is established, you can use the directory browser from the Files panel to set the Video directory used by the application. Note that the Files panel setting is used for viewing existing videos. The setting on the Storage panel Archive Dir is used by the application for writing videos files as they are produced by the cameras.
-
----
-
-&nbsp;
-
-</details>
-
-
-</details>
-
-
-<details>
-<summary>Notes</summary>
-
-&nbsp;
 
 <details>
 <summary>Running Multiple Cameras</summary>
@@ -1798,6 +1819,11 @@ Check the update service periodically to ensure it remains disabled.
 &nbsp;
 
 </details>
+
+---
+
+&nbsp;
+
 </details>
 
 <details>
