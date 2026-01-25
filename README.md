@@ -44,7 +44,7 @@ Open source software written in Python with permissive Apache license affords th
 
 The system installation requires network connected components and appropriate switching hardware. The software is designed to support ONVIF compatible cameras. Please note that not all cameras support ONVIF, and those that do may have non-compliant or incomplete implementations. Cayenue supports a wide range of cameras and is tolerant of non-compliant implementations. Cameras listed in the System Requirements section above can be expected to work. Many other types of cameras are derivative of those listed and should behave in a similar fashion.
 
-The software can operate in three modes, Stand-Alone, Server and Client. Stand-Alone mode is based on legacy configurations and might be considered obsolete. Server mode is recommended, even if there is only one computer being used to view camera streams on the network. Server mode includes a Proxy server (Media MTX) that will provide a buffer between the camera stream and the Server. This has beneficial effects for stability. However, some cameras may not conform properly to RTSP standards expected by the Proxy, in which case Stand-Alone mode may provide better results. Client mode requires a Server and can be installed and used by any number of computers, limited by the network constraints of the installation.
+The software can operate in three modes, Stand-Alone, Server and Client. Stand-Alone mode requires minimal configuration but is considered obsolete. Server mode is recommended, even if there is only one computer being used to view camera streams on the network. Server mode includes a Proxy server [Media MTX](https://github.com/bluenviron/mediamtx) that will provide a buffer between the camera stream and the Server. This has beneficial effects for stability and allows multiple Clients to access camera streams. However, some cameras may not conform properly to RTSP standards expected by the Proxy, in which case Stand-Alone mode may provide better results for a single computer setup. Client mode requires a Server and can be installed and used by any number of computers, limited by the network constraints of the installation.
 
 Operating a Server with dual network interface ports provides the opportunity for subnet isolation of cameras. If the hardware under consideration for the Server only has one ethernet network interface, a dongle can be used to connect a second ethernet cable, although dongled connections can be expected to have lower bandwidth. 
 
@@ -58,13 +58,13 @@ It is possible to use wireless cameras in the system, but this is not recommende
 
 &nbsp;
 
-When cameras are isolated on a seperate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses and is a service running on the Server. 
+When cameras are isolated on a seperate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses. 
 
-DHCP is configured on Linux by installing a service program that is configured with an edited file. Similarly, Mac OS can be configured to run a DHCP server by editing a configuration file. Although Windows is not recommended for Server configuration, it is possible to use a free program for this purpose.
+DHCP is configured on Linux by installing a service program that is configured with an edited file. Similarly, Mac OS can be configured to run a DHCP server by editing a configuration file. Although Windows is not recommended for Server configuration, it is possible to use a free program for DHCP address assignment.
 
-One important point to note is that the DHCP server for the camera subnet MUST reside on the proper network interface (on the diagram 10.2.2.0/24). There can only be one DHCP server on a network and the existing DHCP service provided by the internal router may experience issues if the Cayenue Server DHCP is run on the wrong network interface (on the diagram 192.168.1.0/24). Your actual network nomenclature may differ from that shown here.
+One important point to note is that the DHCP server for the camera subnet MUST reside on the proper network interface (on the diagram 10.2.2.0/24). There can only be one DHCP server on a network and the existing DHCP service provided by the internal local network router may experience issues if the Cayenue Server DHCP is run on the wrong network interface (on the diagram 192.168.1.0/24). Your actual network nomenclature may differ from that shown here.
 
-Cayenue is designed to take advantage of advanced YOLO inference detection algorithms for detecting objects of interest. In order to run this inference, there is a requirement that the Server have a capable compute unit. Integrated GPU or NPU hardware is recommended for this task. Discrete GPU may also be used, but at a significantly higher power consumption profile, as well as additional driver installation and configuration. Intel iGPU and Apple Silicon NPU are recommended and are directly supported by the Cayenue installation programs and do not require any additional configuration.
+Cayenue is designed to take advantage of advanced [YOLOX](https://github.com/Megvii-BaseDetection/YOLOX) inference detection algorithms for detecting objects of interest. In order to run this inference, there is a requirement that the Server have a capable compute unit. Integrated GPU or NPU hardware is recommended for this task. Discrete GPU may also be used, but at a significantly higher power consumption profile, as well as additional driver installation and configuration. Intel iGPU and Apple Silicon NPU are recommended and are directly supported by the Cayenue installation programs and do not require any additional configuration.
 
 Hardware requirements for Client configuration are more relaxed as the Client can recieve alerts from the server and do not require any additional inference processing capablilties. If the Server is configured to share its Picture and Video directories using SMB protocol (Samba), Clients may access pictures and videos from the Server without the need for local storage. SMB performance is excellent in a local network scenario, and can be expected to provide essentially the same experience as local storage.
 
@@ -219,6 +219,8 @@ ___
 </details>
 
 &nbsp;
+
+---
 
 The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode is easily configured, but requires acces to a Server.
 
@@ -809,9 +811,9 @@ Once the mount is established, you can use the directory browser from the Files 
 
 </details>
 
-&nbsp;
+---
 
-___
+&nbsp;
 
 </details>
 
@@ -820,6 +822,8 @@ ___
 <details><summary>Firewall Rules</summary>
 
 &nbsp;
+
+---
 
 Cayenue requires network access to communicate with cameras in Stand Alone or Server mode. If the host computer uses a firewall, it may be necessary to enable some communciations ports so that cameras can use the WS-Discovery protocol to announce their presence to the program.
 
@@ -874,9 +878,11 @@ sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule family="ipv4" 
 sudo firewall-cmd --reload
 ```
 
+---
+
+&nbsp;
+
 </details>
-
-
 
 <details>
 <summary>Getting Started</summary>
@@ -1703,6 +1709,8 @@ The control tab on the right of the application window may be toggled using the 
 
 &nbsp;
 
+---
+
 <details>
 <summary>Using MacOS as a Server</summary>
 
@@ -1953,6 +1961,8 @@ Check the update service periodically to ensure it remains disabled.
 <details>
 <summary>Media MTX</summary>
 
+---
+
 <a href="https://github.com/bluenviron/mediamtx">
 <image src="assets/images/media_mtx_logo.png">
 </a>
@@ -1979,10 +1989,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+---
+
+&nbsp;
+
 </details>
 
 <details>
 <summary>YOLOX</summary>
+
+---
 
 <a href="https://github.com/Megvii-BaseDetection/YOLOX">
 <image src = "assets/images/yolox_logo.png">
@@ -2026,6 +2042,8 @@ It is hoped that every AI practitioner in the world will stick to the concept of
 没有孙剑博士的指导，YOLOX也不会问世并开源给社区使用。
 孙剑博士的离去是CV领域的一大损失，我们在此特别添加了这个部分来表达对我们的“船长”孙老师的纪念和哀思。
 希望世界上的每个AI从业者秉持着“持续创新拓展认知边界，非凡科技成就产品价值”的观念，一路向前。
+
+---
 
 </details>
 
