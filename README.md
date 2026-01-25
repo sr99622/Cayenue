@@ -1,13 +1,20 @@
-# Cayenue
-<h3>IP Camera Interface Software</h3>
+<h3>Quick Installer Download Links</h3>
+
+### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/cayenue_1.0.6_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mac OS](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-installer-1.0.6.exe)
+
+<i>Please refer to the Software Installation section of this document for detailed instructions.</i>
+
+&nbsp;
 
 <image src="assets/images/cayenue_logo.png">
+
+<h3>IP Camera Interface Software</h3>
 
 View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High Perfomance software with responsive interface and proven stability.
 
 <h3>System Requirements</h3>
 
-Onvif compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco
+Onvif compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco.
 
 Computers running Linux, Mac or Windows. Cayenue is a multi-modal system and runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
 
@@ -39,7 +46,7 @@ The system installation requires network connected components and appropriate sw
 
 The software can operate in three modes, Stand-Alone, Server and Client. Stand-Alone mode is based on legacy configurations and might be considered obsolete. Server mode is recommended, even if there is only one computer being used to view camera streams on the network. Server mode includes a Proxy server (Media MTX) that will provide a buffer between the camera stream and the Server. This has beneficial effects for stability. However, some cameras may not conform properly to RTSP standards expected by the Proxy, in which case Stand-Alone mode may provide better results. Client mode requires a Server and can be installed and used by a number of computers limited by the network constraints of the installation.
 
-Operating a Server with dual network interface ports provides the opportunity for subnet isolation of cameras. There are many benefits to this configuration, not the least being enhanced network security that prevents camera network communication with the internet at large, or the internal network. Non-compliant protocol implementations by cameras also present a stability threat that isolation can prevent.
+Operating a Server with dual network interface ports provides the opportunity for subnet isolation of cameras. There are many benefits to this configuration, not the least being enhanced network security that prevents camera network communication with the internet at large, or the internal network. Non-compliant protocol implementations by cameras also present a stability threat that isolation can prevent. If the hardware under consideration for the Server only has one ethernet network interface, a dongle can be used to connect a second ethernet cable, although dongled connections can be expected to have lower bandwidth.
 
 <image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/net_config.png?raw=true" width="600">
 
@@ -58,7 +65,152 @@ Hardware requirements for Client configuration are more relaxed as the Client ca
 
 &nbsp;
 
-The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode easily configured, but requires acces to a Server.
+<details>
+<summary>Linux</summary>
+
+&nbsp;
+
+---
+
+<details>
+<summary>Flatpak</summary>
+
+&nbsp;
+___
+
+Download the [Flatpak installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.flatpak), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+
+```
+flatpak install Cayenue-1.0.6.flatpak
+```
+
+In some cases, it may be necessary to re-boot the computer in order to see the icon in the Applications menu.
+
+The program can then be launched from the Applications menu. To uninstall use the command.
+
+```
+flatpak uninstall io.github.sr99622.Cayenue
+```
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+
+<summary>Snap</summary>
+
+&nbsp;
+____
+
+Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/cayenue_1.0.6_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+
+```
+sudo snap install cayenue_1.0.6_amd64.snap --dangerous
+```
+
+The program can then be launched from the Applications menu. In order to get audio, you need to connect the pulseaudio driver.
+
+```
+sudo snap connect cayenue:pulseaudio
+```
+
+If you would like to use the NPU on Intel, the driver can be installed as follows.
+
+```
+sudo snap install intel-npu-driver
+sudo chown root:render /dev/accel/accel0
+sudo chmod g+rw /dev/accel/accel0
+sudo usermod -a -G render $USER
+sudo bash -c "echo 'SUBSYSTEM==\"accel\", KERNEL==\"accel*\", GROUP=\"render\", MODE=\"0660\"' > /etc/udev/rules.d/10-intel-vpu.rules"
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=accel
+sudo reboot now
+```
+
+To uninstall.
+
+```
+sudo snap remove cayenue
+```
+
+</details>
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>Mac</summary>
+
+&nbsp;
+
+---
+
+An installer is available for Apple Silicon running Mac OS version Sequoia (15).
+
+Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.dmg) and open it. Drag the Cayenue icon into the Applications folder. Once the installation is complete, the program can then be started from the Launchpad. To uninstall the program, use Finder to go to the Applications directory, then right click over the icon and select Move to Trash.
+
+---
+
+&nbsp;
+
+</details>
+
+
+<details>
+<summary>Windows</summary>
+
+&nbsp;
+
+---
+
+An installer is available for Windows.
+
+Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-installer-1.0.6.exe) and double click on it. You will receive a warning message from the Operating System. Follow the prompts on the screen to install the program. It can be launched from the icon found in the Applications menu. To uninstall the program, go to Settings -> Apps -> Installed Apps and find the icon, then use the three dot button on the right to select action.
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>NVIDIA GPU</summary>
+
+&nbsp;
+
+<i>The installers are pre-configured for YOLO inference on Intel or Apple Silicon iGPU. Seperate instructions are provided if inference is required on NVIDIA GPU. If inference is not a system requirement, the standard installers are sufficient for operation with NVIDIA GPU.</i>
+
+___
+
+If YOLO operation is desired for systems equipped with NVIDIA GPU, an alternate installation method is required. This is due to the large size of the files required for NVIDIA operation. To use the application with NVIDIA GPU on Linux, create a python virtual environment, then use pip to install.
+
+```
+python3 -m venv env
+source env/bin/activate
+pip install cayenue openvino
+```
+
+Then follow the directions at [PyTorch](https://pytorch.org/get-started/locally/) to complete the installation based on your operating system and CUDA version.
+
+To use an icon with this configuration, use the command below. If working on windows, please run `pip install winshell` in the virtual environment prior to running this command.
+
+```
+sudo env\bin\Cayenue --icon
+```
+
+___
+
+</details>
+
+&nbsp;
+
+The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode is easily configured, but requires acces to a Server.
 
 For Stand Alone or Client modes, please go to the section <b>Install Cayenue</b>
 
@@ -513,157 +665,6 @@ sudo launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
 </details>
 
 &nbsp;
-
-<details>
-<summary>Install Cayenue</summary>
-
-&nbsp;
-
-<details>
-<summary>Linux</summary>
-
-&nbsp;
-
----
-
-<details>
-<summary>Flatpak</summary>
-
-&nbsp;
-___
-
-Download the [Flatpak installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.flatpak), then open a terminal and navigate to the Downloads folder. Use the following command to install.
-
-```
-flatpak install Cayenue-1.0.6.flatpak
-```
-
-In some cases, it may be necessary to re-boot the computer in order to see the icon in the Applications menu.
-
-The program can then be launched from the Applications menu. To uninstall use the command.
-
-```
-flatpak uninstall io.github.sr99622.Cayenue
-```
-
----
-
-&nbsp;
-
-</details>
-
-<details>
-
-<summary>Snap</summary>
-
-&nbsp;
-____
-
-Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/cayenue_1.0.6_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
-
-```
-sudo snap install cayenue_1.0.6_amd64.snap --dangerous
-```
-
-The program can then be launched from the Applications menu. In order to get audio, you need to connect the pulseaudio driver.
-
-```
-sudo snap connect cayenue:pulseaudio
-```
-
-If you would like to use the NPU on Intel, the driver can be installed as follows.
-
-```
-sudo snap install intel-npu-driver
-sudo chown root:render /dev/accel/accel0
-sudo chmod g+rw /dev/accel/accel0
-sudo usermod -a -G render $USER
-sudo bash -c "echo 'SUBSYSTEM==\"accel\", KERNEL==\"accel*\", GROUP=\"render\", MODE=\"0660\"' > /etc/udev/rules.d/10-intel-vpu.rules"
-sudo udevadm control --reload-rules
-sudo udevadm trigger --subsystem-match=accel
-sudo reboot now
-```
-
-To uninstall.
-
-```
-sudo snap remove cayenue
-```
-
-</details>
-
----
-
-&nbsp;
-
-</details>
-
-<details>
-<summary>Mac</summary>
-
-&nbsp;
-
----
-
-An installer is available for Apple Silicon running Mac OS version Sequoia (15).
-
-Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-1.0.6.dmg) and open it. Drag the Cayenue icon into the Applications folder. Once the installation is complete, the program can then be started from the Launchpad. To uninstall the program, use Finder to go to the Applications directory, then right click over the icon and select Move to Trash.
-
----
-
-&nbsp;
-
-</details>
-
-
-<details>
-<summary>Windows</summary>
-
-&nbsp;
-
----
-
-An installer is available for Windows.
-
-Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.6/Cayenue-installer-1.0.6.exe) and double click on it. You will receive a warning message from the Operating System. Follow the prompts on the screen to install the program. It can be launched from the icon found in the Applications menu. To uninstall the program, go to Settings -> Apps -> Installed Apps and find the icon, then use the three dot button on the right to select action.
-
----
-
-&nbsp;
-
-</details>
-
-<details>
-<summary>NVIDIA GPU</summary>
-
-&nbsp;
-___
-
-If YOLO operation is desired for systems equipped with NVIDIA GPU, an alternate installation method is required. This is due to the large size of the files required for NVIDIA operation. To use the application with NVIDIA GPU on Linux, create a python virtual environment, then use pip to install.
-
-```
-python3 -m venv env
-source env/bin/activate
-pip install cayenue openvino
-```
-
-Then follow the directions at [PyTorch](https://pytorch.org/get-started/locally/) to complete the installation based on your operating system.
-
-To use an icon with this configuration,
-
-```
-sudo env\bin\Cayenue --icon
-```
-
-___
-
-</details>
-
-
-</details>
-
-&nbsp;
-
 
 <details>
 <summary>Mount SMB Drive from Linux Client</summary>
@@ -1548,10 +1549,6 @@ The amplitude is measured by calculating the Root Mean Square (rms) value of the
 The frequency spectrum is measured by the integrated area under the spectrum curve normalized. The spectrum may be filtered to eliminate undesired frequencies. Lower frequencies are often common background sounds that do not warrant an alarm condition, whereas higher frequency sounds are often associated with a sudden, sharp noise such as breaking glass.
 
 There are filter bars that can be adjusted using the cursor handles. Frequencies excluded by the filter are depicted in gray. The Gain slider can be used to amplify or attenuate the value of the signal in order to adjust the sensitivity of the detector.
-
-* ### Over/Under
-
-The detector can be configured to alarm in the absence of sound by selecting the Under radio button. This may be useful in situations such as an engine room monitor configured to alarm if the engine stops running. This mode will invert the status bar level.
 
 ---
 
