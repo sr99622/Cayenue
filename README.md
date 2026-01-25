@@ -212,8 +212,6 @@ ___
 
 The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode is easily configured, but requires acces to a Server.
 
-For Stand Alone or Client modes, please go to the section <b>Install Cayenue</b>
-
 Server mode requires the configuation of two services for network communication, DHCP service for cameras and SMB protocol for file sharing with clients. The instructions for setting up these services will vary by operating system. Instructions are provided for Mac OS and Linux distributions Ubuntu and Fedora. Similar procedures could be developed for Windows, however, the use of Windows as a Server is discouraged. Windows does work well as a client, but is difficult to stabilize in a Server role.
 
 Please refer to the diagram presented in the Hardware section of this document, as it shows the configuration for which these instructions are validated. The Server will require two Network Interfaces. If the hardware has only one ethernet port, a dongle can be used to provide a second network interface.
