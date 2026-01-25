@@ -315,7 +315,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   sudo smbpasswd -a <username>
   ```
 
-  The system will prompt you to enter a password.
+  The system will prompt you to enter and verify a password.
 
 ---
 
@@ -329,6 +329,8 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 &nbsp;
 
 ---
+
+### PLEASE NOTE: Replace `<username>` in these instructions with the name of the account under which Cayenue is installed
 
 Install samba
 
@@ -344,11 +346,11 @@ sudo firewall-cmd --reload
 ```
 
 
-create shared directory
+Initialize the home directory for sharing
 
 ```
-sudo semanage fcontext --add --type "samba_share_t" "/home/cayenue(/.*)?"
-sudo restorecon -R /home/cayenue
+sudo semanage fcontext --add --type "samba_share_t" "/home/<username>(/.*)?"
+sudo restorecon -R /home/<username>
 
 ```
 
@@ -359,7 +361,7 @@ sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
 sudo nano /etc/samba/smb.conf
 ```
 
-configuration file content
+Copy and paste the follwing configuration file content
 
 ```
 [global]
@@ -367,15 +369,17 @@ configuration file content
   security = user
 
 [cayenue]
-  comment = My Fedora Samba Share
-  path = /home/cayenue
-  valid users = cayenue
+  comment = Cayenue Shared Folders
+  path = /home/<username>
+  valid users = <username>
   browseable = yes
   writable = no
   guest ok = no
   read only = yes
   public = yes
 ```
+
+Use ctl+O to save and ctl+X to exit nano
 
 add password
 
@@ -390,7 +394,14 @@ start and enable
 sudo systemctl enable smb nmb
 sudo systemctl start smb nmb
 sudo systemctl status smb
+```
 
+A screen displaying configuration should appear and indicate success. The `preset: disabled` is a distribution flag and can be ignored
+
+Reoot 
+
+```
+sudo reboot now
 ```
 ---
 
@@ -473,7 +484,7 @@ The ethernet cable for the camera subnet should now be connected. A fixed IP add
 
 It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be `10.2.2.1`. Although very unlikely, please verify that your existing network does not use this address range. 
 
-There are many references that can provide details on how to set a static ip. On many versions od Linux, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. This configuration prevents direct camera communication outside of the subnet, forcing all traffic through the proxy server.
+There are many references that can provide details on how to set a static ip. On many versions of Linux, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. This configuration prevents direct camera communication outside of the subnet, forcing all traffic through the proxy server.
 
 <b>DHCP Configuration</b>
 
@@ -585,11 +596,12 @@ sudo systemctl status kea-dhcp4
 
 Courtesy of [Server World](https://www.server-world.info/en/note?os=Fedora_43&p=dhcp&f=1). More detailed info there.
 
-Install the DHCP server program
+Install the DHCP server program. There may be a warning message that appears during the installation of the dhcp-server to the effect `Conflict with earlier configuration for user 'nm-openvpn'`. This is a known issue with the packaging system and does not affect the performance of the dhcp-server.
 
 ```
 sudo dnf install dhcp-server
 ```
+
 
 Edit the configuration file
 
@@ -619,7 +631,7 @@ sudo systemctl enable --now dhcpd
 Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transistory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
 
 ```
-sudo systemctl status dhcp4
+sudo systemctl status dhcpd
 ```
 
 ---
@@ -724,6 +736,12 @@ Please note that the installation procedure does not include instructions for se
 &nbsp;
 
 </details>
+
+&nbsp;
+
+Check the Power settings for the server and disable Automatic Suspend so the Server will stay on continuously. Also check the Host Name in the About settings, this will be the name broadcast over the local network for visibility to the Clients.
+
+Following the installation of the SMB and DHCP services, Cayenue can be installed on the Server following the instructions found above.
 
 &nbsp;
 
