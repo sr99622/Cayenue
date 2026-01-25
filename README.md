@@ -44,19 +44,21 @@ Open source software written in Python with permissive Apache license affords th
 
 The system installation requires network connected components and appropriate switching hardware. The software is designed to support ONVIF compatible cameras. Please note that not all cameras support ONVIF, and those that do may have non-compliant or incomplete implementations. Cayenue supports a wide range of cameras and is tolerant of non-compliant implementations. Cameras listed in the System Requirements section above can be expected to work. Many other types of cameras are derivative of those listed and should behave in a similar fashion.
 
-The software can operate in three modes, Stand-Alone, Server and Client. Stand-Alone mode is based on legacy configurations and might be considered obsolete. Server mode is recommended, even if there is only one computer being used to view camera streams on the network. Server mode includes a Proxy server (Media MTX) that will provide a buffer between the camera stream and the Server. This has beneficial effects for stability. However, some cameras may not conform properly to RTSP standards expected by the Proxy, in which case Stand-Alone mode may provide better results. Client mode requires a Server and can be installed and used by a number of computers limited by the network constraints of the installation.
+The software can operate in three modes, Stand-Alone, Server and Client. Stand-Alone mode is based on legacy configurations and might be considered obsolete. Server mode is recommended, even if there is only one computer being used to view camera streams on the network. Server mode includes a Proxy server (Media MTX) that will provide a buffer between the camera stream and the Server. This has beneficial effects for stability. However, some cameras may not conform properly to RTSP standards expected by the Proxy, in which case Stand-Alone mode may provide better results. Client mode requires a Server and can be installed and used by any number of computers, limited by the network constraints of the installation.
 
 Operating a Server with dual network interface ports provides the opportunity for subnet isolation of cameras. There are many benefits to this configuration, not the least being enhanced network security that prevents camera network communication with the internet at large, or the internal network. Non-compliant protocol implementations by cameras also present a stability threat that isolation can prevent. If the hardware under consideration for the Server only has one ethernet network interface, a dongle can be used to connect a second ethernet cable, although dongled connections can be expected to have lower bandwidth.
 
-<image src="https://github.com/sr99622/Cayenue/blob/main/assets/images/net_config.png?raw=true" width="600">
+It is possible to use wireless cameras in the system, but this is not recommended. There are situations where wireless cameras may be the only option, in which case stream resolutions and framerates should be reduced in order to avoid stability issues. Wireless routers and access points can be used to build an isolated camera subnet in the same manner as presented here for wired connections.
+
+<image src="assets/images/net_config.png" width="600">
 
 &nbsp;
 
-When cameras are isolated on a seperate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses and is a service running on the Server. DHCP is configured on Linux by installing a service program that is configured with an edited file. Similarly, Mac OS can be configured to run a DHCP server by editing a configuration file. Although Windows is not recommended for Server configuration, it is possible to use a free program for this purpose. Please consult the DHCP Servers section of the Server Configuration topic of this document for detailed instructions. One important point to note is that the DHCP server for the camera subnet MUST reside on the proper network interface (on the diagram 10.1.1.0/24). There can only be one DHCP server on a network and the existing DHCP service provided by the internal router may experience issues if the Cayenue Server DHCP is run on the wrong network interface (on the diagram 192.168.1.0/24).
+When cameras are isolated on a seperate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses and is a service running on the Server. DHCP is configured on Linux by installing a service program that is configured with an edited file. Similarly, Mac OS can be configured to run a DHCP server by editing a configuration file. Although Windows is not recommended for Server configuration, it is possible to use a free program for this purpose. Please consult the DHCP Servers section of the Server Configuration topic of this document for detailed instructions. One important point to note is that the DHCP server for the camera subnet MUST reside on the proper network interface (on the diagram 10.2.2.0/24). There can only be one DHCP server on a network and the existing DHCP service provided by the internal router may experience issues if the Cayenue Server DHCP is run on the wrong network interface (on the diagram 192.168.1.0/24). Your actual network nomenclature may differ from that shown here.
 
-Cayenue is designed to take advantage of advanced YOLO detection algorithms for detecting objects of interest. There is a requirement that the Server have a capable compute unit in order to run this inference. Integrated GPU or NPU hardware is recommended for this task. Discrete GPU may also be used, but at a significantly higher power consumption profile, as well as additional driver installation and configuration. Intel iGPU and Apple Silicon NPU are recommended and are directly supported by the Cayenue installation programs and do not require any additional configuration.
+Cayenue is designed to take advantage of advanced YOLO inference detection algorithms for detecting objects of interest. In order to run this inference, there is a requirement that the Server have a capable compute unit. Integrated GPU or NPU hardware is recommended for this task. Discrete GPU may also be used, but at a significantly higher power consumption profile, as well as additional driver installation and configuration. Intel iGPU and Apple Silicon NPU are recommended and are directly supported by the Cayenue installation programs and do not require any additional configuration.
 
-Hardware requirements for Client configuration are more relaxed as the Client can recieve alerts from the server and do not require any additional inference processing capablilties. If the Server is configured to share its Picture and Video directories using SMB protocol (Samba), Clients may access videos from the Server without the need for local storage. SMB performance is excellent in a local network scenario, and can be expected to provide essentially the same experience as local storage.
+Hardware requirements for Client configuration are more relaxed as the Client can recieve alerts from the server and do not require any additional inference processing capablilties. If the Server is configured to share its Picture and Video directories using SMB protocol (Samba), Clients may access pictures and videos from the Server without the need for local storage. SMB performance is excellent in a local network scenario, and can be expected to provide essentially the same experience as local storage.
 
 </details>
 
@@ -212,7 +214,7 @@ ___
 
 The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode is easily configured, but requires acces to a Server.
 
-Server mode requires the configuation of two services for network communication, DHCP service for cameras and SMB protocol for file sharing with clients. The instructions for setting up these services will vary by operating system. Instructions are provided for Mac OS and Linux distributions Ubuntu and Fedora. Similar procedures could be developed for Windows, however, the use of Windows as a Server is discouraged. Windows does work well as a client, but is difficult to stabilize in a Server role.
+Server mode requires the configuation of two services for network communication, DHCP service for the camera subnet and SMB protocol for file sharing with clients. The instructions for setting up these services will vary by operating system. Instructions are provided for Mac OS and Linux distributions Ubuntu and Fedora. Similar procedures could be developed for Windows, however, the use of Windows as a Server is discouraged. Windows does work well as a client, but is difficult to stabilize in a Server role.
 
 Please refer to the diagram presented in the Hardware section of this document, as it shows the configuration for which these instructions are validated. The Server will require two Network Interfaces. If the hardware has only one ethernet port, a dongle can be used to provide a second network interface.
 
@@ -235,6 +237,8 @@ When configuring SMB service, it is recommended to physically connect only the n
 <summary>Linux - Ubuntu</summary>
 
 &nbsp;
+
+---
 
 It is possible for Windows clients to access camera recordings residing on a Linux server on the local network by installing a samba share on the Linux server. There are a few steps needed to set up the server, which are often not well documented for this type of configuration. The following instructions will set up the shared folder on the server, then show how a Windows client can attach to the shared folder as a mapped drive. Please note that this setup is intended for use in a simple private network where all users can be trusted with data. More sophisticated configurations that control data access are possible, but are beyond the scope of these instructions.
 
@@ -303,40 +307,18 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 
   The system will prompt you to enter a password.
 
-  ____________
-  
-  A script to get a list of active samba accounts
-
-  ```
-  #!/bin/bash
-
-  # Run pdbedit and extract only the Unix usernames
-  sudo pdbedit -L -v | while IFS= read -r line; do
-    # Skip empty lines
-    [[ -z "$line" ]] && continue
-
-    # Match only lines that start with "Unix username:"
-    if [[ "$line" == "Unix username:"* ]]; then
-      value="${line#Unix username: }"
-      echo "$value"
-    fi
-  done
-
-  ```
+---
 
 &nbsp;
-
-______________
-
 
 </details>
 
 <details>
 <summary>Linux - Fedora</summary>
 
-
-
 &nbsp;
+
+---
 
 Install samba
 
@@ -400,16 +382,18 @@ sudo systemctl start smb nmb
 sudo systemctl status smb
 
 ```
+---
 
+&nbsp;
 
 </details>
 
 <details>
 <summary>Mac OS</summary>
 
-
-
 &nbsp;
+
+---
 
 Open Sharing Settings: Go to the Apple menu > System Settings > General > Sharing (scroll down if needed).
 
@@ -423,8 +407,51 @@ Select Users: Under "Windows File Sharing," check the box for each user account 
 
 (Optional) Add Folders: In the main Sharing window, use the "+" button to add specific folders to share and set their permissions (read/write for users). 
 
+---
 
+&nbsp;
 
+</details>
+
+<details>
+<summary>Sharing Drives From Windows</summary>
+
+&nbsp;
+
+---
+
+There are a few different paths you can take during this process, so some of the steps below may be redundant. If you click around enough, you should be able to get it working.
+
+The First step is to turn on windows sharing
+* Settings -> Network & Internet -> Sharing
+* Under Private ensure that both "Turn on Network Discovery: and "Turn on file and printer sharing" are toggled on
+
+Share a folder
+* Use the file explorer to find the folder you want to share
+* Right click over the folder
+* Properties -> Sharing -> Advanced Sharing
+* Give access to users with the dropdown box
+* You can create a new account from the dropdown
+
+Create an account for the external machines to use when mounting the shared folder
+* Settings -> Accounts -> Other Users --> Add Account
+* Unfortunately, Microsoft will try to make this a Microsoft account, so you have to click through a couple screens to get to a local acccount
+  * I don't have this person's sign-on information
+  * Add a user without a Microsoft Account
+* Type in a user name, password and hints, which are required
+
+Add User to Shared Folder
+* Use the file explorer and right click over the folder to be shared
+* Show More Options -> Give access to -> Specific People
+* Select the User name from the dropdown box
+* Click Add
+* When asked if you want to change folder settings say yes (twice)
+
+You should now be able to sign into the folder from an SMB client with the user credentials
+
+---
+
+&nbsp;
 
 </details>
 
@@ -432,9 +459,9 @@ Select Users: Under "Windows File Sharing," check the box for each user account 
 
 Upon completion of the SMB service configuration, a test from a client machine is recommended before continuing.
 
-The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camara subnet interface should be set to 10.2.2.1. Ensure that the cameras are connected and powered on.
+The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camara subnet interface should be set to `10.2.2.1`. Ensure that the cameras are connected and powered on.
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. Although very unlikely, please verify that your existing network does not use this address range. 
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be `10.2.2.1`. Although very unlikely, please verify that your existing network does not use this address range. 
 
 There are many references that can provide details on how to set a static ip. On many versions od Linux, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. This configuration prevents direct camera communication outside of the subnet, forcing all traffic through the proxy server.
 
@@ -445,7 +472,9 @@ There are many references that can provide details on how to set a static ip. On
 
 &nbsp;
 
-The link shown is recommended reading and contains detailed information not covered here. [Kea DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/). 
+---
+
+The link  [Kea DHCP server](https://ubuntu.com/server/docs/how-to/networking/install-isc-kea/) is recommended reading and contains detailed information not covered here. 
 
 Install the kea server using the following command
 
@@ -517,7 +546,7 @@ copy and paste the text below into the file. Replace `<your-interface-name>` wit
 }
 ```
 
-This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
+This is a basic configuration that will assign addresses in the range of `10.2.2.64 - 10.2.2.242`, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
 
 Use the commands shown below to control the service. Be sure to use the enable command to get persistent service operation through reboots.
 
@@ -531,15 +560,18 @@ Check the server status. There should be some indication that the service has st
 sudo systemctl status kea-dhcp4
 ```
 
+---
 
+&nbsp;
 
 </details>
 
 <details>
 <summary>Linux - Fedora</summary>
 
-
 &nbsp;
+
+---
 
 Courtesy of [Server World](https://www.server-world.info/en/note?os=Fedora_43&p=dhcp&f=1). More detailed info there.
 
@@ -580,6 +612,10 @@ Check the server status. There should be some indication that the service has st
 sudo systemctl status dhcp4
 ```
 
+---
+
+&nbsp;
+
 </details>
 
 <details>
@@ -587,9 +623,11 @@ sudo systemctl status dhcp4
 
 &nbsp;
 
+---
+
 On Mac OS, the DHCP service is provided by bootpd. The service is configured with a file named `/etc/bootpd.plist`. A sample configuration file is shown below. 
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be 10.2.2.1. This is a reserved network for private subnets. Please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
+It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be `10.2.2.1`. This is a reserved network for private subnets. Although unlikely, please verify that your existing network does not use this address range. To make this configuration, use the Settings -> Network -> Ethernet -> TCP/IP -> Configure IPv4 -> Manually (combo box). The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Router to `10.2.2.1`. If you need internet access, you should have a second network connection to your local router, which is configured separately. Note that you may need to update network priorities in order to use the internet connected interface. Please refer to the section Network Priority on Multi Homed Hosts of this document.
 
 This file is configured to use the interface named `en0`, which in most cases will be the ethernet interface on the Mac computer. Please check the name using the `ifconfig` command to verify that this is the correct information.
 
@@ -638,7 +676,7 @@ This file is configured to use the interface named `en0`, which in most cases wi
 </plist>
 ```
 
-This is a basic configuration that will assign addresses in the range of 10.2.2.64 - 10.2.2.242, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
+This is a basic configuration that will assign addresses in the range of `10.2.2.64 - 10.2.2.242`, leaving the balance of addresses available for static ip. The router and name server addresses point back to the server, which is a dead end. This means that there is no direct traffic between the cameras and the internet or the rest of the network. All communication with the cameras is proxied by the Cayenue server.
 
 The service can be set up by copying the sample file to `/etc/bootpd.plist`, replacing the tag `en0` tag in the `dhcp_enabled` key with the appropriate data from the `ifconfig` command if necessary. This can be done using the command `sudo nano /etc/bootpd.plist`, then copying the text above and using ctrl+O, enter, ctrl+X to save and exit.
 
@@ -654,15 +692,32 @@ The service can be stopped with
 sudo launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
 ```
 
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>Windows</summary>
+
 &nbsp;
 
 ---
 
-</details>
+[DHCP Server for Windows](https://www.dhcpserver.de/cms/) is made available by third party . Older versions are available for [download](https://www.dhcpserver.de/cms/download/) free of charge. Instructions for installation can be found [here](https://www.dhcpserver.de/cms/running_the_server/). Please consider making a donation to the developer if you find the software useful.
+
+Please note that the installation procedure does not include instructions for setting up a static IP address on the network interface, which is necessary for operation. This should be done before configuring the DHCP service. An exhaustive resource on this topic is available at [How to set a static IP address on Windows 11](https://pureinfotech.com/set-static-ip-address-windows-11/).
+
+---
+
+&nbsp;
 
 </details>
 
 &nbsp;
+
+</details>
 
 <details>
 <summary>Mount SMB Drive from Linux Client</summary>
@@ -753,6 +808,67 @@ ___
 </details>
 
 </details>
+
+<details><summary>Firewall Rules</summary>
+
+&nbsp;
+
+Cayenue requires network access to communicate with cameras in Stand Alone or Server mode. If the host computer uses a firewall, it may be necessary to enable some communciations ports so that cameras can use the WS-Discovery protocol to announce their presence to the program.
+
+Some Distributions come with ```firewalld``` pre-installed and configured. These commands will work with firewalld and present a common operation that other firewalls will implement in a similar fashion.
+
+The firewalld package in some distributions includes pre-defined services for WS-Discovery which might manage this port automatically. If the service definition exists on your system, you can use the simpler command: 
+
+```
+sudo firewall-cmd --permanent --zone=public --add-service=ws-discovery-client
+sudo firewall-cmd --reload
+```
+
+You can check for available WS-Discovery services with:
+
+```
+firewall-cmd --get-services | grep ws-discovery
+```
+
+To configure the service manually in the event that it is not included in the firewall services package.
+
+To allow inbound traffic with a specific source port (source-port) in firewalld, you must use a rich rule. Standard port rules in firewalld filter traffic based on the destination port, so a more specific rule is needed to inspect the source port. The common use case for source port 3702/UDP is for WS-Discovery (Web Services Dynamic Discovery) protocols. 
+
+Command to Allow Inbound Source Port 3702 
+
+Run the following commands in your terminal to allow inbound UDP traffic from source port 3702 permanently: Add a rich rule to the desired zone (e.g., public) that accepts traffic where the source port is 3702.
+
+
+```
+sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule family="ipv4" source-port port="3702" protocol="udp" accept'
+sudo firewall-cmd --reload
+```
+
+```
+sudo firewall-cmd --zone=public --list-rich-rules
+```
+
+The output should include the rule you just added. 
+
+Cayenue in server configuration also requires ports to be opened for Onvif, RTSP and HTTP servers. The following commands should achieve this
+
+```
+sudo firewall-cmd --permanent --add-port=8554/tcp
+sudo firewall-cmd --permanent --add-port=8550/tcp
+sudo firewall-cmd --permanent --add-port=8800/tcp
+sudo firewall-cmd --reload
+```
+
+For client configuration to be able to listen for alarms from the server, open port 8080 on the multicast address 239.255.255.247 using rich rule
+
+```
+sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule family="ipv4" destination address="239.255.255.247" port port="8080" protocol="udp" accept'
+sudo firewall-cmd --reload
+```
+
+</details>
+
+
 
 <details>
 <summary>Getting Started</summary>
