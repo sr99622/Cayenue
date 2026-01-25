@@ -50,6 +50,8 @@ Operating a Server with dual network interface ports provides the opportunity fo
 
 It is possible to use wireless cameras in the system, but this is not recommended. There are situations where wireless cameras may be the only option, in which case stream resolutions and framerates should be reduced in order to avoid stability issues. Wireless routers and access points can be used to build an isolated camera subnet in the same manner as presented here for wired connections.
 
+### Cayenue Network Configuration
+
 <image src="assets/images/net_config.png" width="600">
 
 &nbsp;
