@@ -2,7 +2,7 @@
 <component type="desktop">
 	<id>io.github.sr99622.Cayenue</id>
 	<name>Cayenue</name>
-	<summary>Onvif Camera Management System</summary>
+	<summary>IP Camera Management System</summary>
 	<metadata_license>CC-BY-SA-3.0</metadata_license>
 	<project_license>Apache-2.0</project_license>
 	<description>
@@ -26,7 +26,7 @@
 	<url type="homepage">https://github.com/sr99622/Cayenue</url>
 	<screenshots>
 		<screenshot type="default">
-			<caption>The app running YOLOX detection on a camera stream</caption>
+			<caption>The app running YOLOX detections on multiple camera streams</caption>
 			<image>https://raw.githubusercontent.com/sr99622/Cayenue/7e21e358405a97c3ce60aec47a6efdd22e40b935/assets/images/screenshot_1.png</image>
 		</screenshot>
 		<screenshot>
@@ -37,7 +37,7 @@
 	<releases>
 		<release version="1.0.6" date="2026-01-24">
 			<description>
-				<p>Wilton</p>
+				<p>Fleetwood</p>
 			</description>
 			<url>https://github.com/sr99622/Cayenue/releases/tag/v1.0.6</url>
 		</release>
