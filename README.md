@@ -75,6 +75,8 @@ Hardware requirements for Client configuration are more relaxed as the Client ca
 
 &nbsp;
 
+<i>Select the instructions for your operating system below</i>
+
 <details>
 <summary>Linux</summary>
 
@@ -741,11 +743,37 @@ Please note that the installation procedure does not include instructions for se
 
 Check the Power settings for the server and disable Automatic Suspend so the Server will stay on continuously. Also check the Host Name in the About settings, this will be the name broadcast over the local network for visibility to the Clients.
 
-Following the installation of the SMB and DHCP services, Cayenue can be installed on the Server following the instructions found above.
+<details>
+<summary>Mac OS Additional Server Setttings</summary>
+
+&nbsp;
+
+For Mac OS the settings for Energy should be adjusted to disable the low power mode for the device during periods of no user interaction. The setting "Prevent automatic sleeping when the display is off" should be set to on. Mac OS will limit the number of file handles that can be open simoultaneously. These handles are also associated with network socket creation. This has the effect of limiting the number of clients that can connect to the server. In order to increase the number of handles, the ```ulimit``` command can be used.
+
+```
+ulimit -n 8192
+```
+
+</details>
+
+&nbsp;
+
+Following the installation of the SMB and DHCP services, Cayenue can be installed on the Server as described in the instructions found above.
 
 &nbsp;
 
 </details>
+
+<details>
+<summary>Client Configuration</summary>
+
+&nbsp;
+
+Client configuration consists of two steps. This first is to enter the Server address on the `Settings -> Proxy -> Client -> Connect url from server`. Enter the information from the Server's Proxy tab into the text box. Please make sure to type in the line exactly, including the trailing slash character. Then click the `Update` button to refresh the Client settings. The operation will succeed silently or produce an error message on failure. Clicking the `Discover` button from the Camera panel of the Client should populate the camera list with data retrieved from the Server.
+
+The second step of Client configuration involves the File Browser directory settings for the Pictures and Videos tab. The File Browser is launched from the folder icon on the front Camera panel. In order to set these directories, it is necessary to map the SMB shared drives set up on the Server to locations accessible to the Client.
+
+Mapping remote drives is an Operating System dependent excercise. For Windows servers, setting a mapped network drive is a commmon operation and is not detailed here. Mac OS allows Clients to browse the network from the OS file browser, and is a trivial operation without need for further configuration. Mounting remote SMB drives from Linux, however does require some effort and is detailed below.
 
 <details>
 <summary>Mount SMB Drive from Linux Client</summary>
@@ -821,11 +849,13 @@ sudo mount -a
 
 Please note that the mount requires the system to wait for the network to be up before running fstab. The part of the fstab entry - `x-systemd.automount,_netdev,` is what does this. It assumes you have systemd in you Linux distribution. If you don't know what systemd is, you probably have it, as most mainstream linux distros use it by default. If you are using a distro that doesn't have it, then you probably already know what to do.
 
-Once the mount is established, you can use the directory browser from the Files panel to set the Video directory used by the application. Note that the Files panel setting is used for viewing existing videos. The setting on the Storage panel Archive Dir is used by the application for writing videos files as they are produced by the cameras.
-
 ---
 
 &nbsp;
+
+Once the drives are available to the Client, use the folder button on the front Camera panel to launch the File Browser. At the top of the Picture panel, use the three dot button to open the directory selection dialog and navigate to the appropriate remote location. Do likewise for the Video panel and the Client configuration is complete.
+
+</details>
 
 </details>
 
@@ -1727,8 +1757,6 @@ The control tab on the right of the application window may be toggled using the 
 
 &nbsp;
 
----
-
 <details>
 <summary>Using MacOS as a Server</summary>
 
@@ -1788,50 +1816,6 @@ Click the Apple icon in the upper left corner of the screen and select System Se
 ---
 
 </details>
-
-
-<details>
-<summary>Sharing Drives From Windows</summary>
-
-&nbsp;
-
----
-
-There are a few different paths you can take during this process, so some of the steps below may be redundant. If you click around enough, you should be able to get it working.
-
-The First step is to turn on windows sharing
-* Settings -> Network & Internet -> Sharing
-* Under Private ensure that both "Turn on Network Discovery: and "Turn on file and printer sharing" are toggled on
-
-Share a folder
-* Use the file explorer to find the folder you want to share
-* Right click over the folder
-* Properties -> Sharing -> Advanced Sharing
-* Give access to users with the dropdown box
-* You can create a new account from the dropdown
-
-Create an account for the external machines to use when mounting the shared folder
-* Settings -> Accounts -> Other Users --> Add Account
-* Unfortunately, Microsoft will try to make this a Microsoft account, so you have to click through a couple screens to get to a local acccount
-  * I don't have this person's sign-on information
-  * Add a user without a Microsoft Account
-* Type in a user name, password and hints, which are required
-
-Add User to Shared Folder
-* Use the file explorer and right click over the folder to be shared
-* Show More Options -> Give access to -> Specific People
-* Select the User name from the dropdown box
-* Click Add
-* When asked if you want to change folder settings say yes (twice)
-
-You should now be able to sign into the folder from an SMB client with the user credentials
-
----
-
-&nbsp;
-
-</details>
-
 
 <details>
 <summary>Running Multiple Cameras</summary>
@@ -1897,75 +1881,6 @@ If there is an issue with a particular setting, it is recommended to connect to 
 &nbsp;
 
 </details>
-
-<details>
-<summary>Troubleshooting Techniques</summary>
-
-&nbsp;
-
-If you are having difficulty installing or running the program, this first place to check is the program logs. The program maintains a log of most important system functions that can be accessed from the Settings -> General tab. Browsing through the messages may produce some insight into root causes for some issues.
-
-Running the program from the command line inside the virutal environment can help find issues as they occur during operation. To open the virtual environment, use the appropriate command from the list below.
-
-  * Linux
-
-  ```
-  source $HOME/.local/share/onvif-gui-env/bin/activate
-  ```
-
-  * Mac
-
-  ```
-  source /Applications/OnvifGUI.app/Contents/MacOS/Python/Library/Frameworks/Python.framework/Versions/Current/onvif-gui-env/bin/activate
-  ```
-
-  * Windows
-
-  ```
-  %HOMEPATH%\onvif-gui-env\Scripts\activate
-  ```
-
-  Once inside the virtual environment, the prompt will change to (onvif-gui-env) and the program can be started with the command
-
-  ```onvif-gui```
-
-The teminal will now show messages in real time as they occur during program operation.
-
-Opening an Issue in the github repository is encouraged for issues you are not able to resolve on your own. Often times, issues may exist that are unkown to the developers, and feedback is necessary to raise awareness. There are a number of common problems that have been addressed in the Issues, so a look though those may help discover a solution.
-
-Existing issues may have been addressed with a new release of the application, so check that you are using the latest version. The version of the application is displayed in the title bar of the program window. If you want to update, first start the virtual environment as shown above and use the command `pip install --upgrade onvif-gui`.
-
-</details>
-
-<details>
-<summary>Turn Off Windows Update</summary>
-
-&nbsp;
-
----
-To turn off Windows Update completely, you can follow these steps: 
-
-Press the Windows key on your keyboard.
-
-Type "services" and click on "Services" in the search results.
-
-Scroll down and double-click on "Windows Update".
-
-Click the "Startup type" menu and select "Disabled".
-
-Click the "Stop" button.
-
-Click "Apply", then click "OK".
-
-Check the update service periodically to ensure it remains disabled.
-
----
-
-&nbsp;
-
-</details>
-
----
 
 &nbsp;
 
