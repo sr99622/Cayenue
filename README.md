@@ -10,11 +10,11 @@
 
 <h3>IP Camera Interface Software</h3>
 
-View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High Perfomance software with responsive interface and proven stability.
+View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High Performance software with responsive interface and proven stability.
 
 <h3>System Requirements</h3>
 
-Onvif compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco.
+ONVIF compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco.
 
 Computers running Linux, Mac or Windows. Cayenue is a multi-modal system and runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
 
@@ -58,7 +58,7 @@ It is possible to use wireless cameras in the system, but this is not recommende
 
 &nbsp;
 
-When cameras are isolated on a seperate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses. 
+When cameras are isolated on a separate subnet, there is a requirement to provide IP address assignment to the cameras. This can be done using static IP addresses, or by using DHCP (Dynamic Host Configuration Protocol). DHCP is the recommended method for assigning camera IP addresses. 
 
 DHCP is configured on Linux by installing a service program that is configured with an edited file. Similarly, Mac OS can be configured to run a DHCP server by editing a configuration file. Although Windows is not recommended for Server configuration, it is possible to use a free program for DHCP address assignment.
 
@@ -66,7 +66,7 @@ One important point to note is that the DHCP server for the camera subnet MUST r
 
 Cayenue is designed to take advantage of advanced [YOLOX](https://github.com/Megvii-BaseDetection/YOLOX) inference detection algorithms for detecting objects of interest. In order to run this inference, there is a requirement that the Server have a capable compute unit. Integrated GPU or NPU hardware is recommended for this task. Discrete GPU may also be used, but at a significantly higher power consumption profile, as well as additional driver installation and configuration. Intel iGPU and Apple Silicon NPU are recommended and are directly supported by the Cayenue installation programs and do not require any additional configuration.
 
-Hardware requirements for Client configuration are more relaxed as the Client can recieve alerts from the server and do not require any additional inference processing capablilties. If the Server is configured to share its Picture and Video directories using SMB protocol (Samba), Clients may access pictures and videos from the Server without the need for local storage. SMB performance is excellent in a local network scenario, and can be expected to provide essentially the same experience as local storage.
+Hardware requirements for Client configuration are more relaxed as the Client can recieve alerts from the server and do not require any additional inference processing capabilties. If the Server is configured to share its Picture and Video directories using SMB protocol (Samba), Clients may access pictures and videos from the Server without the need for local storage. SMB performance is excellent in a local network scenario, and can be expected to provide essentially the same experience as local storage.
 
 </details>
 
@@ -196,7 +196,7 @@ Download the [installer](https://github.com/sr99622/Cayenue/releases/download/v1
 
 &nbsp;
 
-<i>The installers are pre-configured for YOLO inference on Intel or Apple Silicon iGPU. Seperate instructions are provided if inference is required on NVIDIA GPU. If inference is not a system requirement, the standard installers are sufficient for operation with NVIDIA GPU.</i>
+<i>The installers are pre-configured for YOLO inference on Intel or Apple Silicon iGPU. separate instructions are provided if inference is required on NVIDIA GPU. If inference is not a system requirement, the standard installers are sufficient for operation with NVIDIA GPU.</i>
 
 ___
 
@@ -264,7 +264,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   sudo apt install samba
   ```
 
-  The Samba configuration is performed by editing the `/etc/samba/smb.conf` file. The Samba installation will create a default file in this location, which is not a good fit for this type of configuration. It is recommnded to move the file to a backup and start with a fresh file for configuration, following the commands
+  The Samba configuration is performed by editing the `/etc/samba/smb.conf` file. The Samba installation will create a default file in this location, which is not a good fit for this type of configuration. It is recommended to move the file to a backup and start with a fresh file for configuration, following the commands
 
   ```
   cd /etc/samba
@@ -272,7 +272,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   sudo nano smb.conf
   ```
 
-  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installated. For example, if you created a user cayenue, and were logged on as that user during the time the appliation was installed, the default directory for the application will be /home/cayenue. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
+  You will now be starting from a clean slate. The following text saved into the `smb.conf` file will create a sharing configuration that is compatible with the application. For this configuration, you will need to know the account under which Cayenue was installed. For example, if you created a user cayenue, and were logged on as that user during the time the application was installed, the default directory for the application will be /home/cayenue. The configuration shown below will share two sub-directories used by the program, namely Videos and Pictures.
   
   ```
   [global]
@@ -311,7 +311,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   sudo useradd -m <username>
   ```
   
-  The samba access requires a passord for the user
+  The samba access requires a password for the user
     
   ```
   sudo smbpasswd -a <username>
@@ -332,7 +332,7 @@ It is possible for Windows clients to access camera recordings residing on a Lin
 
 ---
 
-<b>PLEASE NOTE: Replace `<username>` in these instructions with the name of the account under which Cayenue is installed</b>
+PLEASE NOTE: Replace `<username>` in these instructions with the name of the account under which Cayenue is installed
 
 Install samba
 
@@ -363,7 +363,7 @@ sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
 sudo nano /etc/samba/smb.conf
 ```
 
-Copy and paste the follwing configuration file content
+Copy and paste the following configuration file content
 
 ```
 [global]
@@ -400,7 +400,7 @@ sudo systemctl status smb
 
 A screen displaying configuration should appear and indicate success. The `preset: disabled` is a distribution flag and can be ignored
 
-Reoot 
+Reboot 
 
 ```
 sudo reboot now
@@ -458,7 +458,7 @@ Share a folder
 
 Create an account for the external machines to use when mounting the shared folder
 * Settings -> Accounts -> Other Users --> Add Account
-* Unfortunately, Microsoft will try to make this a Microsoft account, so you have to click through a couple screens to get to a local acccount
+* Unfortunately, Microsoft will try to make this a Microsoft account, so you have to click through a couple screens to get to a local account
   * I don't have this person's sign-on information
   * Add a user without a Microsoft Account
 * Type in a user name, password and hints, which are required
@@ -484,7 +484,7 @@ You should now be able to sign into the folder from an SMB client with the user 
 
 Upon completion of the SMB service configuration, a test from a client machine is recommended before continuing.
 
-The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camara subnet interface should be set to `10.2.2.1`. Ensure that the cameras are connected and powered on.
+The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camera subnet interface should be set to `10.2.2.1`. Ensure that the cameras are connected and powered on.
 
 It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be `10.2.2.1`. Although very unlikely, please verify that your existing network does not use this address range. 
 
@@ -577,7 +577,7 @@ Use the commands shown below to control the service. Be sure to use the enable c
 sudo systemctl enable --now kea-dhcp4
 ```
 
-Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transistory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
+Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transitory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
 
 ```
 sudo systemctl status kea-dhcp4
@@ -748,7 +748,7 @@ Check the Power settings for the server and disable Automatic Suspend so the Ser
 
 &nbsp;
 
-For Mac OS the settings for Energy should be adjusted to disable the low power mode for the device during periods of no user interaction. The setting "Prevent automatic sleeping when the display is off" should be set to on. Mac OS will limit the number of file handles that can be open simoultaneously. These handles are also associated with network socket creation. This has the effect of limiting the number of clients that can connect to the server. In order to increase the number of handles, the ```ulimit``` command can be used.
+For Mac OS the settings for Energy should be adjusted to disable the low power mode for the device during periods of no user interaction. The setting "Prevent automatic sleeping when the display is off" should be set to on. Mac OS will limit the number of file handles that can be open simultaneously. These handles are also associated with network socket creation. This has the effect of limiting the number of clients that can connect to the server. In order to increase the number of handles, the ```ulimit``` command can be used.
 
 ```
 ulimit -n 8192
@@ -773,7 +773,7 @@ Client configuration consists of two steps. This first is to enter the Server ad
 
 The second step of Client configuration involves the File Browser directory settings for the Pictures and Videos tab. The File Browser is launched from the folder icon on the front Camera panel. In order to set these directories, it is necessary to map the SMB shared drives set up on the Server to locations accessible to the Client.
 
-Mapping remote drives is an Operating System dependent excercise. For Windows servers, setting a mapped network drive is a commmon operation and is not detailed here. Mac OS allows Clients to browse the network from the OS file browser, and is a trivial operation without need for further configuration. Mounting remote SMB drives from Linux, however does require some effort and is detailed below.
+Mapping remote drives is an Operating System dependent exercise. For Windows servers, setting a mapped network drive is a commmon operation and is not detailed here. Mac OS allows Clients to browse the network from the OS file browser, and is a trivial operation without need for further configuration. Mounting remote SMB drives from Linux, however does require some effort and is detailed below.
 
 <details>
 <summary>Mount SMB Drive from Linux Client</summary>
@@ -873,7 +873,7 @@ Once the drives are available to the Client, use the folder button on the front 
 
 ---
 
-Cayenue requires network access to communicate with cameras in Stand Alone or Server mode. If the host computer uses a firewall, it may be necessary to enable some communciations ports so that cameras can use the WS-Discovery protocol to announce their presence to the program.
+Cayenue requires network access to communicate with cameras in Stand Alone or Server mode. If the host computer uses a firewall, it may be necessary to enable some communications ports so that cameras can use the WS-Discovery protocol to announce their presence to the program.
 
 Some Distributions come with ```firewalld``` pre-installed and configured. These commands will work with firewalld and present a common operation that other firewalls will implement in a similar fashion.
 
@@ -910,7 +910,7 @@ sudo firewall-cmd --zone=public --list-rich-rules
 
 The output should include the rule you just added. 
 
-Cayenue in server configuration also requires ports to be opened for Onvif, RTSP and HTTP servers. The following commands should achieve this
+Cayenue in server configuration also requires ports to be opened for ONVIF, RTSP and HTTP servers. The following commands should achieve this
 
 ```
 sudo firewall-cmd --permanent --add-port=8554/tcp
@@ -993,7 +993,7 @@ Picture and Video files generated by the system can be viewed and managed with a
 
 Snapshot
 
-A snapshot of the currently selected camera cna be saved as jpg file. The snapshot will be named by the system using YYYYMMMDDHHmmSS.jpg format, unless otherwise specified in the file save dialog. The file save dialog can be suppressed using the checkbox labelled "Snapshot File Dlg" on the `Settings->General` tab. There are two modes under which files may be saved, Local and Remote. The Local mode will use the stream currently displayed and convert that to a picture format. This mode will preserve the aspect ratio of the stream and any artifacts such as AI boxes drawn on the image. The Remote mode will address the camera directly through the network and request a snapshot of the Record Profile for the camera. This will generally be a higher resolution image and may be subject to latency or camera network errors. In the event that the camera fails to deliver the image, the Local mode will be used as a fallback.
+A snapshot of the currently selected camera cna be saved as jpg file. The snapshot will be named by the system using YYYYMMMDDHHmmSS.jpg format, unless otherwise specified in the file save dialog. The file save dialog can be suppressed using the checkbox labeled "Snapshot File Dlg" on the `Settings->General` tab. There are two modes under which files may be saved, Local and Remote. The Local mode will use the stream currently displayed and convert that to a picture format. This mode will preserve the aspect ratio of the stream and any artifacts such as AI boxes drawn on the image. The Remote mode will address the camera directly through the network and request a snapshot of the Record Profile for the camera. This will generally be a higher resolution image and may be subject to latency or camera network errors. In the event that the camera fails to deliver the image, the Local mode will be used as a fallback.
 
 <image src="cayenue/resources/apply.png">
 
@@ -1102,7 +1102,7 @@ Remove the currently selected camera from the list. This will remove the camera 
 
     Keyframe interval of the video stream. Keyframes are a full frame encoding, whereas intermediate frames are differential representations of the changes between frames.  Keyframes are larger and require more computing power to process. Higher GOP intervals mean fewer keyframes and as a  result, less accurate representation of the video.  Lower GOP rates increase the accuracy of the  video at the expense of higher bandwidth and compute load. It is necessary to click the Apply button to enact these changes on the camera.
 
-    Note that some cameras may have an option for Dynamic GOP or Adaptive Framerate, or some other name for a process that reduces the GOP automatically based on the lack of motion in the camera view. It is advised to turn this feature off when using onvif-gui. To access the feature, use the camera web application from the `Cameras -> System -> Browser` button.
+    Note that some cameras may have an option for Dynamic GOP or Adaptive Framerate, or some other name for a process that reduces the GOP automatically based on the lack of motion in the camera view. It is advised to turn this feature off when using Cayenue. To access the feature, use the camera web application from the `Cameras -> System -> Browser` button.
 
 * ### Bitrate
 
@@ -1221,7 +1221,7 @@ Settings pertain to preset selections or current camera position. The arrow butt
 
 * ### Record Audio
 
-    In many cases, the audio of the Display Profile will be disabled. By default, audio is disabled for camera streams. This is particulaly relevant when displaying multiple streams, as the audio from multiple cameras playing simultaneously may cause confusion. This checkbox allows the display audio to be disabled while preserving audio on the recorded stream.  
+    In many cases, the audio of the Display Profile will be disabled. By default, audio is disabled for camera streams. This is particularly relevant when displaying multiple streams, as the audio from multiple cameras playing simultaneously may cause confusion. This checkbox allows the display audio to be disabled while preserving audio on the recorded stream.  
 
 * ### Remote Snapshot Image
 
@@ -1362,7 +1362,7 @@ Keyboard shortcuts are available when the file list of either the Picture Panel 
 
 ### Progress / Seek Indicator
 
-Both File Panels have a progress bar that will show the state of the playback. The total duration of the file is shown on the right hand side of the progress bar, and the left hand side will show the current file position which is indicated by the progress bar handle. If the mouse hovers over the bar, the position within the file will be shown above. The seek function will set the file position to the mouse location if the mouse is clicked on the progress bar. Sliding operation is not supported. Note that the seek function depends on the GOP size, so an extremely long GOP will reduce the number of seek points avialable in the video.
+Both File Panels have a progress bar that will show the state of the playback. The total duration of the file is shown on the right hand side of the progress bar, and the left hand side will show the current file position which is indicated by the progress bar handle. If the mouse hovers over the bar, the position within the file will be shown above. The seek function will set the file position to the mouse location if the mouse is clicked on the progress bar. Sliding operation is not supported. Note that the seek function depends on the GOP size, so an extremely long GOP will reduce the number of seek points available in the video.
 
 ### Pop Up Menu
 
@@ -1412,11 +1412,11 @@ Default camera login credentials. If there is a camera on the list that does not
 
 ### Hardware Decoder
 
-A hardware decoder may be selected for the application. Multicore CPUs with more than a few cores will handle the decoding just as easily as a hardware decoder. Smaller CPUs with a small number of cores may benefit from hardware decoding. VAAPI and VDPAU pertain to Linux systems and DXVA2 and D3D11VA are for Windows. CUDA decoding is platform independent and requires NVIDIA GPU. For most Linux installations, this selection will not be implemented. NVIDIA GPU configuration on Linux will work if configured properly, and Windows hardware accleration is also implemented generally.
+A hardware decoder may be selected for the application. Multicore CPUs with more than a few cores will handle the decoding just as easily as a hardware decoder. Smaller CPUs with a small number of cores may benefit from hardware decoding. VAAPI and VDPAU pertain to Linux systems and DXVA2 and D3D11VA are for Windows. CUDA decoding is platform independent and requires NVIDIA GPU. For most Linux installations, this selection will not be implemented. NVIDIA GPU configuration on Linux will work if configured properly, and Windows hardware acceleration is also implemented generally.
 
 ### Start Full Screen
 
-Selecting this check box will cause the application to start in full screen mode. The full screen mode can be cancelled with the Escape key. The F12 key will also toggle full screen mode.
+Selecting this check box will cause the application to start in full screen mode. The full screen mode can be canceled with the Escape key. The F12 key will also toggle full screen mode.
 
 ### Auto Time Sync
 
@@ -1434,7 +1434,7 @@ Performance on some lower powered systems may be improved by increasing the disp
 
 Manage profiles for secondary windows used to display a camera or a group of cameras separately from the main application window.
 
-The default 'Reader' profile is a reserved profile that launches a specialized secondary File panel browser that can operate with it's own configuration for viewing files. The secondary File panel can be used during camera operation without interferring with the main program.
+The default 'Reader' profile is a reserved profile that launches a specialized secondary File panel browser that can operate with it's own configuration for viewing files. The secondary File panel can be used during camera operation without interfering with the main program.
 
 The default 'Focus' profile is a reserved profile that is integrated into application logic. The Focus Window can be launched by double clicking on a camera stream in the main display and can show that camera at higher resolution and frame rate for a more detailed view. The Focus Window will show only one camera at a time. The application will automatically configure the Focus settings for proxy type and auto discovery.
 
@@ -1448,7 +1448,7 @@ Additional profiles can be added using the three dot button to the right of the 
 
 New Windows can be configured to show specific groups of cameras, which can be useful if the host computer is driving several monitors such that different groups of cameras are shown on different monitors. The Open button will launch a window with the profile selected in the drop down box. Each profile will have a separate configuration that is set by the user.
 
-It may be useful to create a profile excusively for viewing camera recordings from the File tab. This way the window can be configured with a larger navigation panel showing more complete file information. Additionally, the camera panel can be hidden in this profile so that the window opens directly to the file list.
+It may be useful to create a profile exclusively for viewing camera recordings from the File tab. This way the window can be configured with a larger navigation panel showing more complete file information. Additionally, the camera panel can be hidden in this profile so that the window opens directly to the file list.
 
 ### Show Logs
 
@@ -1534,7 +1534,7 @@ The application has the ability to manage the disk space used by the recorded me
 
 ### File Write Buffer Size
 
-  File management will remove oldest files based on the total size limit set in the Auto Management field. Because the calculation used by the manager is not exact, an additional buffer space is allocated for safety. The default value should be sufficient, but can be ajusted based on conditions if warranted.
+  File management will remove oldest files based on the total size limit set in the Auto Management field. Because the calculation used by the manager is not exact, an additional buffer space is allocated for safety. The default value should be sufficient, but can be adjusted based on conditions if warranted.
 
 ## Proxy Settings
 
@@ -1598,7 +1598,7 @@ When selected (default is yes) a red filled circle will be displayed on the came
 
 ### Save Picture for Alarms
 
-When selected (default is yes) a picture will be saved to the Pictures directory each time an alarm is triggered. The pictures are used to populate the Event Browser accessible from the File panel which can be used to view vidoes at the time point of the alarm.
+When selected (default is yes) a picture will be saved to the Pictures directory each time an alarm is triggered. The pictures are used to populate the Event Browser accessible from the File panel which can be used to view videos at the time point of the alarm.
 
 ---
 &nbsp;
@@ -1636,7 +1636,7 @@ If the analysis produces an alarm, record and alarm sound actions are taken base
 
 The motion detector measures the difference between two consecutive frames by calculating the percentage of pixels that have changed. If that result is over a threshold value, an alarm is triggered. The Diff check box will show a visualization of the differential pixel map that is used by the calculation. The status bar will light green to red as the value of the algorithm result increases. The Gain slider can amplify or attenuate the result to adjust the sensitivity of the detector. Higher Gain slider values increase the sensitivity of the detector.
 
-Motion detection systems are prone to false alarms due to the indiscriminate nature of the analysis. They can be useful in settings where motion is limited, such as a controlled indoor environment. They are not recommended for general use, expecially in outdoor settings.
+Motion detection systems are prone to false alarms due to the indiscriminate nature of the analysis. They can be useful in settings where motion is limited, such as a controlled indoor environment. They are not recommended for general use, especially in outdoor settings.
 
 ---
 &nbsp;
@@ -1843,11 +1843,11 @@ Software developments in this field are constantly advancing, so it may be worth
 
 &nbsp;
 
-Camera compliance with the onvif standard is often incomplete and in some cases incorrect. Success may be limited in many cases. Cameras made by Hikvision or Dahua will have the greatest level of compatibility. Note that some third party OEM vendors who sell branded versions of these cameras might significantly alter the functionality of the camera software.
+Camera compliance with the ONVIF standard is often incomplete and in some cases incorrect. Success may be limited in many cases. Cameras made by Hikvision or Dahua will have the greatest level of compatibility. Note that some third party OEM vendors who sell branded versions of these cameras might significantly alter the functionality of the camera software.
 
 Camera settings on the Media tab are most likely to work. Other tabs may have limited success. If Cayenue is able to determine that the camera settings for a particular function are unavailable, it will disable the controls for that function.
 
-If the camera DHCP setting is properly onvif compliant, the IP address may be reliably set. Some cameras may not respond to the DHCP setting requested by Cayenue due to non compliance. Note that the camera may reboot automatically under some conditions if the DHCP setting is changed from off to on. DHCP must be turned off before setting a static IP address.
+If the camera DHCP setting is properly ONVIF compliant, the IP address may be reliably set. Some cameras may not respond to the DHCP setting requested by Cayenue due to non compliance. Note that the camera may reboot automatically under some conditions if the DHCP setting is changed from off to on. DHCP must be turned off before setting a static IP address.
 
 If there is an issue with a particular setting, it is recommended to connect to the camera with a web browser, as most cameras will have a web interface that will allow you to make the changes reliably. Cayenue has a button on the Camera Panel System Tab that will launch the web browser connection with the camera.
 
