@@ -235,13 +235,13 @@ Please refer to the diagram presented in the Hardware section of this document, 
 
 &nbsp;
 
-Service configuration for SMB and DHCP are recommended prior to software installation for Cayenue on Servers. This reduces the number of variables under consideration during individual steps of the build process. It is recommended to set up and verify SMB first, then set up and verify DHCP, then install Cayenue. 
+<i>Service configuration for SMB and DHCP are recommended prior to software installation for Cayenue on Servers. This reduces the number of variables under consideration during individual steps of the build process. It is recommended to set up and verify SMB first, then set up and verify DHCP, then install Cayenue.</i> 
+
+<b>SMB configuration</b>
 
 The server should have a fixed IP address on the local network for client access. The router for your local network will control the range of addresses available for fixed IP. In most cases, these will be the lowest or highest numbered addresses on the network. Looking at the router configuration will provide definitive answers to this question. It's always a good idea to ping out to the network to verify that the address under consideration is not being used already, as duplicate addresses can cause mysterious undefined behavior. When setting a fixed IP address for the local network, it is recommended to make note of the current configuration and retain the existing Netmask, Gateway and DNS settings so that the IP address is the only parameter undergoing change.
 
 When configuring SMB service, it is recommended to physically connect only the network interface for the local network used by clients and leave the camera subnet disconnected. This will help reduce confusion over network interface designation. If the two interfaces have different bandwidth properties, the higher bandwidth connection should be used for the local network.
-
-<b>SMB configuration</b>
 
 <details>
 <summary>Linux - Ubuntu</summary>
@@ -478,6 +478,8 @@ You should now be able to sign into the folder from an SMB client with the user 
 
 &nbsp;
 
+<b>DHCP Configuration</b>
+
 Upon completion of the SMB service configuration, a test from a client machine is recommended before continuing.
 
 The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camara subnet interface should be set to `10.2.2.1`. Ensure that the cameras are connected and powered on.
@@ -485,8 +487,6 @@ The ethernet cable for the camera subnet should now be connected. A fixed IP add
 It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be `10.2.2.1`. Although very unlikely, please verify that your existing network does not use this address range. 
 
 There are many references that can provide details on how to set a static ip. On many versions of Linux, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. This configuration prevents direct camera communication outside of the subnet, forcing all traffic through the proxy server.
-
-<b>DHCP Configuration</b>
 
 <details>
 <summary>Linux - Ubuntu</summary>
