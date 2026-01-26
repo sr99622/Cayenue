@@ -38,6 +38,43 @@ Open source software written in Python with permissive Apache license affords th
 ## Operation
 
 <details>
+<summary>Screenshots</summary>
+
+&nbsp;
+
+The app running YOLOX detections on multiple camera streams
+
+<image src="assets/images/screenshot_1.png">
+
+&nbsp;
+
+The file browser can scroll through detection pictures and automatically launch the associated video file at the timepoint of the detection
+
+<image src="assets/images/screenshot_2.png">
+
+&nbsp;
+
+Accurately control camera timestamps
+
+<image src="assets/images/screenshot_3.png">
+
+&nbsp;
+
+Detect audio events with amplitude and frequency analysis
+
+<image src="assets/images/screenshot_4.png">
+
+&nbsp;
+
+Fine grained control over YOLO model parameters
+
+<image src="assets/images/screenshot_5.png">
+
+&nbsp;
+
+</details>
+
+<details>
 <summary>Hardware</summary>
 
 &nbsp;

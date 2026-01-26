@@ -27,11 +27,23 @@
 	<screenshots>
 		<screenshot type="default">
 			<caption>The app running YOLOX detections on multiple camera streams</caption>
-			<image>https://raw.githubusercontent.com/sr99622/Cayenue/7e21e358405a97c3ce60aec47a6efdd22e40b935/assets/images/screenshot_1.png</image>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/bed3ebebede2418f895b2634d165a083e66fb2e1/assets/images/screenshot_1.png</image>
 		</screenshot>
 		<screenshot>
 			<caption>The file browser can scroll through detection pictures and automatically launch the associated video file at the timepoint of the detection</caption>
-			<image>https://raw.githubusercontent.com/sr99622/Cayenue/7e21e358405a97c3ce60aec47a6efdd22e40b935/assets/images/screenshot_2.png</image>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/bed3ebebede2418f895b2634d165a083e66fb2e1/assets/images/screenshot_2.png</image>
+		</screenshot>
+		<screenshot>
+			<caption>Accurately control camera timestamps</caption>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/bed3ebebede2418f895b2634d165a083e66fb2e1/assets/images/screenshot_3.png</image>
+		</screenshot>
+		<screenshot>
+			<caption>Detect audio events with amplitude and frequency analysis</caption>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/bed3ebebede2418f895b2634d165a083e66fb2e1/assets/images/screenshot_4.png</image>
+		</screenshot>
+		<screenshot>
+			<caption>Fine grained control over YOLO model parameters</caption>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/bed3ebebede2418f895b2634d165a083e66fb2e1/assets/images/screenshot_5.png</image>
 		</screenshot>
 	</screenshots>
 	<releases>
