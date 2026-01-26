@@ -10,7 +10,7 @@
 
 <h3>IP Camera Interface Software</h3>
 
-View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High Performance software with responsive interface and proven stability.
+View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High performance software with responsive interface and proven stability.
 
 <h3>System Requirements</h3>
 
