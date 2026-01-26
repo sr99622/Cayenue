@@ -630,7 +630,7 @@ Enable the server
 sudo systemctl enable --now dhcpd 
 ```
 
-Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transistory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
+Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transitory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
 
 ```
 sudo systemctl status dhcpd
@@ -744,7 +744,7 @@ Please note that the installation procedure does not include instructions for se
 Check the Power settings for the server and disable Automatic Suspend so the Server will stay on continuously. Also check the Host Name in the About settings, this will be the name broadcast over the local network for visibility to the Clients.
 
 <details>
-<summary>Mac OS Additional Server Setttings</summary>
+<summary>Mac OS Additional Server Settings</summary>
 
 &nbsp;
 
@@ -1756,31 +1756,6 @@ The control tab on the right of the application window may be toggled using the 
 <summary>Notes</summary>
 
 &nbsp;
-
-<details>
-<summary>Using MacOS as a Server</summary>
-
-&nbsp;
-
-### Introduction
-
-MacOS has a number of qualities that make it desirable as a server platform. It has a capable NPU that can process YOLO models for inference in a very power-efficient manner. It has a good built in DHCP server that can easily be used for the camera network. It has a polished graphical interface capable of driving multiple monitors. It will also run silent in most conditions without creating a lot of fan noise which can be problematic with some systems. 
-
-### Power Management
-
-Apple Silicon is very power efficient, and features have been added to the operating system to further enhance efficiency. These features can have the effect of making the server sleep or get behind in processing video frames that are sent by the cameras. This is undesirable when depending upon the alarm function as the data is not processed in a timely manner. The settings for Energy should be adjusted to disable the low power mode for the device during periods of no user interaction. The setting "Prevent automatic sleeping when the display is off" should be set to on. 
-
-### File Handle Management
-
-The operating system will limit the number of file handles that can be open simoultaneously. These handles are also associated with network socket creation. This has the effect of limiting the number of clients that can connect to the server. In order to increase the number of handles, the ```ulimit``` command can be used.
-
-```
-ulimit -n 8192
-```
-
-This command can be added to the shell resource file, e.g. .zshrc in the user home directory. This will then set the limit for each terminal session as it is opened on a persistent basis.
-
-</details>
 
 <details>
 <summary>Network Priority on Multi Homed Hosts</summary>
