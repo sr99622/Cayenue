@@ -3,7 +3,7 @@ id: io.github.sr99622.Cayenue
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
-command: hello
+command: launch_cayenue
 finish-args:
   - --socket=wayland
   - --socket=fallback-x11
@@ -18,20 +18,20 @@ finish-args:
 
 modules:
 
-  - name: hello
+  - name: launch_cayenue
     buildsystem: simple
     build-commands:
-      - install -Dm755 hello.sh /app/bin/hello
+      - install -Dm755 launch_cayenue.sh /app/bin/launch_cayenue
     sources:
       - type: script
-        dest-filename: hello.sh
+        dest-filename: launch_cayenue.sh
         commands:
           - export LD_LIBRARY_PATH=/app/usr/local/lib:/app/usr/lib/x86_64-linux-gnu:/app/lib
           - export OCL_ICD_VENDORS=/app/etc/OpenCL/vendors
           - cayenue
         only-arches: [x86_64]
       - type: script
-        dest-filename: hello.sh
+        dest-filename: launch_cayenue.sh
         commands:
           - cayenue
         only-arches: [aarch64]
@@ -52,7 +52,7 @@ modules:
       - type: file
         path: io.github.sr99622.Cayenue.png
       #- type: file
-      #  path: cayenue-1.0.5-py3-none-any.whl
+      #  path: cayenue-1.0.6-py3-none-any.whl
       - type: file
         url: https://files.pythonhosted.org/packages/21/65/e890aef2c49dae4b73c8a70f910a7c40aa025bd04fd4cee1cd162a5cd1f0/cayenue-1.0.6-py3-none-any.whl
         sha256: c8f6ace6d66b99fecd0133b7e68364ca78e733bbe6637a676f3457737cf229b1
