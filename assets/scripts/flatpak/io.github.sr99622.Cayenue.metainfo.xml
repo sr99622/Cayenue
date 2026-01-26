@@ -11,12 +11,12 @@
 		viewed simultaneously in the display. Camera output can be recorded to disk archive. Cameras can be configured 
 		to use lower resolution streams during real time operation to conserve resources and to stream high resolution 
 		output to disk archive for maximum observability.
-
+		</p><p>
 		The application is equipped with a built in YOLOX model for computer vision analysis of real time stream data
 		to generate alarms and recordings. The application includes built in runtime drivers for zero configuration 
 		installation on Intel iGPU and Apple Silicon NPU. NVIDIA GPU will also work with proper drivers installed. The 
 		detector features fine-grained control of model parameters for optimized detection envelopes.
-
+		</p><p>
 		Proxy servers, including Media MTX, isolate cameras on a seperate subnet for maximum privacy. Recordings held on 
 		the server can be shared with clients via SMB protocol common to Windows, Linux and Mac OS. HTTP output is 
 		available for generic web browser access from mobile devices. 
@@ -27,11 +27,11 @@
 	<screenshots>
 		<screenshot type="default">
 			<caption>The app running YOLOX detection on a camera stream</caption>
-			<image>https://raw.githubusercontent.com/sr99622/Cayenue/assets/images/screenshot_1.png</image>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/7e21e358405a97c3ce60aec47a6efdd22e40b935/assets/images/screenshot_1.png</image>
 		</screenshot>
 		<screenshot>
 			<caption>The file browser can scroll through detection pictures and automatically launch the associated video file at the timepoint of the detection</caption>
-			<image>https://raw.githubusercontent.com/sr99622/Cayenue/assets/images/screenshot_2.png</image>
+			<image>https://raw.githubusercontent.com/sr99622/Cayenue/7e21e358405a97c3ce60aec47a6efdd22e40b935/assets/images/screenshot_2.png</image>
 		</screenshot>
 	</screenshots>
 	<releases>
