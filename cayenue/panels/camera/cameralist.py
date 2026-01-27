@@ -49,7 +49,8 @@ class CameraList(QListWidget):
                     self.mw.focus_window.close()
                 elif camera := self.currentItem():
                     players = self.mw.pm.getStreamPairPlayers(camera.uri())
-                    if len(players):
+                    timers = self.mw.pm.getStreamPairTimers(camera.uri())
+                    if len(players) or len(timers):
                         self.mw.cameraPanel.btnStopClicked()
 
             case Qt.Key.Key_Delete:
@@ -162,6 +163,7 @@ class CameraList(QListWidget):
     def stopCamera(self):
         if camera := self.currentItem():
             players = self.mw.pm.getStreamPairPlayers(camera.uri())
-            if len(players):
+            timers = self.mw.pm.getStreamPairTimers(camera.uri())
+            if len(players) or len(timers):
                 self.mw.cameraPanel.btnStopClicked()
 
