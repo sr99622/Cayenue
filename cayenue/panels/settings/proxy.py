@@ -68,7 +68,7 @@ class ProxyOptions(QWidget):
         self.chkAutoDownload.setChecked(int(mw.settings.value(self.autoDownloadKey, 1)))
         self.chkAutoDownload.stateChanged.connect(self.chkAutoDownloadChecked)
 
-        self.txtDirectoryMTX = DirectorySelector(mw, "MTXDir", "Dir")
+        self.txtDirectoryMTX = DirectorySelector(mw, "MTXDir", "Dir", self.getProxyServerDir())
         self.txtDirectoryMTX.setEnabled(not self.chkAutoDownload.isChecked())
 
         self.cmbProxyLog = QComboBox()
@@ -439,6 +439,8 @@ class ProxyOptions(QWidget):
         
     def setMediaMTXProxies(self):
         try:
+            self.createMtxIndex()
+
             dir = self.getProxyServerDir()
 
             config_filename = f'{dir}/mediamtx.yml'
@@ -512,12 +514,9 @@ class ProxyOptions(QWidget):
                         lines.append(readline)
                         relevant = False
 
-            
             with open(config_filename, 'w') as config:
                 for line in lines:
                     config.write(line)
-
-            self.createMtxIndex()
 
         except Exception as ex:
             logger.error(f'Error setting Media MTX proxies: {ex}')

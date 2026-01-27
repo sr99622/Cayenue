@@ -1137,7 +1137,7 @@ class MainWindow(QMainWindow):
                 self.http_process = subprocess.Popen([sys.executable, f'{os.path.dirname(os.path.realpath(__file__))}/server.py'], env=os.environ.copy(), start_new_session=True)
                 return_code = self.http_process.returncode
                 print("RC", return_code)
-                logger.debug("starting http server from dir", os.path.dirname(os.path.realpath(__file__)))
+                logger.debug(f"starting http server from dir {os.path.dirname(os.path.realpath(__file__))}")
         except Exception as ex:
             logger.error(f'Error starting http server: {ex}')
             self.signals.error.emit(f'Error starting http server: {ex}')
