@@ -639,9 +639,9 @@ class CameraPanel(QWidget):
                 self.syncGUI()
 
     def btnHelpClicked(self):
-        result = webbrowser.get().open("https://github.com/sr99622/libonvif#readme-ov-file")
+        result = webbrowser.get().open("https://github.com/sr99622/Cayenue#operation")
         if not result:
-            webbrowser.get().open("https://github.com/sr99622/libonvif")
+            webbrowser.get().open("https://github.com/sr99622/Cayenue")
 
     def btnSnapshotClicked(self):
         if player := self.getCurrentPlayer():
