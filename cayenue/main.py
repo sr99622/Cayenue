@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.6"
+VERSION = "1.0.7"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -1138,7 +1138,6 @@ class MainWindow(QMainWindow):
             if not self.http_process:
                 self.http_process = subprocess.Popen([sys.executable, f'{os.path.dirname(os.path.realpath(__file__))}/server.py'], env=os.environ.copy(), start_new_session=True)
                 return_code = self.http_process.returncode
-                print("RC", return_code)
                 logger.debug(f"starting http server from dir {os.path.dirname(os.path.realpath(__file__))}")
         except Exception as ex:
             logger.error(f'Error starting http server: {ex}')
