@@ -19,6 +19,7 @@
 
 [project]
 name = "cayenue" 
+
 version = "1.0.8"
 dynamic = ["gui-scripts"]
 description = "A client gui for Onvif"

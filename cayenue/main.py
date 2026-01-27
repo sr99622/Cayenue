@@ -55,6 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
+
 VERSION = "1.0.8"
 
 class TimerSignals(QObject):
