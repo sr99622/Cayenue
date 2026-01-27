@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.7"
+VERSION = "1.0.8"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -834,7 +834,8 @@ class MainWindow(QMainWindow):
         return self.split.sizes()[1] == 0
 
     def collapseSplitter(self):
-        self.tab.setVisible(False)
+        if self.settings_profile == "Focus":
+            self.tab.setVisible(False)
         self.split.setSizes([self.split.frameSize().width(), 0])
         self.settings.setValue(self.collapsedKey, 1)
         self.tabVisible = False
@@ -849,7 +850,8 @@ class MainWindow(QMainWindow):
             self.tabVisible = False
 
     def restoreSplitter(self):
-        self.tab.setVisible(True)
+        if self.settings_profile == "Focus":
+            self.tab.setVisible(True)
         self.settings.setValue(self.collapsedKey, 0)
         splitterState = self.settings.value(self.splitKey)
         if splitterState is not None:

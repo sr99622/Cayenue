@@ -54,8 +54,8 @@ modules:
       #- type: file
       #  path: cayenue-1.0.7-py3-none-any.whl
       - type: file
-        url: https://files.pythonhosted.org/packages/a0/19/874de47f4b2172143b6be8e656f672447d896ab8422541524026169a7bae/cayenue-1.0.7-py3-none-any.whl
-        sha256: e11ecb536fa24e50c02d155e119df041f80188bfbb4d99145f5849a84c87a934
+        url: https://files.pythonhosted.org/packages/97/24/9e5bd79bf9fdd4962012fbba1ec2aa4860e3bf1c0b510f1c04a464c6f64d/cayenue-1.0.8-py3-none-any.whl
+        sha256: f6c3b80dc8fc25c544f8dc71e752ba81d16893e568d8518f85531bf9d7346ae0
         x-checker-data:
           type: pypi
           name: cayenue
