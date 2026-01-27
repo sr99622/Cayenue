@@ -24,7 +24,6 @@ with open("README.md", "r", encoding = 'cp850') as fh:
 
 setup(
     name="cayenue",
-    
     version="1.0.8",
     author="Stephen Rhodes",
     author_email="sr99622@gmail.com",
