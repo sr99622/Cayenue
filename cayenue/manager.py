@@ -232,6 +232,12 @@ class Manager():
             if i not in self.ordinals.values():
                 blanks.append(self.rectForOrdinal(i, canvas_size, aspect_ratio, num_rows, num_cols))
         return blanks
+    
+    def uri_from_ordinal(self, ordinal):
+        for uri, value in self.ordinals.items():
+            if value == ordinal:
+                return uri
+        return None
 
     def rectForOrdinal(self, ordinal: int, canvas_size: QSize, aspect_ratio: float, num_rows: int, num_cols: int) -> QRectF:
         if not num_rows or ordinal < 0:

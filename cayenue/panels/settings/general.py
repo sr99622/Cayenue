@@ -606,6 +606,11 @@ class GeneralOptions(QWidget):
                 logger.error(f'Error starting file browser: {ex}')
                 self.mw.signals.error.emit(f'Error starting file browser: {ex}')
 
+            #window = MainWindow(settings_profile = self.cmbViewerProfile.currentText())
+            #window.parent_window = self.mw
+            #self.mw.external_windows.append(window)
+            #window.show()
+
     def btnManageProfilesClicked(self):
         if not self.dlgProfiles:
             self.dlgProfiles = ProfileDialog(self.mw)

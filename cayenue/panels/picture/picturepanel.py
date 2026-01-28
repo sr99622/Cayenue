@@ -37,6 +37,10 @@ class PicTreeView(QTreeView):
         self.mw = mw
 
     def keyPressEvent(self, event):
+
+        if not self.isVisible():
+            return super().keyPressEvent(event)
+
         pass_through = True
 
         match event.key():
@@ -423,7 +427,7 @@ class PicturePanel(QWidget):
             else:
                 strInfo = "Invalid Index"
         except Exception as ex:
-            strInfo = f'Unable to read file info: {ex}'
+            strInfo = f'Unable to read picture file info: {ex}'
 
         #msgBox = QMessageBox(self)
         #msgBox.setWindowTitle("File Info")

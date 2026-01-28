@@ -121,13 +121,15 @@ class CameraList(QListWidget):
             players = self.mw.pm.getStreamPairPlayers(camera.uri())
             if not len(players):
                 msg = "Start camera to get stream info"
+            else:
+                msg = f"{camera.name()}\n\n"
             for i, player in enumerate(players):
                 if i == 0:
-                    msg += "<h2>Display Stream</h2>"
+                    msg += "<h3>Display Stream</h3>"
                     msg += player.getStreamInfo()
                     msg += "\n"
                 if i == 1:
-                    msg += "<h2>Record Stream</h2>"
+                    msg += "<h3>Record Stream</h3>"
                     msg += player.getStreamInfo()
                     msg += "\n"
         msgBox = QMessageBox(self)

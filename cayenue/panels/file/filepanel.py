@@ -238,6 +238,9 @@ class FilePanel(QWidget):
         self.model.setReadOnly(True)
 
     def onMenuInfo(self):
+        if not self.isVisible():
+            return
+        
         strInfo = ""
         try:
             index = self.tree.currentIndex()
@@ -281,7 +284,7 @@ class FilePanel(QWidget):
             else:
                 strInfo = "Invalid Index"
         except Exception as ex:
-            strInfo = f'Unable to read file info: {ex}'
+            strInfo = f'Unable to read video file info: {ex}'
 
         #msgBox = QMessageBox(self)
         #msgBox.setWindowTitle("File Info")

@@ -509,6 +509,8 @@ class CameraPanel(QWidget):
                 if player := self.mw.cameraPanel.getCurrentPlayer():
                     if profile := camera.getRecordProfile():
                         self.mw.openFocusWindow()
+                        sleep(0.5)
+                        self.mw.setFocus()
                         count = 0
                         while not self.mw.focus_window.cameraPanel.getCamera(profile.uri()):
                             time.sleep(0.01)
