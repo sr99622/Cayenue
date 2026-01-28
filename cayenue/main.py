@@ -152,7 +152,8 @@ class MainWindow(QMainWindow):
 
 
         self.version = VERSION
-        self.logger_id = logger.add(self.getLogFilename(), rotation="1 MB")
+        if settings_profile == "gui":
+            self.logger_id = logger.add(self.getLogFilename(), rotation="1 MB")
         logger.debug(f'starting Cayenue version: {VERSION}')
 
         self.settings_profile = settings_profile
@@ -161,7 +162,7 @@ class MainWindow(QMainWindow):
         QDir.addSearchPath("image", self.getLocation() + "/cayenue/resources/")
         self.focus_window = None
         self.reader_window = None
-        self.external_windows = []
+        #self.external_windows = []
         self.audioLock = False
         self.mediamtx_process = None
         self.http_process = None
@@ -579,9 +580,9 @@ class MainWindow(QMainWindow):
                 self.focus_window.close()
                 sleep(0.1)
 
-            for window in self.external_windows:
-                window.close()
-                sleep(0.1)
+            #for window in self.external_windows:
+            #    window.close()
+            #    sleep(0.1)
 
             super().closeEvent(event)
 
@@ -834,7 +835,7 @@ class MainWindow(QMainWindow):
         return self.split.sizes()[1] == 0
 
     def collapseSplitter(self):
-        if self.settings_profile == "Focus":
+        if self.settings_profile not in ["gui", "Reader"]:
             self.tab.setVisible(False)
         self.split.setSizes([self.split.frameSize().width(), 0])
         self.settings.setValue(self.collapsedKey, 1)
@@ -850,7 +851,7 @@ class MainWindow(QMainWindow):
             self.tabVisible = False
 
     def restoreSplitter(self):
-        if self.settings_profile == "Focus":
+        if self.settings_profile not in ["gui", "Reader"]:
             self.tab.setVisible(True)
         self.settings.setValue(self.collapsedKey, 0)
         splitterState = self.settings.value(self.splitKey)

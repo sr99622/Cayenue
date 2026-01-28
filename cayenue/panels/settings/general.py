@@ -66,6 +66,8 @@ class LogDialog(QDialog):
         self.btnArchive.clicked.connect(self.btnArchiveClicked)
         self.btnClear = QPushButton("  Clear  ")
         self.btnClear.clicked.connect(self.btnClearClicked)
+        self.btnRefresh = QPushButton("Refresh")
+        self.btnRefresh.clicked.connect(self.btnRefreshClicked)
         self.btnClose = QPushButton("Close")
         self.btnClose.clicked.connect(self.btnCloseClicked)
 
@@ -73,10 +75,11 @@ class LogDialog(QDialog):
         lytButton = QGridLayout(pnlButton)
         lytButton.addWidget(self.btnArchive,   0, 1, 1, 1)
         lytButton.addWidget(self.btnClear,     0, 2, 1, 1)
-        lytButton.addWidget(QLabel(),          0, 3, 1, 1)
-        lytButton.addWidget(self.btnClose,     0, 4, 1, 1, Qt.AlignmentFlag.AlignRight)
+        lytButton.addWidget(self.btnRefresh,   0, 3, 1, 1)
+        lytButton.addWidget(QLabel(),          0, 4, 1, 1)
+        lytButton.addWidget(self.btnClose,     0, 5, 1, 1, Qt.AlignmentFlag.AlignRight)
         lytButton.setContentsMargins(0, 0, 0, 0)
-        lytButton.setColumnStretch(3, 10)
+        lytButton.setColumnStretch(4, 10)
         
         panel = QWidget()
         lytPanel = QGridLayout(panel)
@@ -171,6 +174,9 @@ class LogDialog(QDialog):
             self.readLogFile(log_filename)
             QMessageBox.information(self, "Current Log Displayed", "The current log has been loaded into the display", QMessageBox.StandardButton.Ok)
 
+    def btnRefreshClicked(self):
+        log_filename = self.mw.getLogFilename()
+        self.readLogFile(log_filename)
 
 class ProfileItem(QListWidgetItem):
     def __init__(self, name):
@@ -590,10 +596,15 @@ class GeneralOptions(QWidget):
         elif self.cmbViewerProfile.currentText() == "Reader":
             self.mw.cameraPanel.btnHistoryClicked()
         else:
-            window = MainWindow(settings_profile = self.cmbViewerProfile.currentText())
-            window.parent_window = self.mw
-            self.mw.external_windows.append(window)
-            window.show()
+            try:
+                main_file = Path(__file__).parent.parent.parent / "main.py"
+                if platform.system() == "Windows":
+                    subprocess.Popen([sys.executable, str(main_file), "--profile", self.cmbViewerProfile.currentText()], env=os.environ.copy(), start_new_session=True, shell=True)
+                else:
+                    subprocess.Popen([sys.executable, str(main_file), "--profile", self.cmbViewerProfile.currentText()], env=os.environ.copy(), start_new_session=True)
+            except Exception as ex:
+                logger.error(f'Error starting file browser: {ex}')
+                self.mw.signals.error.emit(f'Error starting file browser: {ex}')
 
     def btnManageProfilesClicked(self):
         if not self.dlgProfiles:
