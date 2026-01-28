@@ -280,7 +280,7 @@ Please refer to the diagram presented in the Hardware section of this document, 
 
 &nbsp;
 
-<b>* SMB configuration</b>
+<b>SMB configuration</b>
 
 The server should have a fixed IP address on the local network for client access. The router for your local network will control the range of addresses available for fixed IP. In most cases, these will be the lowest or highest numbered addresses on the network. Looking at the router configuration will provide definitive answers to this question. It's always a good idea to ping out to the network to verify that the address under consideration is not being used already, as duplicate addresses can cause mysterious undefined behavior. When setting a fixed IP address for the local network, it is recommended to make note of the current configuration and retain the existing Netmask, Gateway and DNS settings so that the IP address is the only parameter undergoing change.
 
@@ -527,7 +527,7 @@ Upon completion of the SMB service configuration, a test from a client machine i
 
 &nbsp;
 
-<b>* DHCP Configuration</b>
+<b>DHCP Configuration</b>
 
 The ethernet cable for the camera subnet should now be connected. Ensure that the cameras are connected and powered on.
 Identify the camera network interface on the Settings -> Network -> Wired Network screen.
@@ -789,7 +789,7 @@ Please note that the installation procedure does not include instructions for se
 
 &nbsp;
 
-<b>* Additional Server Settings</b>
+<b>Additional Server Settings</b>
 
 Check the Power settings for the server and disable Automatic Suspend so the Server will stay on continuously, thereby avoiding undefined behavior when the server goes to sleep. Also check the Host Name in the About settings, this will be the name broadcast over the local network for visibility to the Clients.
 
