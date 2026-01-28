@@ -263,7 +263,7 @@ ___
 
 The software runs in three modes, Stand Alone, Server and Client. Stand Alone is a fully featured system that requires minimal configuration, but is considered to be obsolete. Server mode performs all functions and is recommended over Stand Alone. Server mode requires more planning and effort to set up, but offers many benefits over Stand Alone. Client mode is easily configured, but requires access to a Server.
 
-Server mode requires the configuration of two services for network communication, DHCP service for the camera subnet and SMB protocol for file sharing with clients. The instructions for setting up these services will vary by operating system. Instructions are provided for Mac OS and Linux distributions Ubuntu and Fedora. Similar procedures apply to Windows, however, the use of Windows as a Server is discouraged. Windows does work well as a client, but is difficult to stabilize in a Server role.
+Server mode requires the configuration of two services for network communication, SMB protocol for file sharing with clients and DHCP service for the camera subnet. The instructions for setting up these services will vary by operating system. Instructions are provided for Mac OS and Linux distributions Ubuntu and Fedora. Similar procedures apply to Windows, however, the use of Windows as a Server is discouraged. Windows works well as a client, but is difficult to stabilize in a Server role.
 
 Please refer to the diagram presented in the Hardware section of this document, as it shows the configuration for which these instructions are validated. The Server will require two Network Interfaces. If the hardware has only one ethernet port, a dongle can be used to provide a second network interface.
 
@@ -276,7 +276,11 @@ Please refer to the diagram presented in the Hardware section of this document, 
 
 <i>Service configuration for SMB and DHCP are recommended prior to software installation for Cayenue on Servers. This reduces the number of variables under consideration during individual steps of the build process. It is recommended to set up and verify SMB first, then set up and verify DHCP, then install Cayenue.</i> 
 
-<b>SMB configuration</b>
+---
+
+&nbsp;
+
+<b>* SMB configuration</b>
 
 The server should have a fixed IP address on the local network for client access. The router for your local network will control the range of addresses available for fixed IP. In most cases, these will be the lowest or highest numbered addresses on the network. Looking at the router configuration will provide definitive answers to this question. It's always a good idea to ping out to the network to verify that the address under consideration is not being used already, as duplicate addresses can cause mysterious undefined behavior. When setting a fixed IP address for the local network, it is recommended to make note of the current configuration and retain the existing Netmask, Gateway and DNS settings so that the IP address is the only parameter undergoing change.
 
@@ -517,15 +521,22 @@ You should now be able to sign into the folder from an SMB client with the user 
 
 &nbsp;
 
-<b>DHCP Configuration</b>
-
 Upon completion of the SMB service configuration, a test from a client machine is recommended before continuing.
 
-The ethernet cable for the camera subnet should now be connected. A fixed IP address is required and can be done using the same procedure as the other interface. The IP address for the camera subnet interface should be set to `10.2.2.1`. Ensure that the cameras are connected and powered on.
+---
 
-It is necessary to set the server ethernet interface to a static IP address for this configuration. It is recommended to manually set the Cayenue server ethernet address connecting to the camera network to be `10.2.2.1`. Although very unlikely, please verify that your existing network does not use this address range. 
+&nbsp;
 
-There are many references that can provide details on how to set a static ip. On many versions of Linux, use the Settings -> Network -> Wired Network then click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. This configuration prevents direct camera communication outside of the subnet, forcing all traffic through the proxy server.
+<b>* DHCP Configuration</b>
+
+The ethernet cable for the camera subnet should now be connected. Ensure that the cameras are connected and powered on.
+Identify the camera network interface on the Settings -> Network -> Wired Network screen.
+
+The following instructions set a static IP address of `10.2.2.1`. Although very unlikely, please verify that your existing local network does not use this address range. 
+
+From  the Settings -> Network -> Wired Network screen, click on the gear to get details, use the IPv4 tab and click the Manual radio button to enable manual settings. The IP address should be set to `10.2.2.1`, the Subnet Mask to `255.255.255.0` and the Gateway and DNS both set to `10.2.2.1`. 
+
+Follow the directions below for your Operating System to set up the camera subnet DHCP server.
 
 <details>
 <summary>Linux - Ubuntu</summary>
@@ -778,7 +789,13 @@ Please note that the installation procedure does not include instructions for se
 
 &nbsp;
 
-Check the Power settings for the server and disable Automatic Suspend so the Server will stay on continuously. Also check the Host Name in the About settings, this will be the name broadcast over the local network for visibility to the Clients.
+<b>* Additional Server Settings</b>
+
+Check the Power settings for the server and disable Automatic Suspend so the Server will stay on continuously, thereby avoiding undefined behavior when the server goes to sleep. Also check the Host Name in the About settings, this will be the name broadcast over the local network for visibility to the Clients.
+
+---
+
+&nbsp;
 
 <details>
 <summary>Mac OS Additional Server Settings</summary>
