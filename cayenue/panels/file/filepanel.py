@@ -398,3 +398,6 @@ class FilePanel(QWidget):
     def setVolume(self, volume):
         key = f'File/Volume'
         self.mw.settings.setValue(key, volume)
+
+    def hup(self):
+        print("FILE PANEL HUP")

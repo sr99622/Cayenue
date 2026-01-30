@@ -435,3 +435,14 @@ class PicturePanel(QWidget):
         #msgBox.exec()
         self.dlgInfo.lblMessage.setText(strInfo)
         self.dlgInfo.exec()
+
+    def hup(self):
+        print("PICTURE PANEL HUP")
+        index = self.tree.currentIndex()
+        if index.isValid():
+            info = self.tree.model().fileInfo(index)
+            if info.isFile():
+                print("FOUND FILE", info.fileName())
+                print("DIRECT", info.dir().dirName())
+                if camera := self.mw.cameraPanel.getCameraByName(info.dir().dirName()):
+                    print("FOUND CAMERA", camera.name())

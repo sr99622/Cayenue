@@ -73,6 +73,10 @@ class FileControlPanel(QWidget):
         self.btnNext.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.btnNext.clicked.connect(self.btnNextClicked)
 
+        self.btnHup = QPushButton("|-|")
+        self.btnHup.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.btnHup.clicked.connect(self.btnHupClicked)
+
         self.btnMute = QPushButton()
         self.btnMute.setStyleSheet(self.getButtonStyle("mute"))
         self.btnMute.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -87,6 +91,7 @@ class FileControlPanel(QWidget):
         lytMain.addWidget(self.btnSearch,       0, 0, 1, 1)
         lytMain.addWidget(self.btnRefresh,      0, 1, 1, 1)
         lytMain.addWidget(self.btnSnapshot,     0, 2, 1, 1)
+        lytMain.addWidget(self.btnHup,          0, 3, 1, 1)
         lytMain.addWidget(self.btnPrevious,     1, 0, 1, 1)
         lytMain.addWidget(self.btnPlay,         1, 1, 1, 1)
         lytMain.addWidget(self.btnNext,         1, 2, 1, 1)
@@ -227,6 +232,10 @@ class FileControlPanel(QWidget):
                     logger.debug(f'Snapshot saved as {filename}')
         except Exception as ex:
             logger.error(f"ControlPanel btnSnapshotClicked exception: {ex}")
+
+    def btnHupClicked(self):
+        print("btnHupClicked")
+        self.panel.hup()
 
     def sldVolumeChanged(self, value):
         self.mw.filePanel.setVolume(value)
