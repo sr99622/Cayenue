@@ -437,7 +437,7 @@ class PicturePanel(QWidget):
         self.dlgInfo.exec()
 
     def hup(self):
-        print("PICTURE PANEL HUP")
+        print("PICTURE PANEL HUP", self.mw.settings.value("settings/proxyRemote"))
         index = self.tree.currentIndex()
         if index.isValid():
             info = self.tree.model().fileInfo(index)
