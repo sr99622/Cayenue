@@ -26,9 +26,9 @@ from PyQt6.QtCore import Qt, QStandardPaths
 from cayenue.components import Progress, InfoDialog
 from loguru import logger
 import avio
-from . import FileControlPanel
 from cayenue.components.directoryselector import DirectorySelector
-from . import TreeView
+from cayenue.panels.file import FileControlPanel, FileSortProxy, TreeView
+
 
 class FilePanel(QWidget):
     def __init__(self, mw):
@@ -41,19 +41,30 @@ class FilePanel(QWidget):
         self.verticalScrollBarPosition = 0
         self.dlgInfo = InfoDialog(mw)
 
+        tmp_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.MoviesLocation)[0]
         if self.mw.parent_window:
-            video_dir = self.mw.parent_window.settingsPanel.storage.dirArchive.text()
-        else:
-            video_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.MoviesLocation)[0]
-        self.dirArchive = DirectorySelector(mw, self.mw.settingsPanel.storage.archiveKey, "", video_dir)
+            tmp_dir = self.mw.parent_window.settingsPanel.storage.dirArchive.text()
+        #else:
+        #    self.video_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.MoviesLocation)[0]
+        self.dirArchive = DirectorySelector(mw, self.mw.settingsPanel.storage.archiveKey, "", tmp_dir)
+        self.video_dir = self.dirArchive.text()
         #self.dirArchive.signals.dirChanged.connect(self.mw.settingsPanel.storage.dirArchiveChanged)
         self.dirArchive.signals.dirChanged.connect(self.dirChanged)
 
         self.model = QFileSystemModel()
+        self.tree = TreeView(mw)
+
+        self.proxy = FileSortProxy()
+        self.proxy.setSourceModel(self.model)
+        self.proxy.setDynamicSortFilter(True)
+
+        #self.tree.setModel(self.model)
+        self.tree.setModel(self.proxy)
+        #self.tree.setSortingEnabled(True)
+
         self.model.fileRenamed.connect(self.onFileRenamed)
         self.model.directoryLoaded.connect(self.loaded)
-        self.tree = TreeView(mw)
-        self.tree.setModel(self.model)
+
         self.tree.doubleClicked.connect(self.treeDoubleClicked)
         self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.tree.customContextMenuRequested.connect(self.showContextMenu)
@@ -90,7 +101,8 @@ class FilePanel(QWidget):
 
     def loaded(self, path):
         self.loadedCount += 1
-        self.model.sort(0)
+        #self.model.sort(0)
+        self.tree.sortByColumn(1, Qt.SortOrder.AscendingOrder)
         for i in range(self.model.rowCount(self.model.index(path))):
             idx = self.model.index(i, 0, self.model.index(path))
             if idx.isValid():
@@ -115,34 +127,46 @@ class FilePanel(QWidget):
             self.restorationPath = None
 
     def refresh(self):
-        self.loadedCount = 0
-        self.expandedPaths = []
-        self.restorationPath = self.model.filePath(self.tree.currentIndex())
-        path = self.dirArchive.txtDirectory.text()
-        self.model.sort(0)
-        for i in range(self.model.rowCount(self.model.index(path))):
-            idx = self.model.index(i, 0, self.model.index(path))
-            if idx.isValid():
-                if self.tree.isExpanded(idx):
-                    self.expandedPaths.append(self.model.filePath(idx))
-        self.verticalScrollBarPosition = self.tree.verticalScrollBar().value()
-        self.model = QFileSystemModel()
-        self.model.setRootPath(path)
-        self.model.fileRenamed.connect(self.onFileRenamed)
-        self.model.directoryLoaded.connect(self.loaded)
-        self.tree.setModel(self.model)
-        self.tree.setRootIndex(self.model.index(path))
+        try:
+            self.loadedCount = 0
+            self.expandedPaths = []
+            proxy_idx = self.tree.currentIndex()
+            if proxy_idx.isValid():
+                model_idx = self.proxy.mapToSource(proxy_idx)
+                self.restorationPath = self.model.filePath(model_idx)
+            path = self.dirArchive.txtDirectory.text()
+
+            for i in range(self.model.rowCount(self.model.index(path))):
+                model_idx = self.model.index(i, 0, self.model.index(path))
+                if model_idx.isValid():
+                    proxy_idx = self.proxy.mapFromSource(model_idx)
+                    if self.tree.isExpanded(proxy_idx):
+                        self.expandedPaths.append(self.model.filePath(model_idx))
+            self.verticalScrollBarPosition = self.tree.verticalScrollBar().value()
+
+            #self.model = QFileSystemModel()
+            self.model.setRootPath(path)
+            #self.model.fileRenamed.connect(self.onFileRenamed)
+            #self.model.directoryLoaded.connect(self.loaded)
+            #self.tree.setModel(self.model)
+            #self.tree.setRootIndex(self.model.index(path))
+            #self.tree.setModel(self.proxy)
+            #self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(self.video_dir)))
+        except Exception as ex:
+            logger.error(f"File Panel refresh exception: {ex}")
 
     def dirChanged(self, path):
         if len(path) > 0:
+            self.video_dir = path
             self.model.setRootPath(path)
-            self.tree.setRootIndex(self.model.index(path))
+            self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(self.video_dir)))
 
-    def treeDoubleClicked(self, index):
-        if index.isValid():
-            fileInfo = self.model.fileInfo(index)
+    def treeDoubleClicked(self, proxy_index):
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            fileInfo = self.model.fileInfo(model_index)
             if fileInfo.isDir():
-                self.tree.setExpanded(index, self.tree.isExpanded(index))
+                self.tree.setExpanded(proxy_index, self.tree.isExpanded(proxy_index))
             else:
                 self.mw.closeAnyPlayingFiles()
                 if uri := self.getCurrentFileURI():
@@ -184,16 +208,18 @@ class FilePanel(QWidget):
         player = self.mw.pm.getPlayer(self.getCurrentFileURI())
         self.remove.setDisabled(bool(player))
         self.rename.setDisabled(bool(player))
-        index = self.tree.indexAt(pos)
-        if index.isValid():
-            fileInfo = self.model.fileInfo(index)
+        proxy_index = self.tree.indexAt(pos)
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            fileInfo = self.model.fileInfo(model_index)
             if fileInfo.isFile():
                 self.menu.exec(self.mapToGlobal(pos))
 
     def onMenuRemove(self):
-        index = self.tree.currentIndex()
-        if index.isValid():
-            if self.mw.pm.getPlayer(self.model.filePath(index)):
+        proxy_index = self.tree.currentIndex()
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            if self.mw.pm.getPlayer(self.model.filePath(model_index)):
                 QMessageBox.warning(self, "Warning",
                                         "Camera is currently playing. Please stop before deleting.",
                                         QMessageBox.StandardButton.Ok)
@@ -206,20 +232,22 @@ class FilePanel(QWidget):
 
             if ret == QMessageBox.StandardButton.Ok:
                 try:
-                    idxAbove = self.tree.indexAbove(index)
-                    idxBelow = self.tree.indexBelow(index)
+                    proxy_idxAbove = self.tree.indexAbove(proxy_index)
+                    proxy_idxBelow = self.tree.indexBelow(proxy_index)
 
-                    self.model.remove(index)
+                    self.model.remove(model_index)
                     
                     resolved = False
-                    if idxAbove.isValid():
-                        if os.path.isfile(self.model.filePath(idxAbove)):
-                            self.tree.setCurrentIndex(idxAbove)
+                    if proxy_idxAbove.isValid():
+                        model_idxAbove = self.proxy.mapToSource(proxy_idxAbove)
+                        if os.path.isfile(self.model.filePath(model_idxAbove)):
+                            self.tree.setCurrentIndex(proxy_idxAbove)
                             resolved = True
                     if not resolved:
-                        if idxBelow.isValid():
-                            if os.path.isfile(self.model.filePath(idxBelow)):
-                                self.tree.setCurrentIndex(idxBelow)
+                        if proxy_idxBelow.isValid():
+                            model_idxBelow = self.proxy.mapToSource(proxy_idxBelow)
+                            if os.path.isfile(self.model.filePath(model_idxBelow)):
+                                self.tree.setCurrentIndex(proxy_idxBelow)
                 
                 except Exception as e:
                     logger.error(f'File delete error: {e}')
@@ -229,10 +257,11 @@ class FilePanel(QWidget):
         if player:
             self.mw.onError("Please stop the file playing in order to rename")
             return
-        index = self.tree.currentIndex()
-        if index.isValid():
+        proxy_index = self.tree.currentIndex()
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
             self.model.setReadOnly(False)
-            self.tree.edit(index)
+            self.tree.edit(proxy_index)
 
     def onFileRenamed(self, path, oldName, newName):
         self.model.setReadOnly(True)
@@ -243,9 +272,10 @@ class FilePanel(QWidget):
         
         strInfo = ""
         try:
-            index = self.tree.currentIndex()
-            if (index.isValid()):
-                info = self.model.fileInfo(index)
+            proxy_index = self.tree.currentIndex()
+            if (proxy_index.isValid()):
+                model_index = self.proxy.mapToSource(proxy_index)
+                info = self.model.fileInfo(model_index)
                 strInfo += "Filename: " + info.fileName()
                 strInfo += "\nCreated: " + info.birthTime().toString()
                 strInfo += "\nModified: " + info.lastModified().toString()
@@ -324,9 +354,10 @@ class FilePanel(QWidget):
 
     def getCurrentFileURI(self):
         result = None
-        index = self.tree.currentIndex()
-        if index.isValid():
-            info = self.model.fileInfo(index)
+        proxy_index = self.tree.currentIndex()
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            info = self.model.fileInfo(model_index)
             if info.isFile():
                 result = info.absoluteFilePath()
         return result
@@ -341,8 +372,9 @@ class FilePanel(QWidget):
         return result
             
     def setCurrentFile(self, uri):
-        index = self.model.index(uri)
-        self.tree.setCurrentIndex(index)
+        model_index = self.model.index(uri)
+        proxy_index = self.proxy.mapFromSource(model_index)
+        self.tree.setCurrentIndex(proxy_index)
         self.control.setBtnPlay()
         self.control.setBtnMute()
         self.control.setSldVolume()

@@ -24,9 +24,9 @@ from PyQt6.QtWidgets import QGridLayout, QWidget, \
     QApplication, QTreeView, QMenu, QMessageBox
 from PyQt6.QtGui import QFileSystemModel, QAction, QColorConstants
 from PyQt6.QtCore import Qt, QFileInfo, QDateTime, \
-    QDate, QTime, QStandardPaths
+    QDate, QTime, QStandardPaths, QSortFilterProxyModel
 from cayenue.components.directoryselector import DirectorySelector
-from cayenue.panels.file import FileControlPanel
+from cayenue.panels.file import FileControlPanel, FileSortProxy
 from cayenue.components import Progress, InfoDialog
 from pathlib import Path
 import traceback
@@ -45,17 +45,21 @@ class PicTreeView(QTreeView):
 
         match event.key():
             case Qt.Key.Key_Return:
-                pass_through = False
-                index = self.currentIndex()
-                if index.isValid():
-                    fileInfo = self.model().fileInfo(index)
-                    if fileInfo.isFile():
-                        self.mw.picturePanel.playVideo()
-                    else:
-                        if self.isExpanded(index):
-                            self.collapse(index)
+                if self.mw.picturePanel.model.isReadOnly():
+                    pass_through = False
+                    if player := self.mw.filePanel.getCurrentlyPlayingFile():
+                        self.mw.closeAllStreams()
+                    proxy_index = self.currentIndex()
+                    if proxy_index.isValid():
+                        model_index = self.mw.picturePanel.proxy.mapToSource(proxy_index)
+                        fileInfo = self.mw.picturePanel.model.fileInfo(model_index)
+                        if fileInfo.isFile():
+                            self.mw.picturePanel.playVideo()
                         else:
-                            self.expand(index)
+                            if self.isExpanded(proxy_index):
+                                self.collapse(proxy_index)
+                            else:
+                                self.expand(proxy_index)
             case Qt.Key.Key_Escape:
                 if player := self.mw.filePanel.getCurrentlyPlayingFile():
                     self.mw.closeAllStreams()
@@ -86,11 +90,13 @@ class PicTreeView(QTreeView):
         try:
             if self.mw.settings_profile != "Reader":
                 return
-            index = self.currentIndex()
-            if index.isValid():
-                info = self.model().fileInfo(index)
-                if info.isFile() and self.model().isReadOnly():
+            proxy_index = self.currentIndex()
+            if proxy_index.isValid():
+                model_index = self.mw.picturePanel.proxy.mapToSource(proxy_index)
+                info = self.mw.picturePanel.model.fileInfo(model_index)
+                if info.isFile() and self.mw.picturePanel.model.isReadOnly():
                     self.mw.glWidget.drawFile(info.absoluteFilePath())
+                
         except Exception as ex:
             logger.error(f"PicturePanel showCurrentFile exception: {ex}")
 
@@ -116,20 +122,30 @@ class PicturePanel(QWidget):
         self.progress = Progress(mw)
         self.dlgInfo = InfoDialog(mw)
 
+        tmp_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.PicturesLocation)[0]
         if self.mw.parent_window:
-            picture_dirs = self.mw.parent_window.settingsPanel.storage.dirPictures.text()
-        else:
-            picture_dirs = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.PicturesLocation)[0]
-        self.dirPictures = DirectorySelector(mw, self.mw.settingsPanel.storage.pictureKey, "", picture_dirs)
+            tmp_dir = self.mw.parent_window.settingsPanel.storage.dirPictures.text()
+        #else:
+        #    self.picture_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.PicturesLocation)[0]
+        self.dirPictures = DirectorySelector(mw, self.mw.settingsPanel.storage.pictureKey, "", tmp_dir)
+        self.picture_dir = self.dirPictures.text()
         #self.dirPictures.signals.dirChanged.connect(self.mw.settingsPanel.storage.dirPicturesChanged)
         self.dirPictures.signals.dirChanged.connect(self.dirChanged)
 
         self.model = QFileSystemModel(mw)
-        self.model.directoryLoaded.connect(self.loaded)
         self.tree = PicTreeView(mw)
-        self.tree.setModel(self.model)
+
+        self.proxy = FileSortProxy()
+        self.proxy.setSourceModel(self.model)
+        self.proxy.setDynamicSortFilter(True)
+
+        #self.tree.setModel(self.model)
+        self.tree.setModel(self.proxy)
         #self.tree.setSortingEnabled(True)
-        #self.tree.sortByColumn(0, Qt.SortOrder.DescendingOrder)
+
+        self.model.directoryLoaded.connect(self.loaded)
+
+
         self.tree.doubleClicked.connect(self.treeDoubleClicked)
         self.tree.setColumnHidden(1, True)
         self.tree.setColumnHidden(2, True)
@@ -233,9 +249,10 @@ class PicturePanel(QWidget):
                 return
 
             alarm_buffer_size = self.mw.settingsPanel.alarm.spnBufferSize.value()
-            index = self.tree.currentIndex()
-            if index.isValid():
-                pic_info = self.model.fileInfo(index)
+            proxy_index = self.tree.currentIndex()
+            if proxy_index.isValid():
+                model_index = self.proxy.mapToSource(proxy_index)
+                pic_info = self.model.fileInfo(model_index)
                 if pic_info.isFile():
                     target = self.filenameToQDateTime(pic_info.fileName())
                     dir = Path(self.mw.filePanel.dirArchive.txtDirectory.text()) / str(pic_info.absoluteDir().dirName())
@@ -274,20 +291,24 @@ class PicturePanel(QWidget):
 
     def selectFileInFilePanelTree(self, path, filename):
         tree = self.mw.filePanel.tree
-        model = tree.model()
-        if camera_idx := model.index(path):
-            if camera_idx.isValid():
-                if not tree.isExpanded(camera_idx):
-                    tree.setExpanded(camera_idx, True)
-                if file_idx := model.index(os.path.join(path, filename)):
-                    if file_idx.isValid():
-                        tree.setCurrentIndex(file_idx)
-                        tree.scrollTo(file_idx, QAbstractItemView.ScrollHint.PositionAtCenter)
+        #model = tree.model()
+        model = self.mw.filePanel.model
+        if model_camera_idx := model.index(path):
+            if model_camera_idx.isValid():
+                proxy_camera_idx = self.mw.filePanel.proxy.mapFromSource(model_camera_idx)
+                if not tree.isExpanded(proxy_camera_idx):
+                    tree.setExpanded(proxy_camera_idx, True)
+                if model_file_idx := model.index(os.path.join(path, filename)):
+                    if model_file_idx.isValid():
+                        proxy_file_idx = self.mw.filePanel.proxy.mapFromSource(model_file_idx)
+                        tree.setCurrentIndex(proxy_file_idx)
+                        tree.scrollTo(proxy_file_idx, QAbstractItemView.ScrollHint.PositionAtCenter)
 
     def loaded(self, path):
         self.loadedCount += 1
-        self.model.sort(0)
-        #self.model.sort(0, Qt.SortOrder.DescendingOrder)
+        #self.model.sort(0)
+        self.tree.sortByColumn(1, Qt.SortOrder.AscendingOrder)
+        #'''
         for i in range(self.model.rowCount(self.model.index(path))):
             idx = self.model.index(i, 0, self.model.index(path))
             if idx.isValid():
@@ -303,6 +324,7 @@ class PicturePanel(QWidget):
                 self.restoreSelectedPath()
         else:
             self.restoreSelectedPath()
+        #'''
 
     def restoreSelectedPath(self):
         if self.restorationPath:
@@ -315,34 +337,45 @@ class PicturePanel(QWidget):
         try:
             self.loadedCount = 0
             self.expandedPaths = []
-            self.restorationPath = self.model.filePath(self.tree.currentIndex())
+            proxy_index = self.tree.currentIndex()
+            if proxy_index.isValid():
+                model_index = self.proxy.mapToSource(proxy_index)
+                self.restorationPath = self.model.filePath(model_index)
             path = self.dirPictures.txtDirectory.text()
-            self.model.sort(0)
+
             for i in range(self.model.rowCount(self.model.index(path))):
-                idx = self.model.index(i, 0, self.model.index(path))
-                if idx.isValid():
-                    if self.tree.isExpanded(idx):
-                        self.expandedPaths.append(self.model.filePath(idx))
+                model_idx = self.model.index(i, 0, self.model.index(path))
+                if model_idx.isValid():
+                    proxy_idx = self.proxy.mapFromSource(model_idx)
+                    if self.tree.isExpanded(proxy_idx):
+                        self.expandedPaths.append(self.model.filePath(model_idx))
             self.verticalScrollBarPosition = self.tree.verticalScrollBar().value()
-            self.model = QFileSystemModel()
+
+            #self.model = QFileSystemModel()
             self.model.setRootPath(path)
-            self.model.directoryLoaded.connect(self.loaded)
-            self.tree.setModel(self.model)
-            self.tree.setRootIndex(self.model.index(path))
+            #self.model.directoryLoaded.connect(self.loaded)
+            #self.tree.setModel(self.model)
+            #self.tree.setModel(self.proxy)
+            #self.picture_dir = path
+            #self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(self.picture_dir)))
         except Exception as ex:
             logger.error(f"PicturePanel refresh exception: {ex}")
 
     def dirChanged(self, path):
         if len(path) > 0:
+            self.picture_dir = path
             self.model.setRootPath(path)
-            self.tree.setRootIndex(self.model.index(path))
+            self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(self.picture_dir)))
 
-    def treeDoubleClicked(self, index):
-        if index.isValid():
-            fileInfo = self.model.fileInfo(index)
+    def treeDoubleClicked(self, proxy_index):
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            fileInfo = self.model.fileInfo(model_index)
             if fileInfo.isDir():
-                self.tree.setExpanded(index, self.tree.isExpanded(index))
+                self.tree.setExpanded(proxy_index, self.tree.isExpanded(proxy_index))
             else:
+                if player := self.mw.filePanel.getCurrentlyPlayingFile():
+                    self.mw.closeAllStreams()
                 self.playVideo()
 
     # some weird bug makes this not visible to calling signals in some cases
@@ -370,15 +403,16 @@ class PicturePanel(QWidget):
             self.progress.updateProgress(pct)
 
     def showContextMenu(self, pos):
-        index = self.tree.indexAt(pos)
-        if index.isValid():
-            fileInfo = self.model.fileInfo(index)
+        proxy_index = self.tree.indexAt(pos)
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            fileInfo = self.model.fileInfo(model_index)
             if fileInfo.isFile():
                 self.menu.exec(self.mapToGlobal(pos))
 
     def onMenuRemove(self):
-        index = self.tree.currentIndex()
-        if index.isValid():
+        proxy_index = self.tree.currentIndex()
+        if proxy_index.isValid():
             ret = QMessageBox.warning(self, "Cayenue",
                                         "You are about to ** PERMANENTLY ** delete this file.\n"
                                         "Are you sure you want to continue?",
@@ -386,29 +420,33 @@ class PicturePanel(QWidget):
 
             if ret == QMessageBox.StandardButton.Ok:
                 try:
-                    idxAbove = self.tree.indexAbove(index)
-                    idxBelow = self.tree.indexBelow(index)
+                    proxy_idxAbove = self.tree.indexAbove(proxy_index)
+                    proxy_idxBelow = self.tree.indexBelow(proxy_index)
 
-                    self.model.remove(index)
+                    model_index = self.proxy.mapToSource(proxy_index)
+                    self.model.remove(model_index)
                     
                     resolved = False
-                    if idxAbove.isValid():
-                        if os.path.isfile(self.model.filePath(idxAbove)):
-                            self.tree.setCurrentIndex(idxAbove)
+                    if proxy_idxAbove.isValid():
+                        model_idxAbove = self.proxy.mapToSource(proxy_idxAbove)
+                        if os.path.isfile(self.model.filePath(model_idxAbove)):
+                            self.tree.setCurrentIndex(proxy_idxAbove)
                             resolved = True
                     if not resolved:
-                        if idxBelow.isValid():
-                            if os.path.isfile(self.model.filePath(idxBelow)):
-                                self.tree.setCurrentIndex(idxBelow)
+                        if proxy_idxBelow.isValid():
+                            model_idxBelow = self.proxy.mapToSource(proxy_idxBelow)
+                            if os.path.isfile(self.model.filePath(model_idxBelow)):
+                                self.tree.setCurrentIndex(proxy_idxBelow)
                 
                 except Exception as e:
                     logger.error(f'File delete error: {e}')
 
     def onMenuRename(self):
-        index = self.tree.currentIndex()
-        if index.isValid():
+        proxy_index = self.tree.currentIndex()
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
             self.model.setReadOnly(False)
-            self.tree.edit(index)
+            self.tree.edit(proxy_index)
 
     def onFileRenamed(self, path, oldName, newName):
         self.model.setReadOnly(True)
@@ -416,9 +454,10 @@ class PicturePanel(QWidget):
     def onMenuInfo(self):
         strInfo = ""
         try:
-            index = self.tree.currentIndex()
-            if (index.isValid()):
-                info = self.model.fileInfo(index)
+            proxy_index = self.tree.currentIndex()
+            if (proxy_index.isValid()):
+                model_index = self.proxy.mapToSource(proxy_index)
+                info = self.model.fileInfo(model_index)
                 strInfo += f"Filename:  {info.fileName()}"
                 strInfo += f"\nCreated:  {info.birthTime().toString()}"
                 width = self.mw.glWidget.pixmap.width()
@@ -438,9 +477,10 @@ class PicturePanel(QWidget):
 
     def hup(self):
         print("PICTURE PANEL HUP", self.mw.settings.value("settings/proxyRemote"))
-        index = self.tree.currentIndex()
-        if index.isValid():
-            info = self.tree.model().fileInfo(index)
+        proxy_index = self.tree.currentIndex()
+        if proxy_index.isValid():
+            model_index = self.proxy.mapToSource(proxy_index)
+            info = self.model.fileInfo(model_index)
             if info.isFile():
                 print("FOUND FILE", info.fileName())
                 print("DIRECT", info.dir().dirName())

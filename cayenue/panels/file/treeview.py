@@ -32,33 +32,40 @@ class TreeView(QTreeView):
 
         match event.key():
             case Qt.Key.Key_Return:
-                index = self.currentIndex()
-                if index.isValid():
-                    fileInfo = self.model().fileInfo(index)
+                proxy_index = self.currentIndex()
+                if proxy_index.isValid():
+                    model_index = self.mw.filePanel.proxy.mapToSource(proxy_index)
+                    model = self.mw.filePanel.model
+                    fileInfo = model.fileInfo(model_index)
                     if fileInfo.isFile():
-                        if self.model().isReadOnly():
+                        if model.isReadOnly():
+                            if player := self.mw.filePanel.getCurrentlyPlayingFile():
+                                self.mw.closeAllStreams()
                             self.mw.filePanel.control.btnPlayClicked()
                     else:
-                        if self.isExpanded(index):
-                            self.collapse(index)
+                        if self.isExpanded(proxy_index):
+                            self.collapse(proxy_index)
                         else:
-                            self.expand(index)
+                            self.expand(proxy_index)
 
             case Qt.Key.Key_Space:
-                index = self.currentIndex()
-                if index.isValid():
-                    fileInfo = self.model().fileInfo(index)
+                proxy_index = self.currentIndex()
+                if proxy_index.isValid():
+                    model = self.mw.filePanel.model
+                    model_index = self.mw.filePanel.proxy.mapToSource(proxy_index)
+                    fileInfo = model.fileInfo(model_index)
                     if fileInfo.isFile():
-                        if self.model().isReadOnly():
+                        if model.isReadOnly():
                             if player := self.mw.filePanel.getCurrentlyPlayingFile():
                                 player.togglePaused()
                         self.mw.filePanel.control.setBtnPlay()
 
             case Qt.Key.Key_Escape:
-                if self.model().isReadOnly():
+                model = self.mw.filePanel.model
+                if model.isReadOnly():
                     self.mw.filePanel.control.btnStopClicked()
                 else:
-                    self.model().setReadOnly(True)
+                    model.setReadOnly(True)
         
             case Qt.Key.Key_F1:
                 self.mw.filePanel.onMenuInfo()
@@ -82,7 +89,7 @@ class TreeView(QTreeView):
 
     def currentChanged(self, newItem, oldItem):
         if newItem.data():
-            fullPath = os.path.join(self.model().rootPath(), newItem.data())
+            fullPath = os.path.join(self.model().sourceModel().rootPath(), newItem.data())
             if os.path.isfile(fullPath):
                 if player := self.mw.pm.getPlayer(str(fullPath)):
                     self.mw.glWidget.focused_uri = player.uri

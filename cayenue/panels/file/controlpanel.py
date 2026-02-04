@@ -19,7 +19,7 @@
 
 import os
 from PyQt6.QtWidgets import QPushButton, QGridLayout, \
-    QWidget, QSlider, QFileDialog, QMessageBox
+    QWidget, QSlider, QFileDialog, QMessageBox, QCheckBox
 from PyQt6.QtCore import Qt, QStandardPaths
 import sys
 import platform
@@ -35,6 +35,7 @@ class FileControlPanel(QWidget):
         self.mw = mw
         self.panel = panel
         self.hideCameraKey = "filePanel/hideCameraPanel"
+        self.enableAnalysisKey = "filePanel/enableAnalysis"
 
         self.dlgSearch = FileSearchDialog(self.mw)
 
@@ -87,11 +88,18 @@ class FileControlPanel(QWidget):
         self.sldVolume.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.sldVolume.valueChanged.connect(self.sldVolumeChanged)
 
+        self.chkAnalyze = QCheckBox("Enable Analysis")
+        self.chkAnalyze.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.chkAnalyze.stateChanged.connect(self.chkAnalyzeChecked)
+        self.chkAnalyze.setChecked(bool(int(mw.settings.value(self.enableAnalysisKey, 0))))
+
+
         lytMain =  QGridLayout(self)
         lytMain.addWidget(self.btnSearch,       0, 0, 1, 1)
         lytMain.addWidget(self.btnRefresh,      0, 1, 1, 1)
         lytMain.addWidget(self.btnSnapshot,     0, 2, 1, 1)
         lytMain.addWidget(self.btnHup,          0, 3, 1, 1)
+        lytMain.addWidget(self.chkAnalyze,      0, 5, 1, 1)
         lytMain.addWidget(self.btnPrevious,     1, 0, 1, 1)
         lytMain.addWidget(self.btnPlay,         1, 1, 1, 1)
         lytMain.addWidget(self.btnNext,         1, 2, 1, 1)
@@ -144,42 +152,53 @@ class FileControlPanel(QWidget):
     def btnPreviousClicked(self):
         if type(self.panel).__name__ == "FilePanel":
             tree = self.mw.filePanel.tree
+            model = self.mw.filePanel.model
+            proxy = self.mw.filePanel.proxy
         else:
             tree = self.mw.picturePanel.tree
-        index = tree.currentIndex()
-        if index.isValid():
-            prevIndex = tree.indexAbove(index)
-            if prevIndex.isValid():
-                tree.setCurrentIndex(prevIndex)
-                tree.scrollTo(prevIndex)
+            model = self.mw.picturePanel.model
+            proxy = self.mw.picturePanel.proxy
+        proxy_index = tree.currentIndex()
+        if proxy_index.isValid():
+            proxy_prevIndex = tree.indexAbove(proxy_index)
+            if proxy_prevIndex.isValid():
+                tree.setCurrentIndex(proxy_prevIndex)
+                tree.scrollTo(proxy_prevIndex)
                 if type(self.panel).__name__ == "FilePanel":
-                    self.mw.closeAnyPlayingFiles()                
-                    if tree.model().fileInfo(prevIndex).isFile():
-                        uri = tree.model().fileInfo(prevIndex).filePath()
+                    self.mw.closeAnyPlayingFiles()
+                    model_prevIndex = proxy.mapToSource(proxy_prevIndex)                
+                    if model.fileInfo(model_prevIndex).isFile():
+                        uri = model.fileInfo(model_prevIndex).filePath()
                         self.mw.playMedia(uri)
                         self.mw.glWidget.focused_uri = uri
 
     def btnNextClicked(self):
         if type(self.panel).__name__ == "FilePanel":
             tree = self.mw.filePanel.tree
+            model = self.mw.filePanel.model
+            proxy = self.mw.filePanel.proxy
         else:
             tree = self.mw.picturePanel.tree
-        index = tree.currentIndex()
-        if index.isValid():
-            fileInfo = tree.model().fileInfo(index)
+            model = self.mw.picturePanel.model
+            proxy = self.mw.picturePanel.proxy
+        proxy_index = tree.currentIndex()
+        if proxy_index.isValid():
+            model_index = proxy.mapToSource(proxy_index)
+            fileInfo = model.fileInfo(model_index)
             if fileInfo.isDir():
-                if not tree.isExpanded(index):
-                    tree.expand(index)
+                if not tree.isExpanded(proxy_index):
+                    tree.expand(proxy_index)
                     return
                 
-            nextIndex = tree.indexBelow(index)
-            if nextIndex.isValid():
-                tree.setCurrentIndex(nextIndex)
-                tree.scrollTo(nextIndex)
+            proxy_nextIndex = tree.indexBelow(proxy_index)
+            if proxy_nextIndex.isValid():
+                tree.setCurrentIndex(proxy_nextIndex)
+                tree.scrollTo(proxy_nextIndex)
                 if type(self.panel).__name__ == "FilePanel":
                     self.mw.closeAnyPlayingFiles()
-                    if tree.model().fileInfo(nextIndex).isFile():
-                        uri = tree.model().fileInfo(nextIndex).filePath()
+                    model_nextIndex = proxy.mapToSource(proxy_nextIndex)
+                    if model.fileInfo(model_nextIndex).isFile():
+                        uri = model.fileInfo(model_nextIndex).filePath()
                         if uri:
                             self.mw.playMedia(uri)
                             self.mw.glWidget.focused_uri = uri
@@ -249,3 +268,13 @@ class FileControlPanel(QWidget):
         strStyle = "QPushButton { image : url(image:%1.png); } QPushButton:hover { image : url(image:%1_hi.png); } QPushButton:pressed { image : url(image:%1_lo.png); }"
         strStyle = strStyle.replace("%1", name)
         return strStyle
+
+    def chkAnalyzeChecked(self, state):
+        print("chkAnalyzeChecked")
+        self.mw.settings.setValue(self.enableAnalysisKey, state)
+        if state:
+            self.mw.tab.addTab(self.mw.videoPanel, "Video")
+            self.mw.tab.addTab(self.mw.audioPanel, "Audio")
+        else:
+            self.mw.tab.removeTab(2)
+            self.mw.tab.removeTab(2)
