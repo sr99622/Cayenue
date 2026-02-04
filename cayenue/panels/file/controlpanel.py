@@ -35,7 +35,6 @@ class FileControlPanel(QWidget):
         self.mw = mw
         self.panel = panel
         self.hideCameraKey = "filePanel/hideCameraPanel"
-        self.enableAnalysisKey = "filePanel/enableAnalysis"
 
         self.dlgSearch = FileSearchDialog(self.mw)
 
@@ -88,18 +87,11 @@ class FileControlPanel(QWidget):
         self.sldVolume.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.sldVolume.valueChanged.connect(self.sldVolumeChanged)
 
-        self.chkAnalyze = QCheckBox("Enable Analysis")
-        self.chkAnalyze.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.chkAnalyze.stateChanged.connect(self.chkAnalyzeChecked)
-        self.chkAnalyze.setChecked(bool(int(mw.settings.value(self.enableAnalysisKey, 0))))
-
-
         lytMain =  QGridLayout(self)
         lytMain.addWidget(self.btnSearch,       0, 0, 1, 1)
         lytMain.addWidget(self.btnRefresh,      0, 1, 1, 1)
         lytMain.addWidget(self.btnSnapshot,     0, 2, 1, 1)
         lytMain.addWidget(self.btnHup,          0, 3, 1, 1)
-        lytMain.addWidget(self.chkAnalyze,      0, 5, 1, 1)
         lytMain.addWidget(self.btnPrevious,     1, 0, 1, 1)
         lytMain.addWidget(self.btnPlay,         1, 1, 1, 1)
         lytMain.addWidget(self.btnNext,         1, 2, 1, 1)
@@ -268,13 +260,3 @@ class FileControlPanel(QWidget):
         strStyle = "QPushButton { image : url(image:%1.png); } QPushButton:hover { image : url(image:%1_hi.png); } QPushButton:pressed { image : url(image:%1_lo.png); }"
         strStyle = strStyle.replace("%1", name)
         return strStyle
-
-    def chkAnalyzeChecked(self, state):
-        print("chkAnalyzeChecked")
-        self.mw.settings.setValue(self.enableAnalysisKey, state)
-        if state:
-            self.mw.tab.addTab(self.mw.videoPanel, "Video")
-            self.mw.tab.addTab(self.mw.audioPanel, "Audio")
-        else:
-            self.mw.tab.removeTab(2)
-            self.mw.tab.removeTab(2)

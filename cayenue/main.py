@@ -284,7 +284,7 @@ class MainWindow(QMainWindow):
         self.videoWorker = None
         self.videoConfigureHook = None
         self.videoConfigure = None
-        if self.settingsPanel.proxy.generateAlarmsLocally():
+        if self.settingsPanel.proxy.generateAlarmsLocally() and not hideCameras:
             videoWorkerName = self.videoPanel.cmbWorker.currentText()
             if len(videoWorkerName) > 0:
                 self.loadVideoConfigure(videoWorkerName)
