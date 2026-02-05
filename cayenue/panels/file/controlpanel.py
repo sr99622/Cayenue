@@ -233,14 +233,15 @@ class FileControlPanel(QWidget):
                 else:
                     filename = QFileDialog.getSaveFileName(self, "Save File As", str(filepath))[0]
 
-                answer = QMessageBox.StandardButton.Yes
-                if not filename.endswith(".jpg"):
-                    filename += ".jpg"
-                    if Path(filename).is_file():
-                        answer = QMessageBox.question(self.mw, "File Exists", "You are about to overwrite an existing file, are you sure you wnat to do this?")
-                if answer == QMessageBox.StandardButton.Yes:
-                    player.image.save(filename)
-                    logger.debug(f'Snapshot saved as {filename}')
+                if len(Path(filename).stem):
+                    answer = QMessageBox.StandardButton.Yes
+                    if not filename.endswith(".jpg"):
+                        filename += ".jpg"
+                        if Path(filename).is_file():
+                            answer = QMessageBox.question(self.mw, "File Exists", "You are about to overwrite an existing file, are you sure you wnat to do this?")
+                    if answer == QMessageBox.StandardButton.Yes:
+                        player.image.save(filename)
+                        logger.debug(f'Snapshot saved as {filename}')
         except Exception as ex:
             logger.error(f"ControlPanel btnSnapshotClicked exception: {ex}")
 
