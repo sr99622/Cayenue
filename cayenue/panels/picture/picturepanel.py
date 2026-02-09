@@ -328,9 +328,10 @@ class PicturePanel(QWidget):
 
     def restoreSelectedPath(self):
         if self.restorationPath:
-            idx = self.model.index(self.restorationPath)
-            if idx.isValid():
-                self.tree.setCurrentIndex(idx)
+            model_idx = self.model.index(self.restorationPath)
+            if model_idx.isValid():
+                proxy_idx = self.proxy.mapFromSource(model_idx)
+                self.tree.setCurrentIndex(proxy_idx)
             self.restorationPath = None
 
     def refresh(self):
