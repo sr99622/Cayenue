@@ -125,11 +125,8 @@ class PicturePanel(QWidget):
         tmp_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.PicturesLocation)[0]
         if self.mw.parent_window:
             tmp_dir = self.mw.parent_window.settingsPanel.storage.dirPictures.text()
-        #else:
-        #    self.picture_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.PicturesLocation)[0]
         self.dirPictures = DirectorySelector(mw, self.mw.settingsPanel.storage.pictureKey, "", tmp_dir)
         self.picture_dir = self.dirPictures.text()
-        #self.dirPictures.signals.dirChanged.connect(self.mw.settingsPanel.storage.dirPicturesChanged)
         self.dirPictures.signals.dirChanged.connect(self.dirChanged)
 
         self.model = QFileSystemModel(mw)
@@ -141,10 +138,7 @@ class PicturePanel(QWidget):
 
         #self.tree.setModel(self.model)
         self.tree.setModel(self.proxy)
-        #self.tree.setSortingEnabled(True)
-
         self.model.directoryLoaded.connect(self.loaded)
-
 
         self.tree.doubleClicked.connect(self.treeDoubleClicked)
         self.tree.setColumnHidden(1, True)
@@ -157,6 +151,8 @@ class PicturePanel(QWidget):
         self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.tree.customContextMenuRequested.connect(self.showContextMenu)
 
+        self.dirChanged(self.dirPictures.text())
+
         pnlTree = QWidget()
         lytTree = QGridLayout(pnlTree)
         lytTree.addWidget(self.dirPictures,       0, 0, 1, 1)
@@ -168,8 +164,6 @@ class PicturePanel(QWidget):
         lytMain = QGridLayout(self)
         lytMain.addWidget(pnlTree)
         lytMain.setContentsMargins(0, 0, 0, 0)
-
-        self.dirChanged(self.dirPictures.text())
 
         self.menu = QMenu("Context Menu", self)
         self.remove = QAction("Delete", self)
@@ -336,6 +330,7 @@ class PicturePanel(QWidget):
 
     def refresh(self):
         try:
+            '''
             self.loadedCount = 0
             self.expandedPaths = []
             proxy_index = self.tree.currentIndex()
@@ -351,14 +346,34 @@ class PicturePanel(QWidget):
                     if self.tree.isExpanded(proxy_idx):
                         self.expandedPaths.append(self.model.filePath(model_idx))
             self.verticalScrollBarPosition = self.tree.verticalScrollBar().value()
+            '''
 
-            #self.model = QFileSystemModel()
-            self.model.setRootPath(path)
-            #self.model.directoryLoaded.connect(self.loaded)
+            self.model = QFileSystemModel(self.mw)
+            self.tree = PicTreeView(self.mw)
+
+            self.proxy = FileSortProxy()
+            self.proxy.setSourceModel(self.model)
+            self.proxy.setDynamicSortFilter(True)
+
             #self.tree.setModel(self.model)
-            #self.tree.setModel(self.proxy)
-            #self.picture_dir = path
-            #self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(self.picture_dir)))
+            self.tree.setModel(self.proxy)
+            self.model.directoryLoaded.connect(self.loaded)
+
+            self.tree.doubleClicked.connect(self.treeDoubleClicked)
+            self.tree.setColumnHidden(1, True)
+            self.tree.setColumnHidden(2, True)
+            if data := self.mw.settings.value(self.headerKey):
+                self.tree.header().restoreState(data)
+            self.tree.update()
+            self.tree.header().sectionResized.connect(self.headerChanged)
+            self.tree.header().sectionMoved.connect(self.headerChanged)
+            self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            self.tree.customContextMenuRequested.connect(self.showContextMenu)
+
+            self.dirChanged(self.dirPictures.text())
+
+
+
         except Exception as ex:
             logger.error(f"PicturePanel refresh exception: {ex}")
 
