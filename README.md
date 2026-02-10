@@ -892,7 +892,7 @@ sudo nano /etc/fstab
 
 Add this content to the file
 ```
-//<server_ip>/<share_path> <mount_point> cifs x-systemd.automount,_netdev,credentials=/root/.smbcredentials,uid=<user_id>,gid=<group_id> 0 0
+//<server_ip>/<share_path> <mount_point> cifs x-systemd.automount,_netdev,credentials=/root/.smbcredentials,uid=<user_id>,gid=<group_id>,vers=3.1.1,cache=none,actimeo=1  0 0
 ```
 
 You can test the fstab file
@@ -901,7 +901,7 @@ sudo systemctl daemon-reload
 sudo mount -a
 ```
 
-Please note that the mount requires the system to wait for the network to be up before running fstab. The part of the fstab entry - `x-systemd.automount,_netdev,` is what does this. It assumes you have systemd in you Linux distribution. If you don't know what systemd is, you probably have it, as most mainstream linux distros use it by default. If you are using a distro that doesn't have it, then you probably already know what to do.
+Please note that the mount requires the system to wait for the network to be up before running fstab. The part of the fstab entry - `x-systemd.automount,_netdev,` is what does this. It assumes you have systemd in you Linux distribution. If you don't know what systemd is, you probably have it, as most mainstream linux distros use it by default. If you are using a distro that doesn't have it, then you probably already know what to do. The cache and actimeo flags are there to reduce latency as files are added to the server directories.
 
 ---
 

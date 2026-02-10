@@ -38,17 +38,15 @@ class FilePanel(QWidget):
         self.expandedPaths = []
         self.loadedCount = 0
         self.restorationPath = None
+        self.restorationHeader = None
         self.verticalScrollBarPosition = 0
         self.dlgInfo = InfoDialog(mw)
 
         tmp_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.MoviesLocation)[0]
         if self.mw.parent_window:
             tmp_dir = self.mw.parent_window.settingsPanel.storage.dirArchive.text()
-        #else:
-        #    self.video_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.MoviesLocation)[0]
         self.dirArchive = DirectorySelector(mw, self.mw.settingsPanel.storage.archiveKey, "", tmp_dir)
         self.video_dir = self.dirArchive.text()
-        #self.dirArchive.signals.dirChanged.connect(self.mw.settingsPanel.storage.dirArchiveChanged)
         self.dirArchive.signals.dirChanged.connect(self.dirChanged)
 
         self.model = QFileSystemModel()
@@ -58,14 +56,12 @@ class FilePanel(QWidget):
         self.proxy.setSourceModel(self.model)
         self.proxy.setDynamicSortFilter(True)
 
-        #self.tree.setModel(self.model)
         self.tree.setModel(self.proxy)
-        #self.tree.setSortingEnabled(True)
-
         self.model.fileRenamed.connect(self.onFileRenamed)
         self.model.directoryLoaded.connect(self.loaded)
 
         self.tree.doubleClicked.connect(self.treeDoubleClicked)
+        self.restoreHeader()
         self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.tree.customContextMenuRequested.connect(self.showContextMenu)
 
@@ -121,9 +117,10 @@ class FilePanel(QWidget):
 
     def restoreSelectedPath(self):
         if self.restorationPath:
-            idx = self.model.index(self.restorationPath)
-            if idx.isValid():
-                self.tree.setCurrentIndex(idx)
+            model_idx = self.model.index(self.restorationPath)
+            if model_idx.isValid():
+                proxy_idx = self.proxy.mapFromSource(model_idx)
+                self.tree.setCurrentIndex(proxy_idx)
             self.restorationPath = None
 
     def refresh(self):
@@ -135,7 +132,7 @@ class FilePanel(QWidget):
                 model_idx = self.proxy.mapToSource(proxy_idx)
                 self.restorationPath = self.model.filePath(model_idx)
             path = self.dirArchive.txtDirectory.text()
-
+            self.model.sort(0)
             for i in range(self.model.rowCount(self.model.index(path))):
                 model_idx = self.model.index(i, 0, self.model.index(path))
                 if model_idx.isValid():
@@ -143,15 +140,20 @@ class FilePanel(QWidget):
                     if self.tree.isExpanded(proxy_idx):
                         self.expandedPaths.append(self.model.filePath(model_idx))
             self.verticalScrollBarPosition = self.tree.verticalScrollBar().value()
-
-            #self.model = QFileSystemModel()
+            self.restorationHeader = self.tree.header().saveState()
+            self.proxy.setSourceModel(None)
+            self.model = QFileSystemModel()
             self.model.setRootPath(path)
-            #self.model.fileRenamed.connect(self.onFileRenamed)
-            #self.model.directoryLoaded.connect(self.loaded)
-            #self.tree.setModel(self.model)
-            #self.tree.setRootIndex(self.model.index(path))
-            #self.tree.setModel(self.proxy)
-            #self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(self.video_dir)))
+            self.model.directoryLoaded.connect(self.loaded)
+            self.proxy.setSourceModel(self.model)
+            self.tree.setModel(self.proxy)
+            self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(path)))
+            self.restoreSelectedPath()
+            if self.restorationHeader:
+                self.tree.header().restoreState(self.restorationHeader)
+                key = f'File/Header'
+                self.mw.settings.setValue(key, self.tree.header().saveState())
+
         except Exception as ex:
             logger.error(f"File Panel refresh exception: {ex}")
 
@@ -182,6 +184,7 @@ class FilePanel(QWidget):
 
     def onMediaStopped(self, uri):
         self.control.setBtnPlay()
+        self.progress.duration = 0
         self.progress.updateProgress(0.0)
 
         # this is needed to prevent overwriting another file duration
@@ -381,8 +384,8 @@ class FilePanel(QWidget):
         if player := self.mw.pm.getPlayer(uri):
             self.onMediaProgress(player.file_progress, uri)
 
-    def showEvent(self, event):
-        self.restoreHeader()
+    #def showEvent(self, event):
+    #    self.restoreHeader()
 
     def headerChanged(self, a, b, c):
         key = f'File/Header'

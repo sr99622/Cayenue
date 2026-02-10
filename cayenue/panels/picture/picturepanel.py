@@ -117,6 +117,7 @@ class PicturePanel(QWidget):
         self.expandedPaths = []
         self.loadedCount = 0
         self.restorationPath = None
+        self.restorationHeader = None
         self.verticalScrollBarPosition = 0
         self.control = FileControlPanel(mw, self)
         self.progress = Progress(mw)
@@ -136,13 +137,11 @@ class PicturePanel(QWidget):
         self.proxy.setSourceModel(self.model)
         self.proxy.setDynamicSortFilter(True)
 
-        #self.tree.setModel(self.model)
         self.tree.setModel(self.proxy)
+        self.model.fileRenamed.connect(self.onFileRenamed)
         self.model.directoryLoaded.connect(self.loaded)
 
         self.tree.doubleClicked.connect(self.treeDoubleClicked)
-        self.tree.setColumnHidden(1, True)
-        self.tree.setColumnHidden(2, True)
         if data := self.mw.settings.value(self.headerKey):
             self.tree.header().restoreState(data)
         self.tree.update()
@@ -330,15 +329,14 @@ class PicturePanel(QWidget):
 
     def refresh(self):
         try:
-            '''
             self.loadedCount = 0
             self.expandedPaths = []
-            proxy_index = self.tree.currentIndex()
-            if proxy_index.isValid():
-                model_index = self.proxy.mapToSource(proxy_index)
-                self.restorationPath = self.model.filePath(model_index)
+            proxy_idx = self.tree.currentIndex()
+            if proxy_idx.isValid():
+                model_idx = self.proxy.mapToSource(proxy_idx)
+                self.restorationPath = self.model.filePath(model_idx)
             path = self.dirPictures.txtDirectory.text()
-
+            self.model.sort(0)
             for i in range(self.model.rowCount(self.model.index(path))):
                 model_idx = self.model.index(i, 0, self.model.index(path))
                 if model_idx.isValid():
@@ -346,33 +344,17 @@ class PicturePanel(QWidget):
                     if self.tree.isExpanded(proxy_idx):
                         self.expandedPaths.append(self.model.filePath(model_idx))
             self.verticalScrollBarPosition = self.tree.verticalScrollBar().value()
-            '''
-
-            self.model = QFileSystemModel(self.mw)
-            self.tree = PicTreeView(self.mw)
-
-            self.proxy = FileSortProxy()
-            self.proxy.setSourceModel(self.model)
-            self.proxy.setDynamicSortFilter(True)
-
-            #self.tree.setModel(self.model)
-            self.tree.setModel(self.proxy)
+            self.restorationHeader = self.tree.header().saveState()
+            self.proxy.setSourceModel(None)
+            self.model = QFileSystemModel()
+            self.model.setRootPath(path)
             self.model.directoryLoaded.connect(self.loaded)
-
-            self.tree.doubleClicked.connect(self.treeDoubleClicked)
-            self.tree.setColumnHidden(1, True)
-            self.tree.setColumnHidden(2, True)
-            if data := self.mw.settings.value(self.headerKey):
-                self.tree.header().restoreState(data)
-            self.tree.update()
-            self.tree.header().sectionResized.connect(self.headerChanged)
-            self.tree.header().sectionMoved.connect(self.headerChanged)
-            self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-            self.tree.customContextMenuRequested.connect(self.showContextMenu)
-
-            self.dirChanged(self.dirPictures.text())
-
-
+            self.proxy.setSourceModel(self.model)
+            self.tree.setModel(self.proxy)
+            self.tree.setRootIndex(self.proxy.mapFromSource(self.model.index(path)))
+            self.restoreSelectedPath()
+            if self.restorationHeader:
+                self.tree.header().restoreState(self.restorationHeader)
 
         except Exception as ex:
             logger.error(f"PicturePanel refresh exception: {ex}")
@@ -404,6 +386,7 @@ class PicturePanel(QWidget):
 
     def onMediaStopped(self, uri):
         self.control.setBtnPlay()
+        self.progress.duration = 0
         self.progress.updateProgress(0.0)
         self.progress.lblDuration.setText("0:00")
         # not relavent to camera playback

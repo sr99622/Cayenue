@@ -73,7 +73,7 @@ class FileControlPanel(QWidget):
         self.btnNext.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.btnNext.clicked.connect(self.btnNextClicked)
 
-        self.btnHup = QPushButton("|-|")
+        self.btnHup = QPushButton("]--[")
         self.btnHup.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.btnHup.clicked.connect(self.btnHupClicked)
 

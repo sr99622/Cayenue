@@ -98,7 +98,7 @@ class Progress(QWidget):
 
     def updatePosition(self, f, n):
         if self.showPosition:
-            if f >= 0:
+            if f >= 0 and self.duration > 0:
                 position = int(f * self.duration)
                 self.lblPosition.setText(self.timestring(position), n)
             else:
