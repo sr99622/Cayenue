@@ -144,6 +144,7 @@ class FilePanel(QWidget):
             self.proxy.setSourceModel(None)
             self.model = QFileSystemModel()
             self.model.setRootPath(path)
+            self.model.fileRenamed.connect(self.onFileRenamed)
             self.model.directoryLoaded.connect(self.loaded)
             self.proxy.setSourceModel(self.model)
             self.tree.setModel(self.proxy)

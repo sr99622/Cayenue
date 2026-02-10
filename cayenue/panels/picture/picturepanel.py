@@ -24,7 +24,7 @@ from PyQt6.QtWidgets import QGridLayout, QWidget, \
     QApplication, QTreeView, QMenu, QMessageBox
 from PyQt6.QtGui import QFileSystemModel, QAction, QColorConstants
 from PyQt6.QtCore import Qt, QFileInfo, QDateTime, \
-    QDate, QTime, QStandardPaths, QSortFilterProxyModel
+    QDate, QTime, QStandardPaths
 from cayenue.components.directoryselector import DirectorySelector
 from cayenue.panels.file import FileControlPanel, FileSortProxy
 from cayenue.components import Progress, InfoDialog
@@ -284,7 +284,6 @@ class PicturePanel(QWidget):
 
     def selectFileInFilePanelTree(self, path, filename):
         tree = self.mw.filePanel.tree
-        #model = tree.model()
         model = self.mw.filePanel.model
         if model_camera_idx := model.index(path):
             if model_camera_idx.isValid():
@@ -299,9 +298,7 @@ class PicturePanel(QWidget):
 
     def loaded(self, path):
         self.loadedCount += 1
-        #self.model.sort(0)
         self.tree.sortByColumn(1, Qt.SortOrder.AscendingOrder)
-        #'''
         for i in range(self.model.rowCount(self.model.index(path))):
             idx = self.model.index(i, 0, self.model.index(path))
             if idx.isValid():
@@ -317,7 +314,6 @@ class PicturePanel(QWidget):
                 self.restoreSelectedPath()
         else:
             self.restoreSelectedPath()
-        #'''
 
     def restoreSelectedPath(self):
         if self.restorationPath:
@@ -348,6 +344,7 @@ class PicturePanel(QWidget):
             self.proxy.setSourceModel(None)
             self.model = QFileSystemModel()
             self.model.setRootPath(path)
+            self.model.fileRenamed.connect(self.onFileRenamed)
             self.model.directoryLoaded.connect(self.loaded)
             self.proxy.setSourceModel(self.model)
             self.tree.setModel(self.proxy)
@@ -376,7 +373,6 @@ class PicturePanel(QWidget):
                     self.mw.closeAllStreams()
                 self.playVideo()
 
-    # some weird bug makes this not visible to calling signals in some cases
     def onMediaStarted(self, duration):
         if self.mw.tab.currentIndex() == 1:
             self.tree.setFocus()

@@ -218,8 +218,7 @@ class MainWindow(QMainWindow):
         self.filePanel.control.setBtnMute()
         self.filePanel.control.setSldVolume()
         self.picturePanel = PicturePanel(self)
-        if not sys.platform == "win32":
-            self.signals.started.connect(self.picturePanel.onMediaStarted)
+        self.signals.started.connect(self.picturePanel.onMediaStarted)
         self.signals.progress.connect(self.picturePanel.onMediaProgress)
         self.signals.stopped.connect(self.picturePanel.onMediaStopped)
         self.signals.started.connect(self.filePanel.onMediaStarted)
