@@ -37,6 +37,7 @@ class ClientProtocols():
         self.msg_box.setText("Unable to complete request") 
         self.msg_box.setStandardButtons(QMessageBox.StandardButton.Ok) 
         self.msg_box.setMinimumWidth(650)
+        
     def callback(self, arg):
         try:
             index = bytearray(arg).find(b'\r\n')

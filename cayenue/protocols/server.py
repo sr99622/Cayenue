@@ -105,7 +105,16 @@ class ServerProtocols():
                     self.snapshot.getBufferedSnapshot(profile, buffer, camera)
 
             case "HUP":
-                print("HUP RECVD")
+                camera_name = args[1]
+                if camera := self.mw.cameraPanel.getCameraByName(camera_name):
+                    record_profile = camera.getRecordProfile()
+                    players = self.mw.pm.getStreamPairPlayers(camera.uri())
+                    for player in players:
+                        if player.uri == record_profile.uri():
+                            if filename := player.getOutputFilename():
+                                player.startFileBreak(filename)
+                            break
+                buffer.write(bytearray("HUP\r\n", 'utf-8'))
 
         return np.frombuffer(buffer.getvalue(), dtype=np.uint8)
     

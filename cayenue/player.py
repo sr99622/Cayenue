@@ -147,13 +147,16 @@ class Player(avio.Player):
     def getOutputFilename(self):
         filename = None
         if camera := self.mw.cameraPanel.getCamera(self.uri):
-            d = self.mw.settingsPanel.storage.dirArchive.txtDirectory.text()
-            root = os.path.join(d, camera.text())
-            Path(root).mkdir(parents=True, exist_ok=True)
-            self.output_file_start_time = datetime.now()
-            filename = '{0:%Y%m%d%H%M%S}'.format(self.output_file_start_time)
-            filename = os.path.join(root, filename)
-            self.setMetaData("title", camera.text())
+            try:
+                d = self.mw.settingsPanel.storage.dirArchive.txtDirectory.text()
+                root = os.path.join(d, camera.text())
+                Path(root).mkdir(parents=True, exist_ok=True)
+                self.output_file_start_time = datetime.now()
+                filename = '{0:%Y%m%d%H%M%S}'.format(self.output_file_start_time)
+                filename = os.path.join(root, filename)
+                self.setMetaData("title", camera.text())
+            except Exception as ex:
+                logger.error(f"Player get output filename exception: {ex}")
         return filename
 
     def handleAlarm(self, state):

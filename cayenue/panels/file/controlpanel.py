@@ -246,7 +246,6 @@ class FileControlPanel(QWidget):
             logger.error(f"ControlPanel btnSnapshotClicked exception: {ex}")
 
     def btnHupClicked(self):
-        print("btnHupClicked")
         self.panel.hup()
 
     def sldVolumeChanged(self, value):

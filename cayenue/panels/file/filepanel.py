@@ -436,4 +436,17 @@ class FilePanel(QWidget):
         self.mw.settings.setValue(key, volume)
 
     def hup(self):
-        print("FILE PANEL HUP")
+        proxy_index = self.tree.currentIndex()
+        if not proxy_index.isValid():
+            return
+
+        model_index = self.proxy.mapToSource(proxy_index)
+        info = self.model.fileInfo(model_index)
+        if not info.isFile():
+            return
+
+        if not self.mw.client:
+            logger.error("HUP failed, client not initialized")
+            return
+
+        self.mw.client.transmit(bytearray(f"HUP\n\n{info.dir().dirName()}\r\n", 'utf-8'))
