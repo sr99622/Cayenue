@@ -68,7 +68,7 @@ class ProxyOptions(QWidget):
         self.chkAutoDownload.setChecked(int(mw.settings.value(self.autoDownloadKey, 1)))
         self.chkAutoDownload.stateChanged.connect(self.chkAutoDownloadChecked)
 
-        self.txtDirectoryMTX = DirectorySelector(mw, "MTXDir", "Dir", self.getProxyServerDir())
+        self.txtDirectoryMTX = DirectorySelector(mw, "MTXDir", "Dir", os.path.join(self.mw.getCacheLocation(), "proxy"))
         self.txtDirectoryMTX.setEnabled(not self.chkAutoDownload.isChecked())
 
         self.cmbProxyLog = QComboBox()
