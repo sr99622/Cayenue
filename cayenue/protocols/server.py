@@ -104,6 +104,9 @@ class ServerProtocols():
                     buffer.write(bytearray(profile.user_data() + "\r\n", 'utf-8'))
                     self.snapshot.getBufferedSnapshot(profile, buffer, camera)
 
+            case "HUP":
+                print("HUP RECVD")
+
         return np.frombuffer(buffer.getvalue(), dtype=np.uint8)
     
     def resolve(self, data):

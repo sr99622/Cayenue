@@ -473,11 +473,20 @@ class PicturePanel(QWidget):
     def hup(self):
         print("PICTURE PANEL HUP", self.mw.settings.value("settings/proxyRemote"))
         proxy_index = self.tree.currentIndex()
-        if proxy_index.isValid():
-            model_index = self.proxy.mapToSource(proxy_index)
-            info = self.model.fileInfo(model_index)
-            if info.isFile():
-                print("FOUND FILE", info.fileName())
-                print("DIRECT", info.dir().dirName())
-                if camera := self.mw.cameraPanel.getCameraByName(info.dir().dirName()):
-                    print("FOUND CAMERA", camera.name())
+        if not proxy_index.isValid():
+            return
+
+        model_index = self.proxy.mapToSource(proxy_index)
+        info = self.model.fileInfo(model_index)
+        if not info.isFile():
+            return
+
+        if not self.mw.client:
+            print("client not initialized")
+            return
+
+        print("FOUND FILE", info.fileName())
+        print("DIRECT", info.dir().dirName())
+        if camera := self.mw.cameraPanel.getCameraByName(info.dir().dirName()):
+            print("FOUND CAMERA", camera.name())
+            self.mw.client.transmit(bytearray("HUP\r\n", 'utf-8'))

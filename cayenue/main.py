@@ -162,7 +162,6 @@ class MainWindow(QMainWindow):
         QDir.addSearchPath("image", self.getLocation() + "/cayenue/resources/")
         self.focus_window = None
         self.reader_window = None
-        #self.external_windows = []
         self.audioLock = False
         self.mediamtx_process = None
         self.http_process = None
@@ -322,7 +321,6 @@ class MainWindow(QMainWindow):
 
         if self.settings_profile == "Focus":
             self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-            # Make window frameless and stay on top and not accept focus
             self.setWindowFlags(
 #                Qt.WindowType.Tool
 #                | Qt.WindowType.FramelessWindowHint
@@ -699,10 +697,6 @@ class MainWindow(QMainWindow):
             if self.focus_window:
                 self.focus_window.close()
                 sleep(0.1)
-
-            #for window in self.external_windows:
-            #    window.close()
-            #    sleep(0.1)
 
             super().closeEvent(event)
 
