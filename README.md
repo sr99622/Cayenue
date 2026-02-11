@@ -4,6 +4,12 @@
 
 <i>Please refer to the Software Installation section of this document for detailed instructions.</i>
 
+<!---
+Cayenue brand colors
+background:
+foreground:
+--->
+
 &nbsp;
 
 <image src="assets/images/cayenue_logo.png">
