@@ -288,7 +288,7 @@ Please refer to the diagram presented in the Hardware section of this document, 
 
 <b>SMB configuration</b>
 
-The server should have a fixed IP address on the local network for client access. The router for your local network will control the range of addresses available for fixed IP. In most cases, these will be the lowest or highest numbered addresses on the network. Looking at the router configuration will provide definitive answers to this question. It's always a good idea to ping out to the network to verify that the address under consideration is not being used already, as duplicate addresses can cause mysterious undefined behavior. When setting a fixed IP address for the local network, it is recommended to make note of the current configuration and retain the existing Netmask, Gateway and DNS settings so that the IP address is the only parameter undergoing change.
+The server should have a fixed IP address on the local network for client access. The router for your local network will control the range of addresses available for fixed IP. In most cases, these will be the lowest or highest numbered addresses on the network. Looking at the router configuration will provide definitive answers to this question. It's always a good idea to ping out to the network to verify that the address under consideration is not being used already, as duplicate addresses can cause mysterious undefined behavior. Prior to setting a fixed IP address for the local network, it is recommended to make note of the current configuration and retain the existing Netmask, Gateway and DNS settings so that the IP address is the only parameter undergoing change.
 
 When configuring SMB service, it is recommended to physically connect only the network interface for the local network used by clients and leave the camera subnet disconnected. This will help reduce confusion over network interface designation. If the two interfaces have different bandwidth properties, the higher bandwidth connection should be used for the local network.
 
@@ -565,7 +565,7 @@ Further configuration will require the name of the network interface intended to
 ip -br addr show
 ```
 
-will provide a listing of interface properties that will contain the relevant information. It will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface. Make note of the interface name for use in the next step.
+will provide a listing of interface properties that will contain the relevant information. The network interface name will look something like `enp1s0` but will be different for each machine. The name will be associated with the ip address (<i>10.2.2.1 as set previously</i>) of the desired interface. Make note of the interface name for use in the next step.
 
 Move the default configuration file to a backup location and open an editor to create the new configuration file
 
