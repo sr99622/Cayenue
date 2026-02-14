@@ -1937,7 +1937,7 @@ flatpak remotes
 The flatpak can be built and installed using the following command. To build without installing, remove the `--install` flag.
 
 ```
-flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install builddir $HOME/cayenue/assets/scripts/linux/flatpak/io.github.sr99622.Cayenue.yml
+flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install builddir $HOME/Cayenue/assets/scripts/flatpak/io.github.sr99622.Cayenue.yml
 ```
 
 While the application is installed, a command prompt can run the container environment.
