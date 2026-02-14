@@ -14,7 +14,7 @@ mkdir "%ProgramFiles(x86)%\Cayenue"
 tar -xvzf cpython-3.13.3+20250517-x86_64-pc-windows-msvc-install_only.tar.gz -C "%ProgramFiles(x86)%\Cayenue"
 cd "%ProgramFiles(x86)%\Cayenue"
 python\python -m venv cayenue-env
-cayenue-env\Scripts\pip install %HOMEPATH%\Cayenue torch torchvision openvino
+cayenue-env\Scripts\pip install %HOMEPATH%\Cayenue torch==2.8.0 torchvision==0.23.0 openvino
 cd %HOMEPATH%\installer
 copy %HOMEPATH%\Cayenue\cayenue\resources\Cayenue.ico .
 copy %HOMEPATH%\Cayenue\assets\scripts\windows\cayenue.nsi .
