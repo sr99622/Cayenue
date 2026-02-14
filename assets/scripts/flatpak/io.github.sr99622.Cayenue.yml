@@ -54,14 +54,14 @@ modules:
       #- type: file
       #  path: cayenue-1.0.7-py3-none-any.whl
       - type: file
-        url: https://files.pythonhosted.org/packages/97/24/9e5bd79bf9fdd4962012fbba1ec2aa4860e3bf1c0b510f1c04a464c6f64d/cayenue-1.0.8-py3-none-any.whl
-        sha256: f6c3b80dc8fc25c544f8dc71e752ba81d16893e568d8518f85531bf9d7346ae0
+        url: https://files.pythonhosted.org/packages/70/0a/15242656304b232c2b496890b6330d9b0e3c2b0fbf1bf7e906604a15fe23/cayenue-1.0.9-py3-none-any.whl
+        sha256: f4ba492dd60cd65a30eab3cc7ff901dbe7bcaebb68795fe5a0f67c61e5c9fc38
         x-checker-data:
           type: pypi
           name: cayenue
       - type: file
-        url: https://files.pythonhosted.org/packages/64/d5/1daf65654eeeb665ba49d92f846a1d48655b870ceb45b3b83db7e9d217bd/avio-3.2.7-cp313-cp313-manylinux_2_35_x86_64.whl
-        sha256: 33918af7a49557b97245c7d2ae541a9a23819131ebb7397eff30c15ad825d6ab
+        url: https://files.pythonhosted.org/packages/38/2c/664640a05a912fbcac81cd44bdf838645ff92f3a7b08f19c1f21f6030752/avio-3.2.8-cp313-cp313-manylinux_2_35_x86_64.whl
+        sha256: 5683dd48424e0c89431739d80ec76232d6d85904f9e36cf6e8bc9d387de29b60
         x-checker-data:
           type: pypi
           name: avio

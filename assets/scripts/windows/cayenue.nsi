@@ -3,7 +3,7 @@
 !define DESCRIPTION "Onvif Camera Manager"
 !define VERSIONMAJOR 1
 !define VERSIONMINOR 0
-!define VERSIONBUILD 8
+!define VERSIONBUILD 9
 # This is the size (in kB) of all the files copied into "Program Files"
 !define INSTALLSIZE 2180219
  
