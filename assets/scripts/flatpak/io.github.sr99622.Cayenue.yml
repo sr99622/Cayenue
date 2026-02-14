@@ -52,7 +52,7 @@ modules:
       - type: file
         path: io.github.sr99622.Cayenue.png
       #- type: file
-      #  path: cayenue-1.0.7-py3-none-any.whl
+      #  path: cayenue-1.0.9-py3-none-any.whl
       - type: file
         url: https://files.pythonhosted.org/packages/70/0a/15242656304b232c2b496890b6330d9b0e3c2b0fbf1bf7e906604a15fe23/cayenue-1.0.9-py3-none-any.whl
         sha256: f4ba492dd60cd65a30eab3cc7ff901dbe7bcaebb68795fe5a0f67c61e5c9fc38
@@ -67,8 +67,8 @@ modules:
           name: avio
         only-arches: [x86_64]
       - type: file
-        url: https://files.pythonhosted.org/packages/fe/73/b08e5d16d57ad677da08930dd0525488964f520611d219cb733b0206c153/avio-3.2.7-cp313-cp313-manylinux_2_28_aarch64.whl
-        sha256: 2b7637fba2b8a5c03156e3b865a4bc374cb53a31e76117d213dde0c536a39182
+        url: https://files.pythonhosted.org/packages/b9/97/f9a24fe5735090096ac335f5ef12b36596a46aaf6adf1e34ae3407301fba/avio-3.2.8-cp313-cp313-manylinux_2_28_aarch64.whl
+        sha256: d59bc7b3eba132554a01f49b7270862bc00ec72cf444bef9ffd824168b599631
         x-checker-data:
           type: pypi
           name: avio

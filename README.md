@@ -1,13 +1,13 @@
 <h3>Quick Installer Download Links</h3>
 
-### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.8/Cayenue-1.0.8.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.8/cayenue_1.0.8_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mac OS](https://github.com/sr99622/Cayenue/releases/download/v1.0.8/Cayenue-1.0.8.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.8/Cayenue-installer-1.0.8.exe)
+### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.9/Cayenue-1.0.9.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.9/cayenue_1.0.9_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mac OS](https://github.com/sr99622/Cayenue/releases/download/v1.0.9/Cayenue-1.0.9.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.9/Cayenue-installer-1.0.9.exe)
 
 <i>Please refer to the Software Installation section of this document for detailed instructions.</i>
 
 <!---
 Cayenue brand colors
-background:
-foreground:
+background: 1E1F6E
+foreground: 939FB9
 --->
 
 &nbsp;
@@ -1816,6 +1816,269 @@ The control tab on the right of the application window may be toggled using the 
 <summary>Notes</summary>
 
 &nbsp;
+
+<details>
+<summary>Project Maintenance</summary>
+
+&nbsp;
+
+<details>
+<summary>Updating the Repository</summary>
+
+&nbsp;
+
+Use the ```python -m build``` command to build the Cayenue python package and upload with twine. The official instructions for this process can be found on the [Python web site](https://packaging.python.org/en/latest/tutorials/packaging-projects/).
+
+There are scripts for each operating system that will build the installers for Cayenue. The scripts are intended to be run on virtual machines and are designed to run on a freshly installed vm such that no configuration of the vm is required other than installation.
+
+Version control is critical in the update process and requires edits in several locations that should be coordinated carefully.
+
+<h3>cayenue</h3>
+
+  * pyproject.toml (Including the cayenue version <u>AND</u> the dependencies section)
+  * setup.py
+  * main.py
+
+<h3>flatpak</h3>
+
+  * io.github.sr99622.Cayenue.yml (cayenue whl from pypi)
+  * io.github.sr99622.Cayenue.metainfo.xml (release version)
+
+<h3>snap</h3>
+
+  * snapcraft.yaml
+
+<h3>mac</h3>
+
+  * <i>implicit in the cayenue whl</i>
+
+<h3>windows</h3>
+
+  * cayenue.nsi (!VERSIONMAJOR  !VERSIONMINOR  !VERSIONBUILD)
+
+&nbsp;
+
+The build scripts can be found in the Cayenue source tree at assets/scripts. ```linux_build```, ```mac_build```, and ```windows_build.bat``` are the names of the scripts. The scripts are intended to be run on virtual machines. For Linux and Windows, QEMU will create the proper vm. Mac OS vms can be built with UTM virtual machine manager on Apple Silicon. Put the appropriate script in the home directory for each platform and execute. The script will pull the latest version of the source code and build the python binary installs. The linux_build script should be run on a vm with Linux Mint 21 installed using the vm_ scripts. The binary installs produced will work with any Linux kernel greater than 5.4. The mac_build script can be run on the Mac OS Sequoia or later. A Windows vm is most easily built using Windows 11 and the windows_build.bat will produce binary installs that will work for most modern Windows versions. 
+
+&nbsp;
+
+---
+
+</details>
+
+<details>
+<summary>App Installer on Mac OS</summary>
+
+&nbsp;
+
+---
+
+TLDR;
+
+Use Finder to move existing /Applications/Cayenue to the trash, then run
+
+```
+cd $HOME/Cayenue
+git pull
+assets/scripts/components/mac/build_app
+```
+
+When finished, launch DMG Canvas and open the Cayenue.dmg file from Recent Files. Start by clicking the hammer icon. The installer file will be
+
+```
+$HOME/assets/scripts/mac/Cayenue.dmg
+```
+
+Rename it to Cayenue-x.y.z.dmg where x.y.z is the version number.
+
+----------
+
+Background Info
+
+The script build_app in the assets/scripts/mac folder is used to build the MacOS installer DMG. The script relies on homebrew and will install it as the first action along with a few tools needed for compilation. The basic theory behind the installer is that a python virtual environment is built within the /Applications/Cayenue.app folder under the premise that this will be the location for any arbitrary installation. This is a critical assumption, as the location of the cayenue executable script is required for launching. Any exisiting Cayenue folder in the Applications folder should be removed prior to starting the build.
+
+Once the app has been assembled in situ, the [DMG Canvas application](https://www.araelium.com/dmgcanvas) is used to build the DMG file and notarize it on the Apple Developer site. A valid developer subscription and certificate are required for this operation. It may also be necessary to have an app-specific password in the Keychain for the developer machine, although it is unclear if this is actually required. It is important to note that the app should not be launched from the build location after compile but prior to notarization, as artifacts created in the folder will invalidate the codesign. It has also been observed that running the DMG Canvas application twice in a row will fail the notarization the second time. A reboot has been found to avoid this problem.
+
+ A good resource for understanding the app building process can be found at this [link](https://blog.xojo.com/2024/08/22/macos-apps-from-sandboxing-to-notarization-the-basics/)
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>App Installer for Flatpak</summary>
+
+&nbsp;
+
+---
+
+The script to build a flatpak can be found in the assets/scripts/components/flatpak folder. There is code for building the flatpak using either onvif-gui from PyPi or from a local file. If a local file is selected, you need to build it first using `python -m build` from the libonvif/onvif-gui folder then copy the whl file from the dist subdirectory to the flatpak folder.
+
+To install flatpak-builder
+
+```
+sudo dnf install flatpak-builder
+```
+
+Flatpak needs to know the location of the Flathub repository. Because the flatpak will be built using the --user flag, you must also apply this flag when adding the remote repository.
+
+```
+flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+
+You can list available remotes.
+
+```
+flatpak remotes
+```
+
+The flatpak can be built and installed using the following command. To build without installing, remove the `--install` flag.
+
+```
+flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install builddir $HOME/cayenue/assets/scripts/linux/flatpak/io.github.sr99622.Cayenue.yml
+```
+
+While the application is installed, a command prompt can run the container environment.
+
+```
+flatpak run --command=sh io.github.sr99622.Cayenue
+```
+
+To uninstall the application, use the command.
+
+```
+flatpak uninstall io.github.sr99622.Cayenue
+```
+
+To build a single file flatpak installer, run the command (this will take a while to run).
+
+```
+flatpak build-bundle repo Cayenue.flatpak io.github.sr99622.Cayenue
+```
+
+This can then be used to install the application.
+
+```
+sudo flatpak install Cayenue.flatpak
+```
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>App Installer for snap</summary>
+
+&nbsp;
+
+---
+
+The script for building a snap is in the libonvif/assets/scripts/components/linux/snap folder. The commands to build the snap should be run from the parent of the snap folder i.e. libonvif/assets/scripts/components/linux. 
+
+The first thing you need to do is to install snapcraft
+
+```
+sudo snap install snapcraft --classic
+```
+
+Then you have to [install and configure LXD](https://documentation.ubuntu.com/lxd/latest/tutorial/first_steps/#first-steps), permissions should do it. A reboot is needed to complete.
+
+```
+sudo snap install lxd
+sudo usermod -aG lxd "$USER"
+newgrp lxd
+lxd init --minimal
+sudo reboot now
+```
+
+To build the package, use the command from the directory which is the parent of the snap directory containing snapcraft.yaml
+
+```
+snapcraft
+```
+
+There will be a large volume of error messages and such. Most can be ignored, but some may be relavant. If it doesn't work, then you can comb through the messages and look for things. If it does work, it's fine. You can run the command as `snapcraft --debug` flag to drop into a shell if the process fails.
+
+Sometimes, the system will cache parts of the build that can cause actual errors, to clean the cache
+
+```
+snapcraft clean
+```
+
+To install the package
+
+```
+sudo snap install cayenue*snap --dangerous
+```
+
+To get audio working, you should be on pulse audio (which is the default). From the terminal, run the command
+
+```
+sudo snap connect cayenue:pulseaudio
+```
+
+To uninstall
+
+```
+sudo snap remove cayenue
+```
+
+
+The yaml configuration file includes code for installing the NPU driver, which requires separate installation. 
+
+```
+sudo snap install intel-npu-driver
+sudo chown root:render /dev/accel/accel0
+sudo chmod g+rw /dev/accel/accel0
+sudo usermod -a -G render $USER
+sudo bash -c "echo 'SUBSYSTEM==\"accel\", KERNEL==\"accel*\", GROUP=\"render\", MODE=\"0660\"' > /etc/udev/rules.d/10-intel-vpu.rules"
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=accel
+sudo reboot now
+```
+
+If it's not working, you can start a shell prompt to look around
+
+```
+snap run --shell cayenue
+```
+
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>App Installer for Windows</summary>
+
+&nbsp;
+
+---
+
+There is a script that will handle most of the work for a windows installer build. ** Note ** the installer must be run from a command prompt with Administrator Privilege. The installer uses the NSIS program to build and the script will check if that is installed on the machine and download it if necessary. The basic concept for the installer is similar MacOS, in that the cayenue-env virtual environment is created in a known location that will be common across machines, in this case, C:\Program Files (x86).
+
+The cayenue.nsi file is fed into the NSIS script reader. There is some prep work to do before the script is run, edit the cayenue.nsi file at the top to set the current version number. The script will set up a directory at %HOMEPATH%\installer and copy some configuration files and run from there. To run the script
+
+```
+%HOMEPATH%\Cayenue\assets\scripts\windows\installer\build_installer.bat
+```
+
+The result is an executable file in the %HOMEPATH%\installer directory named Cayenue-installer-x.x.x.exe, where x.x.x is the version triplet. Just double click to install. There will be a warning sign that the developer is unkown. To uninstall, go to the settings panel and look through the installed apps.
+
+---
+
+&nbsp;
+
+</details>
+
+&nbsp;
+
+</details>
 
 <details>
 <summary>Network Priority on Multi Homed Hosts</summary>
