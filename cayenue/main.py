@@ -1024,6 +1024,7 @@ class MainWindow(QMainWindow):
 
             logger.debug('Attempting to download MediaMTX server to directory {dir}')
             
+            print("PLATFORM MACHINE", platform.machine())
             architecture = None
             match platform.machine():
                 case "AMD64":
@@ -1033,7 +1034,7 @@ class MainWindow(QMainWindow):
                 case "arm64":
                     architecture = "arm64"
                 case "aarch64":
-                    architecture = "arm64v8"
+                    architecture = "arm64"
 
             operating_system = None
             match sys.platform:
