@@ -34,6 +34,34 @@ class CameraList(QListWidget):
             self.setCurrentRow(0)
         super().focusInEvent(event)
 
+    def keyReleaseEvent(self, event):
+        match event.key():
+            case Qt.Key.Key_PageDown:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.stopZoom()
+                    return
+            case Qt.Key.Key_PageUp:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.stopZoom()
+                    return
+            case Qt.Key.Key_Right:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.stopPanTilt()
+                    return
+            case Qt.Key.Key_Left:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.stopPanTilt()
+                    return
+            case Qt.Key.Key_Up:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.stopPanTilt()
+                    return
+            case Qt.Key.Key_Down:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.stopPanTilt()
+                    return
+        return super().keyReleaseEvent(event)
+
     def keyPressEvent(self, event):
         match event.key():
             case Qt.Key.Key_Return:
@@ -62,6 +90,12 @@ class CameraList(QListWidget):
             case Qt.Key.Key_F1:
                 self.info()
 
+            case Qt.Key.Key_D:
+                if self.mw.settings_profile == "gui":
+                    if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                        self.mw.cameraPanel.btnDiscoverClicked()
+                        self.mw.cameraPanel.lstCamera.setFocus()
+
             case Qt.Key.Key_A:
                 if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
                     self.mw.cameraPanel.btnStopAllClicked()
@@ -74,6 +108,32 @@ class CameraList(QListWidget):
             case Qt.Key.Key_R:
                 if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
                     self.mw.cameraPanel.btnRecordClicked()
+            case Qt.Key.Key_Right:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.move(0.5, 0.0, 0.0)
+                    return
+            case Qt.Key.Key_Left:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.move(-0.5, 0.0, 0.0)
+                    return
+            case Qt.Key.Key_Up:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.move(0.0, 0.5, 0.0)
+                    return
+            case Qt.Key.Key_Down:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    self.mw.cameraPanel.ptzTab.move(0.0, -0.5, 0.0)
+                    return
+            case Qt.Key.Key_PageDown:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    if not event.isAutoRepeat():
+                        self.mw.cameraPanel.ptzTab.move(0.0, 0.0, -0.5)
+                    return
+            case Qt.Key.Key_PageUp:
+                if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                    if not event.isAutoRepeat():
+                        self.mw.cameraPanel.ptzTab.move(0.0, 0.0, 0.5)
+                    return
 
         return super().keyPressEvent(event)
     

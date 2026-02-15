@@ -319,17 +319,19 @@ class MainWindow(QMainWindow):
         else:
             self.restoreSplitter()
 
+        '''
         if self.settings_profile == "Focus":
             self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
             self.setWindowFlags(
-#                Qt.WindowType.Tool
-#                | Qt.WindowType.FramelessWindowHint
-#                | Qt.WindowType.WindowStaysOnTopHint
+                #Qt.WindowType.Tool
+                #| Qt.WindowType.FramelessWindowHint
+                #| Qt.WindowType.WindowStaysOnTopHint
                  Qt.WindowType.WindowDoesNotAcceptFocus
             )
-#            self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
-#            self.setAttribute(Qt.WidgetAttribute.WA_MacAlwaysShowToolWindow)
-#            self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+            #self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+            #self.setAttribute(Qt.WidgetAttribute.WA_MacAlwaysShowToolWindow)
+            #self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        '''
 
         logger.debug(f'FFMPEG VERSION: {Player("", self).getFFMPEGVersions()}')
 
@@ -470,26 +472,7 @@ class MainWindow(QMainWindow):
         if self.settings_profile == "Focus":
             self.glWidget.force_clear = True
 
-    def keyReleaseEvent(self, event):
-        match event.key():
-            case Qt.Key.Key_PageDown:
-                self.cameraPanel.ptzTab.stopZoom()
-            case Qt.Key.Key_PageUp:
-                self.cameraPanel.ptzTab.stopZoom()
-            case Qt.Key.Key_Right:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.stopPanTilt()
-            case Qt.Key.Key_Left:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.stopPanTilt()
-            case Qt.Key.Key_Up:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.stopPanTilt()
-            case Qt.Key.Key_Down:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.stopPanTilt()
-        return super().keyReleaseEvent(event)
-
+    
     def keyPressEvent(self, event):
         match event.key():
             case Qt.Key.Key_Escape:
@@ -513,96 +496,9 @@ class MainWindow(QMainWindow):
                 else:
                     self.glWidget.focused_uri = None
                     self.collapseSplitter()
-            case Qt.Key.Key_D:
-                if self.settings_profile == "gui":
-                    if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
-                        self.cameraPanel.btnDiscoverClicked()
-                        self.cameraPanel.lstCamera.setFocus()
-            case Qt.Key.Key_Return:
-                if camera := self.cameraPanel.getCurrentCamera():
-                    self.cameraPanel.onItemDoubleClicked(camera)
-            case Qt.Key.Key_F:
-                if not self.tab.isVisible():
-                    self.cameraPanel.btnHistoryClicked()
-            case Qt.Key.Key_F1:
-                if not self.filePanel.isVisible():
-                    self.cameraPanel.lstCamera.info()
-            case Qt.Key.Key_Right:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.move(0.5, 0.0, 0.0)
-                    return
-                if camera := self.cameraPanel.getCurrentCamera():
-                    ordinal = self.pm.ordinals.get(camera.uri())
-                    if ordinal is not None:
-                        ar = self.pm.getMostCommonAspectRatio()
-                        num_rows, num_cols = self.pm.computeRowsCols(self.glWidget.size(), ar/100)
-                        column = ordinal % num_cols
-                        row = int(ordinal / num_cols)
-                        next_column = column + 1
-                        if next_column < num_cols:
-                            next_ordinal = row * num_cols + next_column
-                            if next_ordinal in self.pm.ordinals.values():
-                                uri = self.pm.uri_from_ordinal(next_ordinal)
-                                self.cameraPanel.setCurrentCamera(uri)
-            case Qt.Key.Key_Left:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.move(-0.5, 0.0, 0.0)
-                    return
-                if camera := self.cameraPanel.getCurrentCamera():
-                    ordinal = self.pm.ordinals.get(camera.uri())
-                    if ordinal is not None:
-                        ar = self.pm.getMostCommonAspectRatio()
-                        num_rows, num_cols = self.pm.computeRowsCols(self.glWidget.size(), ar/100)
-                        column = ordinal % num_cols
-                        row = int(ordinal / num_cols)
-                        next_column = column - 1
-                        if next_column >= 0:
-                            next_ordinal = row * num_cols + next_column
-                            if next_ordinal in self.pm.ordinals.values():
-                                uri = self.pm.uri_from_ordinal(next_ordinal)
-                                self.cameraPanel.setCurrentCamera(uri)
-            case Qt.Key.Key_Up:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.move(0.0, 0.5, 0.0)
-                    return
-                if camera := self.cameraPanel.getCurrentCamera():
-                    ordinal = self.pm.ordinals.get(camera.uri())
-                    if ordinal is not None:
-                        ar = self.pm.getMostCommonAspectRatio()
-                        num_rows, num_cols = self.pm.computeRowsCols(self.glWidget.size(), ar/100)
-                        column = ordinal % num_cols
-                        row = int(ordinal / num_cols)
-                        next_row = row - 1
-                        if next_row >= 0:
-                            next_ordinal = next_row * num_cols + column
-                            if next_ordinal in self.pm.ordinals.values():
-                                uri = self.pm.uri_from_ordinal(next_ordinal)
-                                self.cameraPanel.setCurrentCamera(uri)
-            case Qt.Key.Key_Down:
-                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-                    self.cameraPanel.ptzTab.move(0.0, -0.5, 0.0)
-                    return
-                if camera := self.cameraPanel.getCurrentCamera():
-                    ordinal = self.pm.ordinals.get(camera.uri())
-                    if ordinal is not None:
-                        ar = self.pm.getMostCommonAspectRatio()
-                        num_rows, num_cols = self.pm.computeRowsCols(self.glWidget.size(), ar/100)
-                        column = ordinal % num_cols
-                        row = int(ordinal / num_cols)
-                        next_row = row + 1
-                        if next_row < num_rows:
-                            next_ordinal = next_row * num_cols + column
-                            if next_ordinal in self.pm.ordinals.values():
-                                uri = self.pm.uri_from_ordinal(next_ordinal)
-                                self.cameraPanel.setCurrentCamera(uri)
-            case Qt.Key.Key_PageDown:
-                if not event.isAutoRepeat():
-                    self.cameraPanel.ptzTab.move(0.0, 0.0, -0.5)
-            case Qt.Key.Key_PageUp:
-                if not event.isAutoRepeat():
-                    self.cameraPanel.ptzTab.move(0.0, 0.0, 0.5)
-
+            
         super().keyPressEvent(event)
+    
 
     def showEvent(self, event):
         splitterState = self.settings.value(self.splitKey)
