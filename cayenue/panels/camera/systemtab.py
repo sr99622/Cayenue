@@ -535,7 +535,8 @@ class SystemTab(QWidget):
                     if recordProfile.uri() != displayProfile.uri():
                         matchedProfiles = False
 
-            self.chkRecordAudio.setEnabled(not matchedProfiles)
+            #self.chkRecordAudio.setEnabled(not matchedProfiles)
+            self.chkRecordAudio.setEnabled(True)
             self.chkRecordAudio.setChecked(not recordProfile.getDisableAudio())
 
     def btnRebootClicked(self):

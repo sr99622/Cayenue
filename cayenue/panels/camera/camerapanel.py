@@ -603,18 +603,14 @@ class CameraPanel(QWidget):
             remote = ""
             match self.mw.settingsPanel.proxy.proxyType:
                 case ProxyType.SERVER:
-                    print("SERVER")
                     if len(self.mw.settingsPanel.proxy.if_addrs):
                         remote = f'rtsp://{self.mw.settingsPanel.proxy.if_addrs[0]}:8554/'
                 case ProxyType.CLIENT:
-                    print("CLIENT")
                     remote = self.mw.settingsPanel.proxy.proxyRemote
-                case ProxyType.STAND_ALONE:
-                    print("STAND_ALONE")
-            print("btnHIstoryClicked", remote)
             reader_settings = QSettings("Cayenue", "Reader")
             reader_settings.setValue("filePanel/hideCameraPanel", 1)
             reader_settings.setValue("settings/proxyRemote", remote)
+            reader_settings.setValue("settings/audioDriverIndex", self.mw.settingsPanel.general.cmbAudioDriver.currentIndex())
             main_file = Path(__file__).parent.parent.parent / "main.py"
             if platform.system() == "Windows":
                 subprocess.Popen([sys.executable, str(main_file), "--profile", "Reader"], env=os.environ.copy(), start_new_session=True, shell=True)
