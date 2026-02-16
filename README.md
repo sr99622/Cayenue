@@ -254,10 +254,16 @@ pip install cayenue openvino
 
 Then follow the directions at [PyTorch](https://pytorch.org/get-started/locally/) to complete the installation based on your operating system and CUDA version.
 
-To use an icon with this configuration, use the command below. If working on windows, please run `pip install winshell` in the virtual environment prior to running this command.
+To use an icon with this configuration on Linux, use the command below.
 
 ```
 sudo env\bin\Cayenue --icon
+```
+
+If working on windows, please run `pip install winshell` in the virtual environment prior to running this command.
+
+```
+env\scripts\cayenue --icon
 ```
 
 ---
@@ -850,11 +856,42 @@ For Mac OS the settings for Energy should be adjusted to disable the low power m
 ulimit -n 8192
 ```
 
+---
+
+&nbsp;
+
+</details>
+
+<details>
+<summary>Windows as a Server</summary>
+
+&nbsp;
+
+Please note that using Windows as a server presents some unique challenges. It has been observed in the past that the Operating System is likely to change in ways that may render some functions unusable. Additionally, automatic updates will terminate the server in an uncontrolled manner which may result in undefined behavior. Due to the difficulty of finding and correcting these types of issues, Windows does not receive exhaustive testing in the server role. Reasonable efforts are made to facilitate the use of Windows as a server, but there may be undocumented issues that arise during operation. Windows client can be expected to behave normally under most conditions.
+
+One known issue is that the HTTP server is unstable when launched from the GUI manager. In order to avoid this and other similar issues, it is recommended to run the application from the command line in server role. This requires that the application be installed from source in a Python virtual environment using the pip installer. Open a command line window and use the following commands to install and run the application.
+
+```
+python -m venv env
+env\Scripts\activate
+git clone https://github.com/Cayenue
+cd Cayenue
+pip install .
+pip install torch==2.8.0 torchvision==0.23.0 openvino
+python cayenue\main.py
+```
+
+---
+
+&nbsp;
+
 </details>
 
 &nbsp;
 
 Following the installation of the SMB and DHCP services, Cayenue can be installed on the Server as described in the instructions found above.
+
+---
 
 &nbsp;
 
@@ -1865,19 +1902,17 @@ The control tab on the right of the application window may be toggled using the 
 
 Use the ```python -m build``` command to build the Cayenue python package and upload with twine. The official instructions for this process can be found on the [Python web site](https://packaging.python.org/en/latest/tutorials/packaging-projects/).
 
-There are scripts for each operating system that will build the installers for Cayenue. The scripts are intended to be run on virtual machines and are designed to run on a freshly installed vm such that no configuration of the vm is required other than installation.
-
-Version control is critical in the update process and requires edits in several locations that should be coordinated carefully.
+Version control is critical in the update process and requires edits in several locations that should be coordinated carefully. The build scripts can be found in the Cayenue source tree at assets/scripts.
 
 <h3>cayenue</h3>
 
-  * pyproject.toml (Including the cayenue version <u>AND</u> the dependencies section)
+  * pyproject.toml (Including the cayenue version <u>AND</u> the dependencies section if applicable)
   * setup.py
   * main.py
 
 <h3>flatpak</h3>
 
-<i>Note that the flatpak YML configuration file uses the PyPi server location for the cayenue package, and needs to be updated for both x86 and aarch in addition to the XML file version designator.</i>
+<i>Note that the flatpak YML configuration file uses the PyPi server for python packages, some of which may need to be updated for both x86 and aarch in addition to the XML file version designator.</i>
 
   * io.github.sr99622.Cayenue.yml (cayenue whl from pypi)
   * io.github.sr99622.Cayenue.metainfo.xml (release version)
@@ -1893,10 +1928,6 @@ Version control is critical in the update process and requires edits in several 
 <h3>windows</h3>
 
   * cayenue.nsi (!VERSIONMAJOR  !VERSIONMINOR  !VERSIONBUILD)
-
-&nbsp;
-
-The build scripts can be found in the Cayenue source tree at assets/scripts. ```linux_build```, ```mac_build```, and ```windows_build.bat``` are the names of the scripts. The scripts are intended to be run on virtual machines. For Linux and Windows, QEMU will create the proper vm. Mac OS vms can be built with UTM virtual machine manager on Apple Silicon. Put the appropriate script in the home directory for each platform and execute. The script will pull the latest version of the source code and build the python binary installs. The linux_build script should be run on a vm with Linux Mint 21 installed using the vm_ scripts. The binary installs produced will work with any Linux kernel greater than 5.4. The mac_build script can be run on the Mac OS Sequoia or later. A Windows vm is most easily built using Windows 11 and the windows_build.bat will produce binary installs that will work for most modern Windows versions. 
 
 &nbsp;
 
