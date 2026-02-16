@@ -1877,6 +1877,8 @@ Version control is critical in the update process and requires edits in several 
 
 <h3>flatpak</h3>
 
+<i>Note that the flatpak YML configuration file uses the PyPi server location for the cayenue package, and needs to be updated for both x86 and aarch in addition to the XML file version designator.</i>
+
   * io.github.sr99622.Cayenue.yml (cayenue whl from pypi)
   * io.github.sr99622.Cayenue.metainfo.xml (release version)
 
@@ -1886,7 +1888,7 @@ Version control is critical in the update process and requires edits in several 
 
 <h3>mac</h3>
 
-  * <i>implicit in the cayenue whl</i>
+  * Info.plist section of build_app
 
 <h3>windows</h3>
 
