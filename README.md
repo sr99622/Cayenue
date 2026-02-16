@@ -1949,7 +1949,7 @@ Use Finder to move existing /Applications/Cayenue to the trash, then run
 ```
 cd $HOME/Cayenue
 git pull
-assets/scripts/components/mac/build_app
+assets/scripts/mac/build_app
 ```
 
 When finished, launch DMG Canvas and open the Cayenue.dmg file from Recent Files. Start by clicking the hammer icon. The installer file will be
