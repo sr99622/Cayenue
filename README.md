@@ -1154,7 +1154,7 @@ Opens the system web browser to this page.
 
 <h2>Keyboard Bindings</h2>
 
-Many of the above functions can be executed without using the mouse via keyboard bindings. Below is a list of the bindings
+Many of the above functions can be executed without using the mouse via keyboard bindings. Below is a list of the bindings. Note that the key bindings will work as long as the Camera Panel is the current tab panel and the main window has the focus, even if the Camera Panel was hidden using the F11 command.
 
 <b>Enter</b>
 
@@ -1196,7 +1196,13 @@ Rename the currently selected camera
 
 Remove the currently selected camera from the list. This will remove the camera from the Cached Addresses for discovery. Use broadcast discovery to re-enlist the camera.
 
+<b>Ctl+Right &nbsp; Ctl+Left &nbsp; Ctl+Up &nbsp; Ctl+Down</b>
 
+These commands will control Pan and Tilt movements for the camera if equipped.
+
+<b>Ctl+PageUp &nbsp; Ctl+PageDown</b>
+
+These commands will Zoom In and Out for the camera if equipped.
 
 ---
 &nbsp;
@@ -1421,7 +1427,7 @@ Settings pertain to preset selections or current camera position. The arrow butt
 
 The application maintains folders for the storage of camera snapshots and recordings. The folder locations by default are the OS picture and video storage locations, and can be changed using the directory setting at the top of the panel. There is a subfolder for each camera that has previously made pictures or recordings in the application. If you are using Cayenue as a client, and the server is configured to share files using Samba, you can use the server shared folder to access recordings made on the server. 
 
-Inside the camera folders are the individual picture or video files recorded by the camera. The files are named using a datetime convention which represents the time that the snapshot images was taken or the start time of the video recording. Video recordings are prepended by a time interval specified on the `Settings -> Alarm -> Pre-Alarm Buffer Size`. This insures that the moments immediately prior to the beginning of the recording are captured.
+Inside the camera folders are the individual picture or video files recorded by the camera. The files are named using a datetime convention which represents the time that the snapshot images was taken or the start time of the video recording. Video recordings are prepended by a time interval specified on the `Settings -> Alarm -> Pre-Alarm Buffer Size`. This insures that the moments immediately prior to the beginning of the recording are captured. Files within the Picture or Video directories are stored in descending chronological order so that the most recent files are shown first at the top of the directory.
 
 &nbsp;
 
@@ -1439,9 +1445,9 @@ File playback is configured such that one file is played at a time. Keyboard sho
 
 <h3>File Playback Controls For Mouse</h3>
 
-<image src="cayenue/resources/search.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/refresh.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/snapshot.png">
+<image src="cayenue/resources/search.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/refresh.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/snapshot.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>]--[</b>
 
-Search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refresh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Snapshot
+Search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refresh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Snapshot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File Break
 
 <image src="cayenue/resources/play.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/pause.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/stop.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/previous.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/next.png"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <image src="cayenue/resources/audio.png">
 
@@ -1492,6 +1498,10 @@ Keyboard shortcuts are available when the file list of either the Picture Panel 
 * <h3>Down Arrow</h3>
 
   The Down Arrow will move to the next file without stopping the current file. Use the Enter key to start playing the newly highlighted file.
+
+### ]--[ &nbsp;&nbsp;  File Break
+
+When a video file is open and still receiving data from a camera, attempting to view the contents of the file will cause an error message. Clicking the File Break button will close the currently selected file and open a new file to continue receiving data from the camera. The newly opened file will save a number of seconds of video prior to the break so that there is some overlap between the two files and no data is lost. This functionality allows immediate playback for the most recent video files.
 
 ### Progress / Seek Indicator
 
