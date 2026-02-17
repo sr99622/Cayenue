@@ -623,7 +623,6 @@ class GeneralOptions(QWidget):
         if ret == QMessageBox.StandardButton.Yes:
             items = [self.cmbViewerProfile.itemText(i) for i in range(self.cmbViewerProfile.count())]
             for item in items:
-                print(item)
                 QSettings("Cayenue", item).clear()
                 QSettings("Cayenue", "gui").clear()
             QMessageBox.information(self, "Clear Settings",

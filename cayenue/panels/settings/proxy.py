@@ -233,9 +233,10 @@ class ProxyOptions(QWidget):
 
         self.proxyType = type
         self.mw.settings.setValue(self.proxyTypeKey, type)
-        self.mw.stopProxyServer()
-        self.mw.stopOnvifServer()
-        self.mw.stopHttpServer()
+        if self.mw.settings_profile == "gui":
+            self.mw.stopProxyServer()
+            self.mw.stopOnvifServer()
+            self.mw.stopHttpServer()
 
         self.grpAlarmBroadcast.setEnabled(type == ProxyType.SERVER)
         self.grpMediaMTX.setEnabled(type == ProxyType.SERVER)
@@ -364,7 +365,6 @@ class ProxyOptions(QWidget):
             self.mw.stopHttpServer()
 
     def spnTimeoutChanged(self, value):
-        print("spnTimeoutChanged", value)
         self.mw.settings.setValue(self.timeoutKey, value)
         self.mw.client.timeout = value
 

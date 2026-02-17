@@ -81,7 +81,7 @@ class ClientProtocols():
                                     player.image.save(filename)
 
         except Exception as ex:
-            print("EXCEPTION ", ex)
+            logger.error("EXCEPTION ", ex)
             return
 
     def error(self, msg):

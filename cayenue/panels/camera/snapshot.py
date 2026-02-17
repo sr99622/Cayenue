@@ -54,7 +54,6 @@ class Snapshot():
                 if response.status_code == 200:
                     with open(filename, 'wb') as file:
                         file.write(response.content)
-                    #logger.debug(f"Image downloaded successfully as {filename}")
                     return True
                 else:
                     logger.debug(f"get snapshot BASIC auth status code: {response}")
@@ -71,7 +70,6 @@ class Snapshot():
                 if response.status_code == 200:
                     with open(filename, 'wb') as file:
                         file.write(response.content)
-                    #logger.debug(f"Image downloaded successfully as {filename}")
                     return True
                 else:
                     logger.debug(f"get snapshot DIGEST auth status code: {response}")
@@ -83,7 +81,6 @@ class Snapshot():
         return False
 
     def getSnapshotBuffered(self, profile, buffer, auth_type):
-        print("Here we are at getSnapshotBuffered", auth_type)
         parsed = urlparse(profile.snapshot_uri())
 
         if auth_type == SnapshotAuth.NOT_WORKING:
@@ -91,16 +88,10 @@ class Snapshot():
 
         if auth_type == SnapshotAuth.UNKNOWN:
             if self.getSnapshotBuffered(profile, buffer, SnapshotAuth.BASIC):
-                #camera = self.mw.cameraPanel.getCamera(profile.uri())
-                #camera.setSnapshotAuth(SnapshotAuth.BASIC)
-                #logger.debug(f"camera {camera.name()} snapshot auth type set to BASIC")
                 return True
 
             else:
                 if self.getSnapshotBuffered(profile, buffer, SnapshotAuth.DIGEST):
-                    #camera = self.mw.cameraPanel.getCamera(profile.uri())
-                    #camera.setSnapshotAuth(SnapshotAuth.DIGEST)
-                    #logger.debug(f"camera {camera.name()} snapshot auth type set to DIGEST")
                     return True
 
         if auth_type == SnapshotAuth.BASIC:
@@ -109,10 +100,8 @@ class Snapshot():
                 response = requests.get(simple_url, timeout=5)
                 if response.status_code == 200:
                     
-                    print("Writing buffer from BASIC AUTH")
                     buffer.write(response.content)
                     
-                    #logger.debug(f"Image downloaded successfully as {filename}")
                     return True
                 else:
                     logger.debug(f"get snapshot BASIC auth status code: {response}")
@@ -124,19 +113,11 @@ class Snapshot():
         if auth_type == SnapshotAuth.DIGEST:
             try:
                 base_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
-                print("BASE URL:", base_url)
                 params = {k: v[0] for k, v in parse_qs(parsed.query).items()}
                 response = requests.get(base_url, params=params, auth=HTTPDigestAuth(profile.username(), profile.password()), timeout=5)
                 if response.status_code == 200:
                     
-                    print("Writing buffer from DIGEST AUTH")
                     buffer.write(response.content)
-                    #with open("/home/stephen/Pictures/sample.jpg", "wb") as file:
-                        #file.write(response.content)
-                        #file.write(buffer.getvalue())
-                    #print("where is the file")
-
-                    #logger.debug(f"Image downloaded successfully as {filename}")
                     return True
                 else:
                     logger.debug(f"get snapshot DIGEST auth status code: {response}")
@@ -149,13 +130,10 @@ class Snapshot():
 
     def getBufferedSnapshot(self, profile, buffer, camera):
         camera.setSnapshotAuth(SnapshotAuth.UNKNOWN)
-        print("call came into getBufferedSnapshot", camera.name(), camera.snapshotAuth)
         if not self.getSnapshotBuffered(profile, buffer, camera.snapshotAuth):
             if camera.snapshotAuth is not SnapshotAuth.NOT_WORKING:
                 logger.debug(f'camera {camera.name()} snapshot auth type set to NOT_WORKING')
                 camera.setSnapshotAuth(SnapshotAuth.NOT_WORKING)
-            #player.image.save(filename)
-            #return buffer
 
 
     def __call__(self, profile, filename, camera, player):
@@ -163,7 +141,6 @@ class Snapshot():
             player.image.save(filename)
             return
         if self.mw.settingsPanel.proxy.proxyType == ProxyType.CLIENT:
-            print("CLIENT PROXY", camera.name())
             profile.setUserData(filename)
             self.mw.client.transmit(bytearray(f"SNAPSHOT\n\n{profile.toJSON()}\r\n", 'utf-8'))
             return
@@ -172,4 +149,3 @@ class Snapshot():
                 logger.debug(f'camera {camera.name()} snapshot auth type set to NOT_WORKING')
                 camera.setSnapshotAuth(SnapshotAuth.NOT_WORKING)
             player.image.save(filename)
-            #logger.debug(f'Raw stream image saved as {filename}')

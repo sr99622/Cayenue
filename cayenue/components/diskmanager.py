@@ -48,7 +48,7 @@ class DiskManager():
                     total_size += file_info.size
                     file_infos.append(file_info)
                 except Exception as ex:
-                    print(f"file listing exception: {ex}")
+                    logger.debug(f"file listing exception: {ex}")
                     pass
 
         file_infos.sort(key=lambda x: x.created_time)
@@ -74,7 +74,6 @@ class DiskManager():
             logger.error(f'Exception occurred during removal of associated picture files: {ex}')
 
     def manageDirectory(self, d):
-        print("manage directory")
 
         files, size = self.list_files(d)
         max_size = self.mw.settingsPanel.storage.spnDiskLimit.value() * 1_000_000_000
@@ -98,4 +97,3 @@ class DiskManager():
                 pass
         
         self.mw.settingsPanel.storage.signals.updateDiskUsage.emit()
-        print("DONE MANAGING DIRECTORY")

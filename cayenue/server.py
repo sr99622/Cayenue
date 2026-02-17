@@ -8,23 +8,6 @@ from PyQt6.QtCore import QStandardPaths
 
 PORT = 8800
 
-'''
-if sys.platform == "win32":
-    DIRECTORY = f"{os.environ['HOMEPATH']}/.cache/Cayenue/proxy"
-else:
-    DIRECTORY = f"{os.environ['HOME']}/.cache/Cayenue/proxy"
-
-if sys.platform == "win32":
-    DIRECTORY = f"{os.environ['HOMEPATH']}/.cache/Cayenue/proxy"
-elif sys.platform == "darwin":
-    DIRECTORY = Path(os.path.dirname(__file__)).parent.absolute() / "cache" / "proxy"
-elif sys.platform.startswith("linux"):
-    #DIRECTORY = f"{os.environ['HOME']}/.cache/Cayenue/proxy"
-    DIRECTORY = "/home/stephen/github/Cayenue/env/lib/python3.13/site-packages/cayenue"
-else:
-    print(f"Unknown platform: {sys.platform}")
-'''
-
 def getLocation():
     path = Path(os.path.dirname(__file__))
     return str(path.parent.absolute())

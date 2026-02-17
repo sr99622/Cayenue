@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.10"
+VERSION = "1.0.11"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -584,9 +584,10 @@ class MainWindow(QMainWindow):
         try:
             self.closing = True
             self.closeAllStreams()
-            self.stopProxyServer()
-            self.stopHttpServer()
-            self.stopOnvifServer()
+            if self.settings_profile == "gui":
+                self.stopProxyServer()
+                self.stopHttpServer()
+                self.stopOnvifServer()
 
             self.settings.setValue(self.geometryKey, self.geometry())
 
@@ -1024,7 +1025,6 @@ class MainWindow(QMainWindow):
 
             logger.debug('Attempting to download MediaMTX server to directory {dir}')
             
-            print("PLATFORM MACHINE", platform.machine())
             architecture = None
             match platform.machine():
                 case "AMD64":
@@ -1158,7 +1158,7 @@ class MainWindow(QMainWindow):
             self.signals.error.emit(f'Error starting http server: {ex}')
 
     def stopHttpServer(self):
-        if self.settings_profile == "Reader":
+        if self.settings_profile != "gui":
             return
         try:
             requests.post("http://127.0.0.1:8800/shutdown", timeout=1)
