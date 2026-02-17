@@ -867,9 +867,9 @@ ulimit -n 8192
 
 &nbsp;
 
-Please note that using Windows as a server presents some unique challenges. It has been observed in the past that the Operating System is likely to change in ways that may render some functions unusable. Additionally, automatic updates will terminate the server in an uncontrolled manner which may result in undefined behavior. Due to the difficulty of finding and correcting these types of issues, Windows does not receive exhaustive testing in the server role. Reasonable efforts are made to facilitate the use of Windows as a server, but there may be undocumented issues that arise during operation. Windows client can be expected to behave normally under most conditions.
+Please note that using Windows as a server presents some unique challenges. It has been observed in the past that the Operating System is likely to change in ways that may render some functions unusable. Additionally, automatic updates might terminate the server in an uncontrolled manner which may result in undefined behavior. Due to the difficulty of finding and correcting these types of issues, Windows does not receive exhaustive testing in the server role. Reasonable efforts are made to facilitate the use of Windows as a server, but there may be undocumented issues that arise during operation. Windows client can be expected to behave normally under most conditions.
 
-One known issue is that the HTTP server is unstable when launched from the GUI manager. In order to avoid this and other similar issues, it is recommended to run the application from the command line in server role. This requires that the application be installed from source in a Python virtual environment using the pip installer. Open a command line window and use the following commands to install and run the application.
+One known issue is that the HTTP server is unstable when launched as a windows only process. In order to avoid this and other similar issues, it is recommended to run the application from the command line in server role. This requires that the application be installed from source in a Python virtual environment using the pip installer. Open a command line prompt and use the following commands to install and run the application.
 
 ```
 python -m venv env

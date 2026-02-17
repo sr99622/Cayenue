@@ -145,7 +145,7 @@ cat > $Contents/Info.plist <<EOF
     <key>CFBundleIdentifier</key>
     <string>io.github.sr99622.Cayenue</string>
     <key>CFBundleVersion</key>
-    <string>1.0.10</string>
+    <string>1.0.11</string>
     <key>CFBundleExecutable</key>
     <string>launcher</string>
     <key>CFBundleIconFile</key>
