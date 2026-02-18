@@ -39,6 +39,7 @@ class ServerProtocols():
                 buffer.write(bytearray("GET CAMERAS\n\n", 'utf-8'))
                 for c_idx, camera in enumerate(cameras):
                     for p_idx, profile in enumerate(camera.profiles):
+                        profile.setCameraName(camera.name())
                         buffer.write(bytearray(profile.toJSON(), 'utf-8'))
                         if c_idx < len(cameras) - 1 :
                             buffer.write(bytearray("\n", 'utf-8'))
