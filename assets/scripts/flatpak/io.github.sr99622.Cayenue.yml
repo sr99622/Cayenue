@@ -52,10 +52,10 @@ modules:
       - type: file
         path: io.github.sr99622.Cayenue.png
       #- type: file
-      #  path: cayenue-1.0.11-py3-none-any.whl
+      #  path: cayenue-1.0.12-py3-none-any.whl
       - type: file
-        url: https://files.pythonhosted.org/packages/5b/9a/204bf0aee4eb77e9fec00711732a88621f0fa47b7e50bfde002537030c6b/cayenue-1.0.11-py3-none-any.whl
-        sha256: 3cfcfdae9127e747346e926619bec42f9b342a1295ed8883fd59533bd4e24c3d
+        url: https://files.pythonhosted.org/packages/6d/0e/5a281899c849e5830c59f4477a4e75e8914a7f581f6e3ba218a8061813d4/cayenue-1.0.12-py3-none-any.whl
+        sha256: 353211fecc9376fc327f4f35b18ae3495fbeb864027121e67d784143af558bdb
         x-checker-data:
           type: pypi
           name: cayenue
