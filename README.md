@@ -1043,12 +1043,15 @@ sudo firewall-cmd --zone=public --list-rich-rules
 
 The output should include the rule you just added. 
 
-Cayenue in server configuration also requires ports to be opened for ONVIF, RTSP and HTTP servers. The following commands should achieve this
+Cayenue in server configuration also requires ports to be opened for ONVIF, RTSP, WEBRTC and HTTP servers. The following commands should achieve this
 
 ```
-sudo firewall-cmd --permanent --add-port=8554/tcp
-sudo firewall-cmd --permanent --add-port=8550/tcp
-sudo firewall-cmd --permanent --add-port=8800/tcp
+sudo firewall-cmd --zone=public --add-port=8000-9000/udp --permanent
+sudo firewall-cmd --zone=public --add-port=8889/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=8889/udp --permanent
+sudo firewall-cmd --zone=public --add-port=8554/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=8550/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=8800/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
@@ -1057,6 +1060,25 @@ For client configuration to be able to listen for alarms from the server, open p
 ```
 sudo firewall-cmd --permanent --zone=public --add-rich-rule='rule family="ipv4" destination address="239.255.255.247" port port="8080" protocol="udp" accept'
 sudo firewall-cmd --reload
+```
+
+(Strongly recommended) Lock the port range explicitly in MediaMTX
+
+In your mediamtx.yml:
+
+```
+webrtc:
+  udpMinPort: 8000
+  udpMaxPort: 9000
+
+```
+
+This guarantees MediaMTX won’t try to use random ephemeral ports that your firewall blocks.
+
+Verify ports are open
+
+```
+sudo firewall-cmd --zone=public --list-ports
 ```
 
 ---
