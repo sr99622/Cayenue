@@ -147,6 +147,27 @@ The program can then be launched from the Applications menu. To uninstall use th
 ```
 flatpak uninstall io.github.sr99622.Cayenue
 ```
+&nbsp;
+
+<details>
+<summary>Potential Flatpak Installation Issues</summary>
+
+&nbsp;
+
+If installing flatpaks on a system that does not include flatpak natively in the distribution, most notably Ubuntu, it may be necessary to take further steps to configure flatpak for use on the system. 
+
+```
+sudo apt install flatpak
+```
+
+Then reboot
+
+```
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub org.freedesktop.Platform/x86_64/25.08
+```
+
+</details>
 
 ---
 
