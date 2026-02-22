@@ -2098,6 +2098,7 @@ sudo reboot now
 To build the package, use the command from the directory which is the parent of the snap directory containing snapcraft.yaml
 
 ```
+cd assets/scripts
 snapcraft
 ```
 
