@@ -66,6 +66,8 @@ class CameraList(QListWidget):
         match event.key():
             case Qt.Key.Key_Return:
                 if camera := self.currentItem():
+                    if self.mw.settingsPanel.proxy.proxyType == ProxyType.STAND_ALONE and len(self.mw.pm.getStreamPairPlayers(camera.uri())):
+                        return
                     if not camera.editing():
                         self.itemDoubleClicked.emit(camera)
                         self.setFocus()
