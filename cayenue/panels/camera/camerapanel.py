@@ -577,11 +577,12 @@ class CameraPanel(QWidget):
     def btnRecordClicked(self):
         player = self.getCurrentPlayer()
         camera = self.getCurrentCamera()
-        if camera.displayProfileIndex() != camera.recordProfileIndex():
-            recordProfile = camera.getRecordProfile()
-            if recordProfile:
-                record_uri = recordProfile.uri()
-                player = self.mw.pm.getPlayer(record_uri)
+        if camera:
+            if camera.displayProfileIndex() != camera.recordProfileIndex():
+                recordProfile = camera.getRecordProfile()
+                if recordProfile:
+                    record_uri = recordProfile.uri()
+                    player = self.mw.pm.getPlayer(record_uri)
 
         if player:
             if player.isRecording():

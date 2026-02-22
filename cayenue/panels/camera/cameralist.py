@@ -194,11 +194,12 @@ class CameraList(QListWidget):
                     msg += "<h3>Record Stream</h3>"
                     msg += player.getStreamInfo()
                     msg += "\n"
-        msgBox = QMessageBox(self)
-        msgBox.setWindowTitle("Stream Info")
-        msgBox.setText(msg)
-        msgBox.setTextFormat(Qt.TextFormat.RichText)
-        msgBox.exec()
+        if len(msg):
+            msgBox = QMessageBox(self)
+            msgBox.setWindowTitle("Stream Info")
+            msgBox.setText(msg)
+            msgBox.setTextFormat(Qt.TextFormat.RichText)
+            msgBox.exec()
     
     def rename(self):
         if camera := self.currentItem():
