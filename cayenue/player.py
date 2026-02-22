@@ -49,6 +49,7 @@ class Player(avio.Player):
         self.videoModelSettings = None
         self.audioModelSettings = None
         self.detection_count = deque()
+        self.last_rect = None
         self.last_image = None
         self.last_render = None
         self.needs_render = False

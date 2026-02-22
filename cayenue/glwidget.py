@@ -401,6 +401,9 @@ class GLWidget(QOpenGLWidget):
                     continue
 
                 rect = self.mw.pm.displayRect(player.uri, self.buffer.size())
+                if player.last_rect and player.last_rect != rect:
+                    painter.fillRect(player.last_rect, QColorConstants.Black)
+                player.last_rect = rect
                 if player.image:
                     painter.drawImage(rect, player.image)
 
