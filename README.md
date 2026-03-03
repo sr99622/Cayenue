@@ -2168,7 +2168,7 @@ There is a script that will handle most of the work for a windows installer buil
 The cayenue.nsi file is fed into the NSIS script reader. There is some prep work to do before the script is run, edit the cayenue.nsi file at the top to set the current version number. The script will set up a directory at %HOMEPATH%\installer and copy some configuration files and run from there. To run the script
 
 ```
-%HOMEPATH%\Cayenue\assets\scripts\windows\installer\build_installer.bat
+%HOMEPATH%\Cayenue\assets\scripts\windows\build_installer.bat
 ```
 
 The result is an executable file in the %HOMEPATH%\installer directory named Cayenue-installer-x.x.x.exe, where x.x.x is the version triplet. Just double click to install. There will be a warning sign that the developer is unkown. To uninstall, go to the settings panel and look through the installed apps.
