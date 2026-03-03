@@ -65,7 +65,7 @@ parts:
     plugin: python
     python-packages:
       - openvino
-      - cayenue==1.0.13
+      - cayenue==1.0.14
       - https://download.pytorch.org/whl/cpu/torch-2.7.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=64123c05615e27368c7a7816f6e39c6d219998693beabde0b0b9cedf91b5ed8b
       - https://download.pytorch.org/whl/cpu/torchvision-0.22.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=effb34eabe87ae0d811fe2d6e3433ed1eee2d1850ff0670964d1475a06512c73
 
