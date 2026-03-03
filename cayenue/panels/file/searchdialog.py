@@ -27,6 +27,7 @@ from PyQt6.QtCore import Qt
 from loguru import logger
 from datetime import datetime
 from cayenue.enums import Occurence
+import traceback
 
 FORMAT = "%Y%m%d%H%M%S"
 
@@ -135,6 +136,7 @@ class FileSearchDialog(QDialog):
         self.closest_before = None
         self.closest_after = None
         try:
+            print("TEST 1")
             selected = self.getSelectedDate()
             main_directory = self.mw.filePanel.dirArchive.txtDirectory.text()
             sub_directory = self.cameras.currentText()
@@ -203,20 +205,25 @@ class FileSearchDialog(QDialog):
 
         except Exception as ex:
             logger.error(f'File search error: {ex}')
+            logger.debug(traceback.format_exc())
 
         self.hide()
 
     def selectFileInTree(self, path, filename):
+        print("PATH", path)
         tree = self.mw.filePanel.tree
-        model = tree.model()
+        #model = tree.model()
+        model = self.mw.filePanel.model
         if camera_idx := model.index(path):
             if camera_idx.isValid():
-                if not tree.isExpanded(camera_idx):
-                    tree.setExpanded(camera_idx, True)
+                proxy_idx = self.mw.filePanel.proxy.mapFromSource(camera_idx)
+                if not tree.isExpanded(proxy_idx):
+                    tree.setExpanded(proxy_idx, True)
                 if file_idx := model.index(os.path.join(path, filename)):
                     if file_idx.isValid():
-                        tree.setCurrentIndex(file_idx)
-                        tree.scrollTo(file_idx, QAbstractItemView.ScrollHint.PositionAtCenter)
+                        proxy_idx = self.mw.filePanel.proxy.mapFromSource(file_idx)
+                        tree.setCurrentIndex(proxy_idx)
+                        tree.scrollTo(proxy_idx, QAbstractItemView.ScrollHint.PositionAtCenter)
 
     def qualifiedFileName(self, path, name):
         if not os.path.isfile(os.path.join(path, name)):

@@ -817,7 +817,7 @@ class MainWindow(QMainWindow):
 
                 logger.error(f'{name}, Error: {msg}')
         except Exception as ex:
-            logger(f'exception occured during error handling: {ex}')
+            logger.error(f'exception occured during error handling: {ex}')
 
     def mediaProgress(self, pct, uri):
         self.signals.progress.emit(pct, uri)
