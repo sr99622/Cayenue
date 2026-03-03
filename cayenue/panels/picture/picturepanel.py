@@ -70,6 +70,7 @@ class PicTreeView(QTreeView):
             case Qt.Key.Key_Space:
                 if player := self.mw.filePanel.getCurrentlyPlayingFile():
                     player.togglePaused()
+                    self.mw.picturePanel.control.setBtnPlay()
             case Qt.Key.Key_Left:
                 self.mw.filePanel.rewind()
                 pass_through = False
