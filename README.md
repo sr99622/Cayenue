@@ -1137,6 +1137,8 @@ During manually initiated recording, a rotating red colored tick mark will show 
 
 Files created by the application are limited in length to the setting on `Settings -> Storage -> Max File Duration`, which is by default 15 minutes. Recordings that require a longer time will be broken up into several parts that are each that length of time (15 minutes e.g.) long. There will be a slight overlap between files broken up this way corresponding to the length of the Pre Record Buffer setting, which can be found at `Settings -> Alarm -> Pre-Alarm Buffer Size`.
 
+The system is capable of recording streams with h264 or h265 (hevc) codecs. In some rare cases, the camera may have an mjpeg codec stream. Unfortunately, this type of stream can cause crashes when attempting to record. If you think this might be the case, you can check the stream codec by using the F1 key in the camera list while the camera is streaming but not recording to verify the codec. Check the camera for alternate streams that have accepted codecs for recording if possible. This issue should be fixed in a future release of the program.
+
 <image src="cayenue/resources/history.png">
 
 File Operations
