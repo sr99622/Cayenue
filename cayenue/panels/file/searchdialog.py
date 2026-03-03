@@ -151,7 +151,7 @@ class FileSearchDialog(QDialog):
                     main_directory = self.mw.filePanel.dirArchive.txtDirectory.text()
                     sub_directory = self.cameras.currentText()
                     tree = self.mw.filePanel.tree
-                    model = tree.model()
+                    model = self.mw.filePanel.model
                     path = os.path.join(main_directory, sub_directory, self.matching_file)
                     if file_idx := model.index(path):
                         if file_idx.isValid():
