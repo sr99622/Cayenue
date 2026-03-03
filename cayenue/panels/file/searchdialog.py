@@ -136,7 +136,6 @@ class FileSearchDialog(QDialog):
         self.closest_before = None
         self.closest_after = None
         try:
-            print("TEST 1")
             selected = self.getSelectedDate()
             main_directory = self.mw.filePanel.dirArchive.txtDirectory.text()
             sub_directory = self.cameras.currentText()
@@ -210,9 +209,7 @@ class FileSearchDialog(QDialog):
         self.hide()
 
     def selectFileInTree(self, path, filename):
-        print("PATH", path)
         tree = self.mw.filePanel.tree
-        #model = tree.model()
         model = self.mw.filePanel.model
         if camera_idx := model.index(path):
             if camera_idx.isValid():
