@@ -813,6 +813,8 @@ class MainWindow(QMainWindow):
                         self.signals.error.emit(msg)
 
                 else:
+                    if "-1094995529" in msg:
+                        msg = "Error opening file. This is probably because the file is still open and receiving camera data. Use the ]--[ button in the control panel to reset the file and then try again."
                     self.signals.error.emit(msg)
 
                 logger.error(f'{name}, Error: {msg}')
