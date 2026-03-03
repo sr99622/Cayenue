@@ -249,6 +249,9 @@ class ProxyOptions(QWidget):
             if self.chkEnableHttpServer.isChecked():
                 self.mw.startHttpServer()
             self.mw.startOnvifServer("")
+            # this condition will be met when live switching to server mode
+            if hasattr(self.mw, "cameraPanel"):
+                self.setMediaMTXProxies()
 
         if not hasattr(self.mw, "cameraPanel"):
             return
