@@ -36,6 +36,7 @@ import webbrowser
 import threading
 import sys
 import time
+import traceback
 
 class CameraPanelSignals(QObject):
     fill = pyqtSignal(onvif.Data)
@@ -488,49 +489,54 @@ class CameraPanel(QWidget):
             self.mw.videoConfigure.setCamera(camera)
 
     def onItemDoubleClicked(self, camera):
-        if not camera: return
-        profiles = self.mw.pm.getStreamPairProfiles(camera.uri())
-        players = self.mw.pm.getStreamPairPlayers(camera.uri())
-        timers = self.mw.pm.getStreamPairTimers(camera.uri())
+        try:
+            if not camera: return
+            profiles = self.mw.pm.getStreamPairProfiles(camera.uri())
+            players = self.mw.pm.getStreamPairPlayers(camera.uri())
+            timers = self.mw.pm.getStreamPairTimers(camera.uri())
 
-        activeTimer = False
-        for timer in timers:
-            if timer.isActive():
-                activeTimer = True
-
-        if activeTimer:
+            activeTimer = False
             for timer in timers:
-                self.mw.signals.stopReconnect.emit(timer.uri)
-            for player in players:
-                player.requestShutdown()
-            camera.setIconIdle()
-        else:
-            if len(players):
-                if player := self.mw.cameraPanel.getCurrentPlayer():
-                    if profile := camera.getRecordProfile():
-                        self.mw.openFocusWindow()
-                        #sleep(0.5)
-                        #self.mw.setFocus()
-                        count = 0
-                        while not self.mw.focus_window.cameraPanel.getCamera(profile.uri()):
-                            time.sleep(0.01)
-                            count += 1
-                            if count > 200:
-                                logger.error("timeout error opening focus window")
-                                break
-                        if camera := self.mw.focus_window.cameraPanel.getCamera(profile.uri()):
-                            self.mw.focus_window.cameraPanel.onItemDoubleClicked(camera)
-            else:
-                for i, profile in enumerate(profiles):
-                    if i == 0:
-                        profile.setHidden(False)
-                        self.mw.playMedia(profile.uri())
-                    else:
-                        if camera.displayProfileIndex() != camera.recordProfileIndex():
-                            profile.setHidden(True)
-                            self.mw.playMedia(profile.uri())
+                if timer.isActive():
+                    activeTimer = True
 
-        self.syncGUI()
+            if activeTimer:
+                for timer in timers:
+                    self.mw.signals.stopReconnect.emit(timer.uri)
+                for player in players:
+                    player.requestShutdown()
+                camera.setIconIdle()
+            else:
+                if len(players):
+                    if player := self.mw.cameraPanel.getCurrentPlayer():
+                        profile = camera.getRecordProfile()
+                        if profile and self.mw.settingsPanel.proxy.proxyType != ProxyType.STAND_ALONE:
+                            self.mw.openFocusWindow()
+                            #sleep(0.5)
+                            #self.mw.setFocus()
+                            count = 0
+                            while not self.mw.focus_window.cameraPanel.getCamera(profile.uri()):
+                                time.sleep(0.01)
+                                count += 1
+                                if count > 200:
+                                    logger.error("timeout error opening focus window")
+                                    break
+                            if camera := self.mw.focus_window.cameraPanel.getCamera(profile.uri()):
+                                self.mw.focus_window.cameraPanel.onItemDoubleClicked(camera)
+                else:
+                    for i, profile in enumerate(profiles):
+                        if i == 0:
+                            profile.setHidden(False)
+                            self.mw.playMedia(profile.uri())
+                        else:
+                            if camera.displayProfileIndex() != camera.recordProfileIndex():
+                                profile.setHidden(True)
+                                self.mw.playMedia(profile.uri())
+
+            self.syncGUI()
+        except Exception as ex:
+            logger.error(f"CameraPanel.onItemDoubleClicked exception: {ex}")
+            logger.debug(traceback.format_exc())
 
     def setTabsEnabled(self, enabled):
         self.tabVideo.setEnabled(enabled)
