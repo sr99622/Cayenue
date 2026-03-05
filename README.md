@@ -1,6 +1,6 @@
 <h3>Quick Installer Download Links</h3>
 
-### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.13/cayenue_1.0.13_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mac OS](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-installer-1.0.14.exe)
+### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/cayenue_1.0.14_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mac OS](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-installer-1.0.14.exe)
 
 <i>Please refer to the Software Installation section of this document for detailed instructions.</i>
 
@@ -182,10 +182,10 @@ flatpak install flathub org.freedesktop.Platform/x86_64/25.08
 &nbsp;
 ____
 
-Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.13/cayenue_1.0.13_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
+Download the [snap installer](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/cayenue_1.0.14_amd64.snap), then open a terminal and navigate to the Downloads folder. Use the following command to install.
 
 ```
-sudo snap install cayenue_1.0.13_amd64.snap --dangerous
+sudo snap install cayenue_1.0.14_amd64.snap --dangerous
 ```
 
 The program can then be launched from the Applications menu. In order to get audio, you need to connect the pulseaudio driver.
