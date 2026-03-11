@@ -489,6 +489,10 @@ Copy and paste the following configuration file content
   guest ok = no
   read only = yes
   public = yes
+  oplocks = no
+  level2 oplocks = no
+  kernel oplocks = no
+  strict locking = yes  
 ```
 
 Use ctl+O to save and ctl+X to exit nano
@@ -1008,6 +1012,29 @@ Please note that the mount requires the system to wait for the network to be up 
 &nbsp;
 
 Once the drives are available to the Client, use the folder button on the front Camera panel to launch the File Browser. At the top of the Picture panel, use the three dot button to open the directory selection dialog and navigate to the appropriate remote location. Do likewise for the Video panel and the Client configuration is complete.
+
+</details>
+
+<details>
+<summary>Additional SMB settings for Mac OS</summary>
+
+&nbsp;
+
+If you would like to be able to view shared files immediately on Mac, some additional settings may be necessary
+
+```
+sudo nano /etc/nsmb.conf
+```
+
+Then add the following content to the configuration
+
+```
+[default]
+dir_cache_max_cnt=0
+notify_off=yes
+streams=no
+soft=yes
+```
 
 </details>
 
