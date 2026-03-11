@@ -388,23 +388,20 @@ It is possible for Windows clients to access camera recordings residing on a Lin
   [global]
     workgroup = WORKGROUP
 
-  [Videos]
-    comment = Shared Videos Folder
-    path = /home/cayenue/Videos
-    browasble = yes
+  [cayenue]
+    comment = Cayenue Shared Folders
+    path = /home/<username>
+    valid users = <username>
+    browseable = yes
+    writable = no
+    guest ok = no
     read only = yes
+    public = yes
+    oplocks = no
+    level2 oplocks = no
+    kernel oplocks = no
+    strict locking = yes  
 
-  [Pictures]
-    comment = Shared Pictures Folder
-    path = /home/cayenue/Pictures
-    browsable = yes
-    read only = yes
-
-  [Documents]
-    comment = Shared Documents Folder
-    path = /home/cayenue/Documents
-    browsable = yes
-    read only = no
   ```
 
   <h4>Step 3. Re-start the Samba service</h4> After changing the configuration file, it is necessary to re-start the service in order to enact the changes made. This should be done any time changes are made to the smb.conf file.
