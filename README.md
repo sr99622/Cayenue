@@ -692,13 +692,13 @@ This is a basic configuration that will assign addresses in the range of `10.2.2
 Use the commands shown below to control the service. Be sure to use the enable command to get persistent service operation through reboots.
 
 ```
-sudo systemctl enable --now kea-dhcp4
+sudo systemctl enable --now kea-dhcp4-server
 ```
 
 Check the server status. There should be some indication that the service has started successfully and there is activity with the other devices on the network. It may take a few moments for all devices to complete configuration and there may be stray warning or error messages which are likely transitory. If difficulty is encountered, please refer to the link at the top of this section for troubleshooting information.
 
 ```
-sudo systemctl status kea-dhcp4
+sudo systemctl status kea-dhcp4-server
 ```
 
 ---
