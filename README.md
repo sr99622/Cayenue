@@ -309,7 +309,7 @@ flatpak install Cayenue-1.0.14_aarch64.flatpak
 Depending on the platform, it may be necessary to add some components to get the application running. The following commands may be helpful.
 
 ```
-flatpak install flathub org.freedesktop.Platform//25.08
+flatpak install flathub org.freedesktop.Platform/aarch64/25.08
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
