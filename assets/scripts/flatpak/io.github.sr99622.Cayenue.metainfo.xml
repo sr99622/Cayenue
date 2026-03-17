@@ -24,6 +24,7 @@
 	</description>
 	<developer_name>Stephen Rhodes</developer_name>
 	<url type="homepage">https://github.com/sr99622/Cayenue</url>
+	<url type="vcs-browser">https://github.com/sr99622/Cayenue</url>
 	<screenshots>
 		<screenshot type="default">
 			<caption>The app running YOLOX detections on multiple camera streams</caption>
@@ -51,7 +52,7 @@
 			<description>
 				<p>Fleetwood</p>
 			</description>
-			<url>https://github.com/sr99622/Cayenue/releases/tag/v1.0.8</url>
+			<url>https://github.com/sr99622/Cayenue/releases/tag/v1.0.14</url>
 		</release>
 	</releases>
 	<categories>
@@ -62,12 +63,15 @@
 		<keyword>Networking</keyword>
 		<keyword>Yolo</keyword>
 	</keywords>
-	<recommends>
+	<branding>
+		<color type="primary" scheme_preference="light">#939FB9</color>
+		<color type="primary" scheme_preference="dark">#1E1F6E</color>
+	</branding>	
+	<requires>
 		<control>keyboard</control>
-	</recommends>
-	<supports>
 		<control>pointing</control>
-	</supports>
+		<display_length compare="ge">768</display_length>
+	</requires>
 	<content_rating type="oars-1.1"/>
 	<launchable type="desktop-id">io.github.sr99622.Cayenue.desktop</launchable>
 </component>
