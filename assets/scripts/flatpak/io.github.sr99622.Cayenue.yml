@@ -254,11 +254,10 @@ modules:
       - tar -xvf data.tar.zst -C /app
       - ar x libze-intel-gpu1_25.48.36300.8-0_amd64.deb
       - tar -xvf data.tar.zst -C /app
-      - install -Dm644 intel.icd -t /app/etc/OpenCL/vendors
+      - install -d /app/etc/OpenCL/vendors
+      - printf '%s\n' '/app/usr/lib/x86_64-linux-gnu/intel-opencl/libigdrcl.so' | install -Dm644 /dev/stdin /app/etc/OpenCL/vendors/intel.icd
 
     sources:
-      - type: file
-        path: intel.icd
       - type: file
         url: https://github.com/intel/compute-runtime/releases/download/25.48.36300.8/intel-ocloc_25.48.36300.8-0_amd64.deb
         sha256: 15a4b977d375581b3bc14ae67f76a8c3b379d1f0f7ba9ff813aeb8d207f3feb6
