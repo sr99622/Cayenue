@@ -1153,7 +1153,7 @@ class MainWindow(QMainWindow):
     def startHttpServer(self):
         try:
             if not self.http_process:
-                if os.platform == "win32":
+                if sys.platform == "win32":
                     server_path = Path(__file__).resolve().parent / "server.py"
 
                     self.http_process = subprocess.Popen(
