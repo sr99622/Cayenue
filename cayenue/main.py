@@ -22,7 +22,7 @@ import sys
 
 from loguru import logger
 import hashlib
-from time import sleep, time
+from time import sleep
 from datetime import datetime
 import importlib.util
 from pathlib import Path
@@ -47,6 +47,7 @@ import cayenue
 import threading
 import argparse
 import warnings
+import time
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -55,7 +56,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.18"
+VERSION = "1.0.16"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -1154,23 +1155,32 @@ class MainWindow(QMainWindow):
             if not self.http_process:
                 if os.platform == "win32":
                     server_path = Path(__file__).resolve().parent / "server.py"
+
                     self.http_process = subprocess.Popen(
                         [sys.executable, str(server_path)],
                         cwd=str(server_path.parent),
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         text=True,
-                        creationflags=subprocess.CREATE_NEW_CONSOLE
-                    )
-                else:                
-                    self.http_process = subprocess.Popen(
-                        [sys.executable, f'{os.path.dirname(os.path.realpath(__file__))}/server.py'], 
-                        env=os.environ.copy(), 
-                        start_new_session=True
                     )
 
+                    logger.debug(f"server_path={server_path}")
+                    logger.debug(f"python={sys.executable}")
+                    logger.debug(f"pid={self.http_process.pid}")
+
+                    time.sleep(1)
+
+                    if self.http_process.poll() is not None:
+                        out, err = self.http_process.communicate()
+                        logger.error(f"HTTP server exited: {self.http_process.returncode}")
+                        logger.error(f"stdout={out}")
+                        logger.error(f"stderr={err}")
+
+                else:
+                    self.http_process = subprocess.Popen([sys.executable, f'{os.path.dirname(os.path.realpath(__file__))}/server.py'], env=os.environ.copy(), start_new_session=True)
                 #return_code = self.http_process.returncode
                 #logger.debug(f"starting http server from dir {os.path.dirname(os.path.realpath(__file__))}")
+        
         except Exception as ex:
             logger.error(f'Error starting http server: {ex}')
             self.signals.error.emit(f'Error starting http server: {ex}')
