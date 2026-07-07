@@ -23,3 +23,4 @@ repo/
 *.flatpak
 env/
 run.py
+uv.lock

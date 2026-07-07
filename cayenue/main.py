@@ -22,7 +22,7 @@ import sys
 
 from loguru import logger
 import hashlib
-from time import sleep
+from time import sleep, time
 from datetime import datetime
 import importlib.util
 from pathlib import Path
@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
     import tarfile
 
-VERSION = "1.0.16"
+VERSION = "1.0.18"
 
 class TimerSignals(QObject):
     timeoutPlayer = pyqtSignal(str)
@@ -1152,9 +1152,25 @@ class MainWindow(QMainWindow):
     def startHttpServer(self):
         try:
             if not self.http_process:
-                self.http_process = subprocess.Popen([sys.executable, f'{os.path.dirname(os.path.realpath(__file__))}/server.py'], env=os.environ.copy(), start_new_session=True)
-                return_code = self.http_process.returncode
-                logger.debug(f"starting http server from dir {os.path.dirname(os.path.realpath(__file__))}")
+                if os.platform == "win32":
+                    server_path = Path(__file__).resolve().parent / "server.py"
+                    self.http_process = subprocess.Popen(
+                        [sys.executable, str(server_path)],
+                        cwd=str(server_path.parent),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        text=True,
+                        creationflags=subprocess.CREATE_NEW_CONSOLE
+                    )
+                else:                
+                    self.http_process = subprocess.Popen(
+                        [sys.executable, f'{os.path.dirname(os.path.realpath(__file__))}/server.py'], 
+                        env=os.environ.copy(), 
+                        start_new_session=True
+                    )
+
+                #return_code = self.http_process.returncode
+                #logger.debug(f"starting http server from dir {os.path.dirname(os.path.realpath(__file__))}")
         except Exception as ex:
             logger.error(f'Error starting http server: {ex}')
             self.signals.error.emit(f'Error starting http server: {ex}')
