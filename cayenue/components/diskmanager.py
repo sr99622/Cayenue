@@ -71,7 +71,8 @@ class DiskManager():
                     if target <= finish:
                         os.remove(os.path.join(pic_dir, file))
         except Exception as ex:
-            logger.error(f'Exception occurred during removal of associated picture files: {ex}')
+            #logger.error(f'Exception occurred during removal of associated picture files: {ex}')
+            pass
 
     def manageDirectory(self, d):
 
