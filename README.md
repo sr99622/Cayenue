@@ -1,5 +1,15 @@
 <image src="assets/images/cayenue_logo.png">
 
+<h3>IP Camera Interface Software</h3>
+
+View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High performance software with responsive interface and proven stability.
+
+<h3>System Requirements</h3>
+
+ONVIF compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco.
+
+Computers running Linux, Mac or Windows. Cayenue is a multi-modal system and runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
+
 <h3>Quick Installer Download Links</h3>
 
 ### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/cayenue_1.0.14_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MacOS](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-installer-1.0.14.exe)
@@ -21,16 +31,6 @@ foreground: 939FB9
 --->
 
 &nbsp;
-
-<h3>IP Camera Interface Software</h3>
-
-View, analyze and store AV streams from a fleet of networked cameras in real time. Quickly set up and manage complex systems with easily understood and intuitive controls. Concurrently review alert events with integrated media player. Distribute streams using proxy service multipliers. Absolute autonomy over data privacy. High performance software with responsive interface and proven stability.
-
-<h3>System Requirements</h3>
-
-ONVIF compliant cameras. Brands known to work with this system: Dahua, Hikvision, Amcrest, Trendnet, Reolink, Axis, Vivotek, Speco.
-
-Computers running Linux, Mac or Windows. Cayenue is a multi-modal system and runs as both the server and the client. Linux and Mac are recommended for the server. To run YOLO inference on camera streams, a capable compute unit is required. Supported GPUs include Intel iGPU, NVIDIA and Mac Silicon. Excellent results are acheived with Intel Xe graphics and Apple M series chips. These compute units offer outstanding power consumption profiles, strong performance and are supported directly by the installers for zero configuration.
 
 <h3>Network Configuration</h3>
 
