@@ -1,8 +1,16 @@
 <h3>Quick Installer Download Links</h3>
 
-### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/cayenue_1.0.14_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Mac OS](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-installer-1.0.14.exe)
+### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/cayenue_1.0.14_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MacOS](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-installer-1.0.14.exe)
 
-<i>Please refer to the Software Installation section of this document for detailed instructions.</i>
+<i>Please note that the traditional GUI installers are being deprecated. They are very difficult to maintain, and in the case of Windows, Microsoft is blocking installation with their new App Safety utility.
+
+Going forward, the recommended method for installation is to use [pipx](https://pipx.pypa.io/stable/how-to/install-pipx/). Because pipx has only recently been able to correctly install Cayenue, it is important to use the official source of the current version for successful installation. Once pipx has been setup, the commands to  install and run the program are:
+</i>
+
+```
+pipx install cayenue
+cayenue
+```
 
 <!---
 Cayenue brand colors
