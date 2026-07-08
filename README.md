@@ -1,3 +1,5 @@
+<image src="assets/images/cayenue_logo.png">
+
 <h3>Quick Installer Download Links</h3>
 
 ### [Flatpak](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.flatpak)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Snap](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/cayenue_1.0.14_amd64.snap)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MacOS](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-1.0.14.dmg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Windows](https://github.com/sr99622/Cayenue/releases/download/v1.0.14/Cayenue-installer-1.0.14.exe)
@@ -19,8 +21,6 @@ foreground: 939FB9
 --->
 
 &nbsp;
-
-<image src="assets/images/cayenue_logo.png">
 
 <h3>IP Camera Interface Software</h3>
 
